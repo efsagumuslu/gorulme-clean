@@ -13,6 +13,10 @@ workflows:
         script: npm install @capacitor/android
       - name: Add Android platform
         script: npx cap add android
+      - name: Generate icon and splash screen
+        script: |
+          npm install @capacitor/assets --save-dev
+          npx capacitor-assets generate --android
       - name: Sync Capacitor with Android
         script: npx cap sync android
       - name: Build Android APK
