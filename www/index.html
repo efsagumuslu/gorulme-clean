@@ -929,11 +929,51 @@
     requestAnimationFrame(loop);
   }
 
+  // ---------- AdMob (real ads on native, simulated fallback in browser) ----------
+  // NOTE: replace with your own AdMob App ID (capacitor.config.json) and Ad Unit ID
+  // (below) once your AdMob account is approved. These are Google's official
+  // public TEST ids — safe to ship while developing, must be swapped before release.
+  const ADMOB_REWARDED_UNIT_ID_ANDROID = 'ca-app-pub-8061507782344181/1123043779';
+  let admobReady = false;
+  let admobRewardEarned = false;
+
+  function getAdMob(){
+    return (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) || null;
+  }
+
+  async function initAdMob(){
+    const AdMob = getAdMob();
+    if(!AdMob) return; // not running inside the native app (e.g. browser testing) — fine, simulation handles it
+    try{
+      await AdMob.initialize({ requestTrackingAuthorization: true, initializeForTesting: true });
+      admobReady = true;
+    }catch(e){ admobReady = false; }
+  }
+
+  async function showRealRewardedAd(){
+    const AdMob = getAdMob();
+    if(!AdMob) return false;
+    admobRewardEarned = false;
+    try{
+      const rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
+      const dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
+      await AdMob.prepareRewardVideoAd({ adId: ADMOB_REWARDED_UNIT_ID_ANDROID });
+      await AdMob.showRewardVideoAd();
+      // give the dismiss/reward events a moment to fire before we check the flag
+      await new Promise(res=>setTimeout(res, 600));
+      rewardListener.remove(); dismissListener.remove();
+      return admobRewardEarned;
+    }catch(e){
+      return false;
+    }
+  }
+
   function continueWithAd(){
     const adBtn = document.getElementById('adContinueBtn');
     adBtn.disabled = true;
     adBtn.textContent = S().adPlaying;
-    setTimeout(()=>{
+
+    const grantLifeAndResume = ()=>{
       lives = 1;
       progress.adWatches++;
       saveProgress();
@@ -946,7 +986,23 @@
       state = 'playing';
       lastT = performance.now();
       requestAnimationFrame(loop);
-    }, 1600);
+    };
+    const restoreButton = ()=>{
+      adBtn.disabled = false;
+      adBtn.textContent = S().adContinue;
+    };
+
+    const AdMob = getAdMob();
+    if(AdMob){
+      showRealRewardedAd().then(earned=>{
+        if(earned) grantLifeAndResume();
+        else restoreButton();
+      });
+    } else {
+      // browser / no AdMob plugin available yet — keep the old simulated flow so
+      // testing via Surge/http-server still works during development
+      setTimeout(grantLifeAndResume, 1600);
+    }
   }
 
   function pauseGame(){
@@ -1772,6 +1828,7 @@
     }
   }
 
+  initAdMob();
   document.getElementById('playBtn').addEventListener('click', ()=>{ ensureAudio(); startGame(); });
   document.getElementById('muteBtn').addEventListener('click', toggleSound);
   document.getElementById('pauseBtn').addEventListener('click', pauseGame);
