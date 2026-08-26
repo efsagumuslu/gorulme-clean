@@ -1,5 +1,10 @@
 {
   "appId": "com.gorulme.app",
   "appName": "Gorulme",
-  "webDir": "www"
+  "webDir": "www",
+  "plugins": {
+    "AdMob": {
+      "appId": "ca-app-pub-8061507782344181~3472663490"
+    }
+  }
 }
