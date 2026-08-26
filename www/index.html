@@ -87,6 +87,7 @@
     width:100%; max-width:380px;
     display:flex; flex-direction:column; align-items:center;
     text-align:center;
+    position:relative;
   }
   .eyebrow{
     color:var(--amber); font-size:12px; letter-spacing:0.18em; font-weight:700;
@@ -151,7 +152,10 @@
     margin-top:22px; color:var(--muted); font-size:12px; opacity:0.7;
   }
 
-  .icon-row{ display:flex; gap:10px; width:100%; margin-bottom:16px; }
+  .icon-row{ display:flex; gap:8px; width:100%; margin-bottom:16px; }
+  .tut-dots{ display:flex; gap:7px; justify-content:center; margin-top:6px; }
+  .tut-dot{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:background 0.2s ease, transform 0.2s ease; }
+  .tut-dot.active{ background:var(--amber); transform:scale(1.3); }
   .icon-link-btn{
     flex:1; padding:10px 6px; border-radius:14px;
     border:1.5px solid var(--line); background:rgba(255,255,255,0.02);
@@ -236,13 +240,14 @@
 
   <div class="hud" id="hud" style="display:none;">
     <div class="hud-group">
-      <div class="hud-pill"><span>Bölüm</span><span id="levelLabel">1</span></div>
+      <div class="hud-pill"><span id="hudLevelLabel">Bölüm</span><span id="levelLabel">1</span></div>
       <div class="hud-pill" id="livesPill"><span id="livesLabel">♥♥♥</span></div>
       <div class="hud-pill" id="foodPill" style="display:none;"><span id="foodLabelText">Yem</span><span id="foodLabel">0/1</span></div>
       <div class="hud-pill" id="energyPill" style="display:none;"><span>⚡</span><span id="energyLabel">0</span></div>
     </div>
     <div class="hud-group">
-      <div class="hud-pill"><span>En İyi</span><span id="bestLabel">1</span></div>
+      <div class="hud-pill"><span id="hudBestLabel">En İyi</span><span id="bestLabel">1</span></div>
+      <button class="pause-btn" id="langBtnHud">EN</button>
       <button class="pause-btn" id="muteBtn" aria-label="Sesi Kapat">🔊</button>
       <button class="pause-btn" id="pauseBtn" aria-label="Duraklat">❚❚</button>
     </div>
@@ -253,14 +258,15 @@
 
   <div class="overlay" id="startOverlay">
     <div class="panel">
-      <div class="eyebrow">Gölgede Kal</div>
+      <button class="icon-link-btn" id="langBtn" style="position:absolute; top:14px; right:14px; width:auto; padding:8px 12px;">EN</button>
+      <div class="eyebrow" id="eyebrowText">Gölgede Kal</div>
       <h1 id="titleText">Görülme</h1>
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
-      <div class="star-badge">⭐ <span id="starCount">0</span></div>
+      <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
 
       <div class="quest-card">
-        <div class="quest-title">📅 Günlük Görev</div>
+        <div class="quest-title" id="questTitleText">📅 Günlük Görev</div>
         <div class="quest-desc" id="questDesc">—</div>
         <div class="quest-bar-wrap"><div class="quest-bar-fill" id="questBarFill"></div></div>
         <div class="quest-status" id="questStatus">0/0</div>
@@ -269,20 +275,35 @@
       <div class="theme-tabs" id="themeTabs"></div>
 
       <div class="icon-row">
-        <div class="icon-link-btn" id="openAchBtn"><span class="glyph">🏆</span><span>Başarımlar</span></div>
-        <div class="icon-link-btn" id="openShopBtn"><span class="glyph">🛍️</span><span>Mağaza</span></div>
+        <div class="icon-link-btn" id="openAchBtn"><span class="glyph">🏆</span><span id="openAchLabel">Başarımlar</span></div>
+        <div class="icon-link-btn" id="openShopBtn"><span class="glyph">🛍️</span><span id="openShopLabel">Mağaza</span></div>
+        <div class="icon-link-btn" id="openTutBtn"><span class="glyph">❓</span><span id="openTutLabel">Nasıl Oynanır?</span></div>
       </div>
 
       <button class="play-btn" id="playBtn">Başla</button>
 
-      <div class="footer-hint">Parmağınla / fareyle sürükleyerek yönet</div>
+      <div class="footer-hint" id="footerHintText">Parmağınla / fareyle sürükleyerek yönet</div>
+    </div>
+  </div>
+
+  <div class="overlay" id="tutorialOverlay" style="display:none;">
+    <div class="panel">
+      <div class="eyebrow" id="tutEyebrowText">Nasıl Oynanır</div>
+      <div style="font-size:52px; margin:6px 0 10px;" id="tutIcon">👆</div>
+      <h1 style="font-size:22px;" id="tutTitle">—</h1>
+      <p class="sub" id="tutDesc">—</p>
+      <div class="tut-dots" id="tutDots"></div>
+      <div style="display:flex; gap:10px; width:100%; margin-top:16px;">
+        <button class="play-btn" id="tutSkipBtn" style="flex:1; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Atla</button>
+        <button class="play-btn" id="tutNextBtn" style="flex:1;">İleri</button>
+      </div>
     </div>
   </div>
 
   <div class="overlay list-overlay" id="achievementsOverlay" style="display:none;">
     <div class="panel">
-      <div class="eyebrow">İlerleme</div>
-      <h1 style="font-size:26px;">Başarımlar</h1>
+      <div class="eyebrow" id="achEyebrowText">İlerleme</div>
+      <h1 style="font-size:26px;" id="achTitleText">Başarımlar</h1>
       <div class="scroll-list" id="achList"></div>
       <div class="close-link" id="closeAchBtn">Kapat</div>
     </div>
@@ -290,8 +311,8 @@
 
   <div class="overlay list-overlay" id="shopOverlay" style="display:none;">
     <div class="panel">
-      <div class="eyebrow">Mağaza</div>
-      <h1 style="font-size:26px;">Görünüm</h1>
+      <div class="eyebrow" id="shopEyebrowText">Mağaza</div>
+      <h1 style="font-size:26px;" id="shopTitleText">Görünüm</h1>
       <div class="star-badge">⭐ <span id="shopStarCount">0</span></div>
       <div class="shop-tabs" id="shopTabs"></div>
       <div class="scroll-list" id="shopList"></div>
@@ -302,12 +323,12 @@
   <div class="overlay" id="endOverlay">
     <div class="panel">
       <div class="caught-icon" id="caughtIcon">👁️</div>
-      <div class="eyebrow" style="color:var(--danger);">Görüldün</div>
+      <div class="eyebrow" id="endEyebrowText" style="color:var(--danger);">Görüldün</div>
       <h1 id="endLevelText">Bölüm 4</h1>
       <p class="sub" id="endSub">Bir sonrakinde daha dikkatli ol.</p>
       <div class="stat-row">
-        <div class="stat-box"><div class="n" id="reachedLabel">3</div><div class="l">Ulaşılan</div></div>
-        <div class="stat-box"><div class="n" id="bestLabel2">4</div><div class="l">En İyi</div></div>
+        <div class="stat-box"><div class="n" id="reachedLabel">3</div><div class="l" id="reachedLabelText">Ulaşılan</div></div>
+        <div class="stat-box"><div class="n" id="bestLabel2">4</div><div class="l" id="endBestLabelText">En İyi</div></div>
       </div>
       <button class="play-btn" id="energyContinueBtn" style="margin-top:22px; display:none;">Enerji Harcayarak Devam Et</button>
       <button class="play-btn" id="adContinueBtn" style="margin-top:12px;">Reklam İzle, +1 Can Kazan</button>
@@ -318,9 +339,9 @@
 
   <div class="overlay" id="pauseOverlay" style="display:none;">
     <div class="panel">
-      <div class="eyebrow">Duraklatıldı</div>
-      <h1>Mola</h1>
-      <p class="sub">Devam etmek için hazır olduğunda dokun.</p>
+      <div class="eyebrow" id="pauseEyebrowText">Duraklatıldı</div>
+      <h1 id="pauseTitleText">Mola</h1>
+      <p class="sub" id="pauseSubText">Devam etmek için hazır olduğunda dokun.</p>
       <button class="play-btn" id="resumeBtn">Devam Et</button>
       <button class="play-btn" id="quitBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Ana Menüye Dön</button>
     </div>
@@ -337,6 +358,8 @@
       id:'wolf', glyph:'🐺', color:'#c9584f', accent:'#e0554a',
       hunterName:'Kurt', preyName:'Kuzu',
       title:'Kurt & Kuzu', sub:'Kurdun bakışının dışında kal, çayırın öbür ucuna geç.',
+      hunterNameEn:'Wolf', preyNameEn:'Lamb',
+      titleEn:'Wolf & Lamb', subEn:'Stay out of the wolf\'s sight, reach the far end of the meadow.',
       bg0:'#0d1210', bg1:'#161f19', ground:'#1a241d',
       dayBg0:'#1c2620', dayBg1:'#2e3d30',
       hunterBody:'#4c4b52', hunterDark:'#34333a',
@@ -347,6 +370,8 @@
       id:'cat', glyph:'🐈', color:'#d9a441', accent:'#e0a83f',
       hunterName:'Kedi', preyName:'Fare',
       title:'Kedi & Fare', sub:'Kedinin gözünden kaç, deliğe ulaş.',
+      hunterNameEn:'Cat', preyNameEn:'Mouse',
+      titleEn:'Cat & Mouse', subEn:'Dodge the cat\'s gaze, reach the hole.',
       bg0:'#12100c', bg1:'#1c1812', ground:'#201a12',
       dayBg0:'#241d13', dayBg1:'#3a2c18',
       hunterBody:'#c98a3f', hunterDark:'#8f5f26',
@@ -357,6 +382,8 @@
       id:'alien', glyph:'👽', color:'#6fae8f', accent:'#5fd6a8',
       hunterName:'Uzaylı', preyName:'İnsan',
       title:'Uzaylı & İnsan', sub:'Tarayıcı ışının dışında kal, kapsüle ulaş.',
+      hunterNameEn:'Alien', preyNameEn:'Human',
+      titleEn:'Alien & Human', subEn:'Stay outside the scanner beam, reach the escape pod.',
       bg0:'#0a0e16', bg1:'#101728', ground:'#0d1420',
       dayBg0:'#151f30', dayBg1:'#213048',
       hunterBody:'#5fae7f', hunterDark:'#3d7a58',
@@ -367,6 +394,105 @@
   let themeIndex = 0;
   let theme = THEMES[0];
   const DAY_CYCLE_SECONDS = 100;
+
+  // ---------- Language ----------
+  function detectLang(){
+    try{
+      const saved = localStorage.getItem('gorulme_lang');
+      if(saved==='tr' || saved==='en') return saved;
+    }catch(e){}
+    return (navigator.language||'').toLowerCase().startsWith('tr') ? 'tr' : 'en';
+  }
+  let lang = detectLang();
+  function setLang(l){
+    lang = l;
+    try{ localStorage.setItem('gorulme_lang', l); }catch(e){}
+  }
+  function tField(obj, base){
+    return lang==='en' ? (obj[base+'En'] ?? obj[base]) : obj[base];
+  }
+
+  const STR = {
+    tr: {
+      eyebrow:'Gölgede Kal', footerHint:'Parmağınla / fareyle sürükleyerek yönet',
+      achTitle:'Başarımlar', achLink:'Başarımlar', shopLink:'Mağaza', progressEyebrow:'İlerleme',
+      shopEyebrow:'Mağaza', shopTitle:'Görünüm', closeLink:'Kapat',
+      playBtn:'Başla', pauseEyebrow:'Duraklatıldı', pauseTitle:'Mola',
+      pauseSub:'Devam etmek için hazır olduğunda dokun.',
+      resumeBtn:'Devam Et', quitBtn:'Ana Menüye Dön',
+      endEyebrow:'Görüldün', hudLevelLabel:'Bölüm', hudBestLabel:'En İyi',
+      themeBestPrefix:'🏅 En İyi: ',
+      energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)',
+      adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...',
+      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', reachedLabel:'Ulaşılan',
+      hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
+      caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.",
+      levelUpLabel:lv=>'Bölüm '+lv,
+      dailyQuestTitle:'📅 Günlük Görev',
+      dailyQuestDone:s=>'✅ Tamamlandı (+'+s+'⭐ alındı)',
+      dailyQuestToastLabel:'Günlük Görev',
+      dailyQuestCompleteTitle:'Günlük Görev Tamamlandı',
+      dailyQuestRewardDesc:s=>'+'+s+' Yıldız kazandın',
+      achToastLabel:'Başarım Kazandın',
+      shareText:(t,lv)=>'Görülme ('+t+") oyununda Bölüm "+lv+"'e ulaştım! 🎮",
+      shareCopied:'Skor panoya kopyalandı!',
+      skinSelected:'Seçili', skinSelect:'Seç',
+      dqReachLevel:t=>"Tek oyunda Bölüm "+t+"'a ulaş",
+      dqCollectFood:t=>"Bugün "+t+" yem topla",
+      dqNoHit:t=>"Can kaybetmeden "+t+" bölüm geç",
+      foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji',
+      langBtnLabel:'EN',
+      tutLink:'Nasıl Oynanır?', tutEyebrow:'Nasıl Oynanır',
+      tutSkip:'Atla', tutNext:'İleri', tutDone:'Anladım',
+      tutorialSteps:[
+        {icon:'👆', title:'Sürükleyerek Yönet', desc:'Parmağınla veya fareyle ekranda istediğin yöne sürükle, karakterin seni takip eder.'},
+        {icon:'👁️', title:'Görülme', desc:'Avcının parlayan bakış konisine girersen fark edilirsin. Konide kaldıkça hızla yakalanırsın.'},
+        {icon:'🏠', title:'Hedefe Ulaş', desc:'Karşıdaki eve/kulübeye ulaşarak bölümü tamamla.'},
+        {icon:'🐑', title:'Sürünü Koru', desc:'Bazı bölümlerde arkanda seni takip eden arkadaşların olur. Onlar da avcı tarafından görülebilir!'},
+        {icon:'⭐', title:'Yem Topla', desc:'Bazı bölümlerde önce yem toplaman gerekir, hedef ancak o zaman açılır.'}
+      ]
+    },
+    en: {
+      eyebrow:'Stay in the Shadows', footerHint:'Drag with your finger / mouse to move',
+      achTitle:'Achievements', achLink:'Achievements', shopLink:'Shop', progressEyebrow:'Progress',
+      shopEyebrow:'Shop', shopTitle:'Appearance', closeLink:'Close',
+      playBtn:'Play', pauseEyebrow:'Paused', pauseTitle:'Break',
+      pauseSub:'Tap when you\'re ready to continue.',
+      resumeBtn:'Resume', quitBtn:'Back to Menu',
+      endEyebrow:'Spotted', hudLevelLabel:'Level', hudBestLabel:'Best',
+      themeBestPrefix:'🏅 Best: ',
+      energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)',
+      adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...',
+      shareBtn:'Share Score', retryBtn:'Start Over', reachedLabel:'Reached',
+      hitTitle:'You Lost a Life!', hitSuffix:' lives left',
+      caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.',
+      levelUpLabel:lv=>'Level '+lv,
+      dailyQuestTitle:'📅 Daily Quest',
+      dailyQuestDone:s=>'✅ Completed (+'+s+'⭐ earned)',
+      dailyQuestToastLabel:'Daily Quest',
+      dailyQuestCompleteTitle:'Daily Quest Completed',
+      dailyQuestRewardDesc:s=>'+'+s+' Stars earned',
+      achToastLabel:'Achievement Unlocked',
+      shareText:(t,lv)=>'I reached Level '+lv+' in Görülme ('+t+')! 🎮',
+      shareCopied:'Score copied to clipboard!',
+      skinSelected:'Selected', skinSelect:'Select',
+      dqReachLevel:t=>'Reach Level '+t+' in a single run',
+      dqCollectFood:t=>'Collect '+t+' food items today',
+      dqNoHit:t=>'Clear '+t+' levels without losing a life',
+      foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy',
+      langBtnLabel:'TR',
+      tutLink:'How to Play?', tutEyebrow:'How to Play',
+      tutSkip:'Skip', tutNext:'Next', tutDone:'Got it',
+      tutorialSteps:[
+        {icon:'👆', title:'Drag to Move', desc:'Drag anywhere with your finger or mouse — your character follows.'},
+        {icon:'👁️', title:'Stay Unseen', desc:'If you enter the hunter\'s glowing vision cone, you\'ll be spotted quickly.'},
+        {icon:'🏠', title:'Reach the Goal', desc:'Get to the house/hut on the other side to clear the level.'},
+        {icon:'🐑', title:'Protect Your Herd', desc:'In later levels, followers trail behind you — they can be spotted too!'},
+        {icon:'⭐', title:'Collect Food', desc:'Some levels require collecting food first before the goal unlocks.'}
+      ]
+    }
+  };
+  function S(){ return STR[lang]; }
 
   // ---------- Canvas setup ----------
   const canvas = document.getElementById('game');
@@ -385,8 +511,8 @@
   // ---------- Persistent progress (stars, achievements, cosmetics) ----------
   function defaultProgress(){
     return {
-      stars:0, bestLevelEver:0, totalFoodsEver:0, adWatches:0,
-      noHitStreakBest:0, themesPlayed:[], achievements:{},
+      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0}, totalFoodsEver:0, adWatches:0,
+      noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false,
       skins:{wolf:'default', cat:'default', alien:'default'},
       ownedSkins:{wolf:['default'], cat:['default'], alien:['default']}
     };
@@ -407,19 +533,19 @@
 
   const SKIN_DEFS = {
     wolf: [
-      {id:'default', name:'Klasik Kuzu', cost:0, body:'#eee7d9', dark:'#d8cfba'},
-      {id:'black', name:'Kara Kuzu', cost:5, body:'#3a3a3f', dark:'#242428'},
-      {id:'gold', name:'Altın Kuzu', cost:15, body:'#e8c14a', dark:'#c9a53a'}
+      {id:'default', name:'Klasik Kuzu', nameEn:'Classic Lamb', cost:0, body:'#eee7d9', dark:'#d8cfba'},
+      {id:'black', name:'Kara Kuzu', nameEn:'Black Lamb', cost:5, body:'#3a3a3f', dark:'#242428'},
+      {id:'gold', name:'Altın Kuzu', nameEn:'Golden Lamb', cost:15, body:'#e8c14a', dark:'#c9a53a'}
     ],
     cat: [
-      {id:'default', name:'Klasik Fare', cost:0, body:'#a79c8f', dark:'#847a70'},
-      {id:'white', name:'Beyaz Fare', cost:5, body:'#f0ece4', dark:'#cfc8bd'},
-      {id:'brown', name:'Kahve Fare', cost:15, body:'#8a6a4a', dark:'#5f4530'}
+      {id:'default', name:'Klasik Fare', nameEn:'Classic Mouse', cost:0, body:'#a79c8f', dark:'#847a70'},
+      {id:'white', name:'Beyaz Fare', nameEn:'White Mouse', cost:5, body:'#f0ece4', dark:'#cfc8bd'},
+      {id:'brown', name:'Kahve Fare', nameEn:'Brown Mouse', cost:15, body:'#8a6a4a', dark:'#5f4530'}
     ],
     alien: [
-      {id:'default', name:'Klasik İnsan', cost:0, body:'#e0b98f', dark:'#b8906a'},
-      {id:'tan', name:'Bronz Ten', cost:5, body:'#c68a5a', dark:'#9a6640'},
-      {id:'pale', name:'Solgun Ten', cost:15, body:'#f0d8c0', dark:'#d0b89a'}
+      {id:'default', name:'Klasik İnsan', nameEn:'Classic Human', cost:0, body:'#e0b98f', dark:'#b8906a'},
+      {id:'tan', name:'Bronz Ten', nameEn:'Tan Skin', cost:5, body:'#c68a5a', dark:'#9a6640'},
+      {id:'pale', name:'Solgun Ten', nameEn:'Pale Skin', cost:15, body:'#f0d8c0', dark:'#d0b89a'}
     ]
   };
   function getCurrentSkin(){
@@ -428,16 +554,21 @@
     return list.find(s=>s.id===owned) || list[0];
   }
 
+  function overallBest(){
+    const b = progress.bestLevelByTheme || {};
+    return Math.max(b.wolf||0, b.cat||0, b.alien||0);
+  }
+
   const ACHIEVEMENTS = [
-    {id:'first_level', title:'İlk Adım', desc:"Bölüm 1'i tamamla", check:()=>progress.bestLevelEver>=2},
-    {id:'reach_10', title:'Hayatta Kalan', desc:"Bölüm 10'a ulaş", check:()=>progress.bestLevelEver>=10},
-    {id:'reach_20', title:'Uzman Kaçak', desc:"Bölüm 20'ye ulaş", check:()=>progress.bestLevelEver>=20},
-    {id:'reach_30', title:'Efsane', desc:"Bölüm 30'a ulaş", check:()=>progress.bestLevelEver>=30},
-    {id:'food_10', title:'Yem Ustası', desc:"Toplam 10 yem topla", check:()=>progress.totalFoodsEver>=10},
-    {id:'star_20', title:'Yıldız Koleksiyoncusu', desc:"20 yıldız biriktir", check:()=>progress.stars>=20},
-    {id:'streak_5', title:'Sağlam Can', desc:"Can kaybetmeden 5 bölüm geç", check:()=>progress.noHitStreakBest>=5},
-    {id:'ad_watch', title:'İkinci Şans', desc:"Reklam izleyerek devam et", check:()=>progress.adWatches>=1},
-    {id:'all_themes', title:'Tema Gezgini', desc:"Üç temanın hepsinde oyna", check:()=>progress.themesPlayed.length>=3}
+    {id:'first_level', title:'İlk Adım', titleEn:'First Step', desc:"Bölüm 1'i tamamla", descEn:'Complete Level 1', check:()=>overallBest()>=2},
+    {id:'reach_10', title:'Hayatta Kalan', titleEn:'Survivor', desc:"Bölüm 10'a ulaş", descEn:'Reach Level 10', check:()=>overallBest()>=10},
+    {id:'reach_20', title:'Uzman Kaçak', titleEn:'Expert Escapee', desc:"Bölüm 20'ye ulaş", descEn:'Reach Level 20', check:()=>overallBest()>=20},
+    {id:'reach_30', title:'Efsane', titleEn:'Legend', desc:"Bölüm 30'a ulaş", descEn:'Reach Level 30', check:()=>overallBest()>=30},
+    {id:'food_10', title:'Yem Ustası', titleEn:'Food Master', desc:"Toplam 10 yem topla", descEn:'Collect 10 food items total', check:()=>progress.totalFoodsEver>=10},
+    {id:'star_20', title:'Yıldız Koleksiyoncusu', titleEn:'Star Collector', desc:"20 yıldız biriktir", descEn:'Collect 20 stars', check:()=>progress.stars>=20},
+    {id:'streak_5', title:'Sağlam Can', titleEn:'Solid Streak', desc:"Can kaybetmeden 5 bölüm geç", descEn:'Clear 5 levels without losing a life', check:()=>progress.noHitStreakBest>=5},
+    {id:'ad_watch', title:'İkinci Şans', titleEn:'Second Chance', desc:"Reklam izleyerek devam et", descEn:'Continue by watching an ad', check:()=>progress.adWatches>=1},
+    {id:'all_themes', title:'Tema Gezgini', titleEn:'Theme Explorer', desc:"Üç temanın hepsinde oyna", descEn:'Play all three themes', check:()=>progress.themesPlayed.length>=3}
   ];
   function checkAchievements(){
     const newly = [];
@@ -455,9 +586,9 @@
   function showAchievementToast(a, icon, label){
     const el = document.getElementById('achToast');
     document.getElementById('achToastIcon').textContent = icon || '🏆';
-    document.getElementById('achToastLabel').textContent = label || 'Başarım Kazandın';
-    document.getElementById('achToastTitle').textContent = a.title;
-    document.getElementById('achToastDesc').textContent = a.desc;
+    document.getElementById('achToastLabel').textContent = label || S().achToastLabel;
+    document.getElementById('achToastTitle').textContent = tField(a,'title');
+    document.getElementById('achToastDesc').textContent = tField(a,'desc');
     el.classList.add('show');
     setTimeout(()=> el.classList.remove('show'), 2600);
   }
@@ -468,9 +599,9 @@
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
   const DAILY_QUEST_TYPES = [
-    {type:'reach_level', targets:[5,8,10,12], label:t=>"Tek oyunda Bölüm "+t+"'a ulaş"},
-    {type:'collect_food', targets:[3,5,8], label:t=>"Bugün "+t+" yem topla"},
-    {type:'no_hit_streak', targets:[3,4,6], label:t=>"Can kaybetmeden "+t+" bölüm geç"}
+    {type:'reach_level', targets:[5,8,10,12], label:t=>S().dqReachLevel(t)},
+    {type:'collect_food', targets:[3,5,8], label:t=>S().dqCollectFood(t)},
+    {type:'no_hit_streak', targets:[3,4,6], label:t=>S().dqNoHit(t)}
   ];
   const DAILY_REWARD_STARS = 5;
   function ensureDailyQuest(){
@@ -496,7 +627,7 @@
       q.claimed = true;
       progress.stars += DAILY_REWARD_STARS;
       saveProgress();
-      showAchievementToast({title:'Günlük Görev Tamamlandı', desc:'+'+DAILY_REWARD_STARS+' Yıldız kazandın'}, '📅', 'Günlük Görev');
+      showAchievementToast({title:S().dailyQuestCompleteTitle, desc:S().dailyQuestRewardDesc(DAILY_REWARD_STARS)}, '📅', S().dailyQuestToastLabel);
       checkAchievements();
     } else {
       saveProgress();
@@ -510,14 +641,13 @@
     const pct = Math.min(100, (q.progress/q.target)*100);
     document.getElementById('questBarFill').style.width = pct+'%';
     document.getElementById('questStatus').textContent = q.claimed
-      ? ('✅ Tamamlandı (+'+DAILY_REWARD_STARS+'⭐ alındı)')
+      ? S().dailyQuestDone(DAILY_REWARD_STARS)
       : (q.progress+'/'+q.target);
   }
 
   // ---------- Game state ----------
   let state = 'start'; // start | playing | levelup | hit | paused | gameover
   let level = 1;
-  let best = 1;
   let lives = 3;
   const MAX_LIVES = 3;
   let energy = 0;
@@ -707,7 +837,7 @@
 
   function updateHud(){
     document.getElementById('levelLabel').textContent = level;
-    document.getElementById('bestLabel').textContent = best;
+    document.getElementById('bestLabel').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
     document.getElementById('livesLabel').textContent = '♥'.repeat(lives) + '♡'.repeat(MAX_LIVES-lives);
     const foodPill = document.getElementById('foodPill');
     if(foods.length>0){
@@ -727,9 +857,9 @@
     }
   }
   function foodLabelFor(id){
-    if(id==='wolf') return 'Ot';
-    if(id==='cat') return 'Peynir';
-    return 'Enerji';
+    if(id==='wolf') return S().foodWolf;
+    if(id==='cat') return S().foodCat;
+    return S().foodAlien;
   }
 
   // ---------- Life loss / continue flow ----------
@@ -758,25 +888,27 @@
 
   function gameOver(){
     state = 'gameover';
-    best = Math.max(best, level);
+    progress.bestLevelByTheme[theme.id] = Math.max(progress.bestLevelByTheme[theme.id]||0, level);
+    saveProgress();
+    checkAchievements();
     sfxGameOver();
-    document.getElementById('endLevelText').textContent = theme.hunterName + ' seni gördü';
-    document.getElementById('endSub').textContent = 'Bölüm ' + level + "'de yakalandın.";
+    document.getElementById('endLevelText').textContent = S().caughtBy(tField(theme,'hunterName'));
+    document.getElementById('endSub').textContent = S().caughtSub(level);
     document.getElementById('reachedLabel').textContent = level;
-    document.getElementById('bestLabel2').textContent = best;
+    document.getElementById('bestLabel2').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
     document.getElementById('caughtIcon').textContent = theme.glyph;
 
     const energyBtn = document.getElementById('energyContinueBtn');
     if(energy>=ENERGY_COST_PER_LIFE){
       energyBtn.style.display='block';
-      energyBtn.textContent = 'Enerji Harcayarak Devam Et (-'+ENERGY_COST_PER_LIFE+'⚡)';
+      energyBtn.textContent = S().energyContinuePrefix+ENERGY_COST_PER_LIFE+S().energySuffix;
       energyBtn.disabled = false;
     } else {
       energyBtn.style.display='none';
     }
     const adBtn = document.getElementById('adContinueBtn');
     adBtn.disabled = false;
-    adBtn.textContent = 'Reklam İzle, +1 Can Kazan';
+    adBtn.textContent = S().adContinue;
 
     document.getElementById('endOverlay').style.display='flex';
     document.getElementById('hud').style.display='none';
@@ -800,7 +932,7 @@
   function continueWithAd(){
     const adBtn = document.getElementById('adContinueBtn');
     adBtn.disabled = true;
-    adBtn.textContent = 'Reklam oynatılıyor...';
+    adBtn.textContent = S().adPlaying;
     setTimeout(()=>{
       lives = 1;
       progress.adWatches++;
@@ -978,7 +1110,7 @@
         level++;
         runStreak++;
         progress.stars += 1;
-        progress.bestLevelEver = Math.max(progress.bestLevelEver, level);
+        progress.bestLevelByTheme[theme.id] = Math.max(progress.bestLevelByTheme[theme.id]||0, level);
         progress.noHitStreakBest = Math.max(progress.noHitStreakBest, runStreak);
         updateDailyQuestProgress('reach_level', level, 'max');
         updateDailyQuestProgress('no_hit_streak', runStreak, 'max');
@@ -1297,21 +1429,92 @@
 
   function drawGoal(){
     const t = performance.now()/500;
-    const pulse = 1 + Math.sin(t)*0.08;
-    const color = goalUnlocked ? '127,174,134' : '120,126,140';
+    const pulse = 1 + Math.sin(t)*0.06;
+    const glowColor = goalUnlocked ? '127,174,134' : '120,126,140';
     ctx.save();
     ctx.translate(goal.x,goal.y);
-    const grad = ctx.createRadialGradient(0,0,0,0,0,goal.r*1.8*pulse);
-    grad.addColorStop(0, `rgba(${color},${goalUnlocked?0.5:0.25})`);
-    grad.addColorStop(1, `rgba(${color},0)`);
+    const grad = ctx.createRadialGradient(0,0,0,0,0,goal.r*2.0*pulse);
+    grad.addColorStop(0, `rgba(${glowColor},${goalUnlocked?0.45:0.22})`);
+    grad.addColorStop(1, `rgba(${glowColor},0)`);
     ctx.fillStyle = grad;
-    ctx.beginPath(); ctx.arc(0,0,goal.r*1.8*pulse,0,7); ctx.fill();
-    ctx.strokeStyle = goalUnlocked ? '#7fae86' : '#787e8c';
-    ctx.lineWidth=2.5;
-    ctx.setLineDash(goalUnlocked ? [] : [6,5]);
-    ctx.beginPath(); ctx.arc(0,0,goal.r*pulse,0,7); ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.beginPath(); ctx.arc(0,0,goal.r*2.0*pulse,0,7); ctx.fill();
+
+    if(!goalUnlocked){
+      ctx.strokeStyle = '#787e8c';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6,5]);
+      ctx.beginPath(); ctx.arc(0,0,goal.r*1.15*pulse,0,7); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    ctx.scale(pulse, pulse);
+    if(theme.id==='wolf') drawGoalHut(goal.r, goalUnlocked);
+    else if(theme.id==='cat') drawGoalMouseHouse(goal.r, goalUnlocked);
+    else drawGoalHouse(goal.r, goalUnlocked);
     ctx.restore();
+  }
+
+  function drawGoalHut(r, unlocked){
+    const wall = unlocked ? '#a3794f' : '#5a5f6a';
+    const wallDark = unlocked ? '#7a5a38' : '#454a54';
+    const roof = unlocked ? '#5f4530' : '#3a3e48';
+    ctx.fillStyle = wallDark;
+    ctx.fillRect(-r*0.85, -r*0.1, r*1.7, r*1.0);
+    ctx.fillStyle = wall;
+    ctx.fillRect(-r*0.78, -r*0.05, r*1.56, r*0.9);
+    ctx.fillStyle = roof;
+    ctx.beginPath();
+    ctx.moveTo(-r*1.08, -r*0.1);
+    ctx.lineTo(0, -r*0.98);
+    ctx.lineTo(r*1.08, -r*0.1);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = unlocked ? '#2a1f14' : '#2a2d34';
+    ctx.fillRect(-r*0.22, r*0.15, r*0.44, r*0.65);
+    if(unlocked){
+      ctx.fillStyle = 'rgba(255,214,140,0.55)';
+      ctx.fillRect(-r*0.15, r*0.22, r*0.3, r*0.28);
+    }
+  }
+
+  function drawGoalHouse(r, unlocked){
+    const wall = unlocked ? '#d8c9a8' : '#5a5f6a';
+    const wallDark = unlocked ? '#b8a888' : '#454a54';
+    const roof = unlocked ? '#9a5a42' : '#3a3e48';
+    ctx.fillStyle = wallDark;
+    ctx.fillRect(-r*0.85, -r*0.05, r*1.7, r*0.95);
+    ctx.fillStyle = wall;
+    ctx.fillRect(-r*0.78, 0, r*1.56, r*0.85);
+    ctx.fillStyle = roof;
+    ctx.beginPath();
+    ctx.moveTo(-r*1.08, -r*0.05);
+    ctx.lineTo(0, -r*0.92);
+    ctx.lineTo(r*1.08, -r*0.05);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = roof;
+    ctx.fillRect(r*0.35, -r*0.88, r*0.16, r*0.38);
+    ctx.fillStyle = unlocked ? 'rgba(255,224,150,0.6)' : 'rgba(255,255,255,0.15)';
+    ctx.fillRect(-r*0.55, r*0.12, r*0.28, r*0.28);
+    ctx.fillStyle = unlocked ? '#4a3320' : '#2a2d34';
+    ctx.fillRect(r*0.08, r*0.22, r*0.32, r*0.58);
+  }
+
+  function drawGoalMouseHouse(r, unlocked){
+    const wall = unlocked ? '#c9a06a' : '#5a5f6a';
+    const wallDark = unlocked ? '#a37e4c' : '#454a54';
+    const roof = unlocked ? '#7a5230' : '#3a3e48';
+    ctx.fillStyle = wallDark;
+    ctx.beginPath(); ctx.arc(0, r*0.12, r*0.72, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = wall;
+    ctx.beginPath(); ctx.arc(0, r*0.08, r*0.62, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = roof;
+    ctx.beginPath();
+    ctx.arc(0, r*0.05, r*0.66, Math.PI, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = unlocked ? '#2a1f14' : '#2a2d34';
+    ctx.beginPath(); ctx.arc(0, r*0.35, r*0.22, 0, Math.PI*2); ctx.fill();
   }
 
   function drawFood(f){
@@ -1387,7 +1590,7 @@
       ctx.fillStyle = '#7fae86';
       ctx.font = '700 22px Segoe UI, sans-serif';
       ctx.textAlign='center';
-      ctx.fillText('Bölüm ' + level, W/2, H/2);
+      ctx.fillText(S().levelUpLabel(level), W/2, H/2);
       ctx.restore();
     }
     if(state==='hit'){
@@ -1396,10 +1599,10 @@
       ctx.fillStyle = '#e0554a';
       ctx.font = '700 22px Segoe UI, sans-serif';
       ctx.textAlign='center';
-      ctx.fillText('Can Kaybettin!', W/2, H/2-16);
+      ctx.fillText(S().hitTitle, W/2, H/2-16);
       ctx.font = '600 15px Segoe UI, sans-serif';
       ctx.fillStyle = '#eae6d8';
-      ctx.fillText(lives + ' can kaldı', W/2, H/2+14);
+      ctx.fillText(lives + S().hitSuffix, W/2, H/2+14);
       ctx.restore();
     }
   }
@@ -1420,7 +1623,7 @@
       const el = document.createElement('div');
       el.className = 'theme-tab' + (i===themeIndex?' active':'');
       el.style.setProperty('--tab-color', t.color);
-      el.innerHTML = `<span class="glyph">${t.glyph}</span><span>${t.title.split(' & ')[1]}</span>`;
+      el.innerHTML = `<span class="glyph">${t.glyph}</span><span>${tField(t,'preyName')}</span>`;
       el.addEventListener('click', ()=>{
         themeIndex = i;
         theme = THEMES[themeIndex];
@@ -1430,18 +1633,60 @@
       tabsEl.appendChild(el);
     });
   }
+  function applyLanguage(){
+    document.getElementById('eyebrowText').textContent = S().eyebrow;
+    document.getElementById('footerHintText').textContent = S().footerHint;
+    document.getElementById('playBtn').textContent = S().playBtn;
+    document.getElementById('openAchLabel').textContent = S().achLink;
+    document.getElementById('openShopLabel').textContent = S().shopLink;
+    document.getElementById('openTutLabel').textContent = S().tutLink;
+    document.getElementById('themeBestLabel').textContent = S().themeBestPrefix;
+    document.getElementById('langBtn').textContent = S().langBtnLabel;
+    document.getElementById('langBtnHud').textContent = S().langBtnLabel;
+    document.getElementById('questTitleText').textContent = S().dailyQuestTitle;
+    document.getElementById('achEyebrowText').textContent = S().progressEyebrow;
+    document.getElementById('achTitleText').textContent = S().achTitle;
+    document.getElementById('closeAchBtn').textContent = S().closeLink;
+    document.getElementById('shopEyebrowText').textContent = S().shopEyebrow;
+    document.getElementById('shopTitleText').textContent = S().shopTitle;
+    document.getElementById('closeShopBtn').textContent = S().closeLink;
+    document.getElementById('endEyebrowText').textContent = S().endEyebrow;
+    document.getElementById('reachedLabelText').textContent = S().reachedLabel;
+    document.getElementById('endBestLabelText').textContent = S().hudBestLabel;
+    document.getElementById('shareBtn').textContent = S().shareBtn;
+    document.getElementById('retryBtn').textContent = S().retryBtn;
+    document.getElementById('pauseEyebrowText').textContent = S().pauseEyebrow;
+    document.getElementById('pauseTitleText').textContent = S().pauseTitle;
+    document.getElementById('pauseSubText').textContent = S().pauseSub;
+    document.getElementById('resumeBtn').textContent = S().resumeBtn;
+    document.getElementById('quitBtn').textContent = S().quitBtn;
+    document.getElementById('hudLevelLabel').textContent = S().hudLevelLabel;
+    document.getElementById('hudBestLabel').textContent = S().hudBestLabel;
+  }
+  function toggleLang(){
+    setLang(lang==='tr' ? 'en' : 'tr');
+    applyLanguage();
+    updateStartText();
+    if(state==='playing' || state==='paused' || state==='hit' || state==='levelup') updateHud();
+  }
   function updateStartText(){
-    document.getElementById('titleText').textContent = theme.title;
-    document.getElementById('subText').textContent = theme.sub;
+    document.getElementById('titleText').textContent = tField(theme,'title');
+    document.getElementById('subText').textContent = tField(theme,'sub');
     document.getElementById('starCount').textContent = progress.stars;
+    document.getElementById('themeBestCount').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
     renderDailyQuestUI();
   }
+  applyLanguage();
   renderTabs();
   updateStartText();
   document.getElementById('muteBtn').textContent = soundOn ? '🔊' : '🔇';
+  document.getElementById('langBtn').addEventListener('click', toggleLang);
+  document.getElementById('langBtnHud').addEventListener('click', toggleLang);
 
   // ---------- Achievements screen ----------
   function renderAchievements(){
+    document.getElementById('achTitleText').textContent = S().achTitle;
+    document.getElementById('closeAchBtn').textContent = S().closeLink;
     const list = document.getElementById('achList');
     list.innerHTML = '';
     ACHIEVEMENTS.forEach(a=>{
@@ -1449,7 +1694,7 @@
       const row = document.createElement('div');
       row.className = 'ach-row' + (unlocked?'':' locked');
       row.innerHTML = `<div class="ico">${unlocked?'🏆':'🔒'}</div>
-        <div><div class="t1">${a.title}</div><div class="t2">${a.desc}</div></div>`;
+        <div><div class="t1">${tField(a,'title')}</div><div class="t2">${tField(a,'desc')}</div></div>`;
       list.appendChild(row);
     });
   }
@@ -1457,13 +1702,16 @@
   // ---------- Shop screen ----------
   let shopThemeIndex = themeIndex;
   function renderShopTabs(){
+    document.getElementById('shopEyebrowText').textContent = S().shopEyebrow;
+    document.getElementById('shopTitleText').textContent = S().shopTitle;
+    document.getElementById('closeShopBtn').textContent = S().closeLink;
     const el = document.getElementById('shopTabs');
     el.innerHTML = '';
     THEMES.forEach((t,i)=>{
       const b = document.createElement('div');
       b.className = 'theme-tab' + (i===shopThemeIndex?' active':'');
       b.style.setProperty('--tab-color', t.color);
-      b.innerHTML = `<span class="glyph">${t.glyph}</span><span>${t.title.split(' & ')[1]}</span>`;
+      b.innerHTML = `<span class="glyph">${t.glyph}</span><span>${tField(t,'preyName')}</span>`;
       b.addEventListener('click', ()=>{ shopThemeIndex=i; renderShopTabs(); renderShopList(); });
       el.appendChild(b);
     });
@@ -1482,13 +1730,13 @@
       const isSelected = selected===s.id;
       let btnHtml;
       if(isSelected){
-        btnHtml = `<button class="skin-btn selected" disabled>Seçili</button>`;
+        btnHtml = `<button class="skin-btn selected" disabled>${S().skinSelected}</button>`;
       } else if(isOwned){
-        btnHtml = `<button class="skin-btn locked" data-action="select" data-id="${s.id}">Seç</button>`;
+        btnHtml = `<button class="skin-btn locked" data-action="select" data-id="${s.id}">${S().skinSelect}</button>`;
       } else {
         btnHtml = `<button class="skin-btn" data-action="buy" data-id="${s.id}" ${progress.stars<s.cost?'disabled':''}>⭐${s.cost}</button>`;
       }
-      row.innerHTML = `<div class="swatch" style="background:${s.body};"></div><div class="name">${s.name}</div>${btnHtml}`;
+      row.innerHTML = `<div class="swatch" style="background:${s.body};"></div><div class="name">${tField(s,'name')}</div>${btnHtml}`;
       list.appendChild(row);
       const btn = row.querySelector('button');
       btn.addEventListener('click', ()=>{
@@ -1512,12 +1760,12 @@
   }
 
   function shareScore(){
-    const text = 'Görülme (' + theme.title + ") oyununda Bölüm " + level + "'e ulaştım! 🎮";
+    const text = S().shareText(tField(theme,'title'), level);
     if(navigator.share){
       navigator.share({text: text}).catch(()=>{});
     } else if(navigator.clipboard){
       navigator.clipboard.writeText(text).then(()=>{
-        alert('Skor panoya kopyalandı!');
+        alert(S().shareCopied);
       }).catch(()=>{ alert(text); });
     } else {
       alert(text);
@@ -1553,6 +1801,52 @@
   document.getElementById('closeShopBtn').addEventListener('click', ()=>{
     document.getElementById('shopOverlay').style.display='none';
   });
+
+  // ---------- Tutorial ----------
+  let tutStep = 0;
+  function renderTutStep(){
+    const steps = S().tutorialSteps;
+    const s = steps[tutStep];
+    document.getElementById('tutEyebrowText').textContent = S().tutEyebrow;
+    document.getElementById('tutIcon').textContent = s.icon;
+    document.getElementById('tutTitle').textContent = s.title;
+    document.getElementById('tutDesc').textContent = s.desc;
+    document.getElementById('tutSkipBtn').textContent = S().tutSkip;
+    document.getElementById('tutNextBtn').textContent = (tutStep===steps.length-1) ? S().tutDone : S().tutNext;
+    const dots = document.getElementById('tutDots');
+    dots.innerHTML = '';
+    steps.forEach((_,i)=>{
+      const d = document.createElement('div');
+      d.className = 'tut-dot' + (i===tutStep ? ' active' : '');
+      dots.appendChild(d);
+    });
+  }
+  function openTutorial(){
+    tutStep = 0;
+    renderTutStep();
+    document.getElementById('tutorialOverlay').style.display='flex';
+  }
+  function closeTutorial(){
+    document.getElementById('tutorialOverlay').style.display='none';
+    if(!progress.tutorialSeen){
+      progress.tutorialSeen = true;
+      saveProgress();
+    }
+  }
+  document.getElementById('openTutBtn').addEventListener('click', openTutorial);
+  document.getElementById('tutSkipBtn').addEventListener('click', closeTutorial);
+  document.getElementById('tutNextBtn').addEventListener('click', ()=>{
+    const steps = S().tutorialSteps;
+    if(tutStep < steps.length-1){
+      tutStep++;
+      renderTutStep();
+    } else {
+      closeTutorial();
+    }
+  });
+  if(!progress.tutorialSeen){
+    openTutorial();
+  }
 
 })();
 </script>
