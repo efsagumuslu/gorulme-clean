@@ -6,13 +6,13 @@ workflows:
     environment:
       node: 22
       java: 21
+      android_signing:
+        - gorulme_keystore
     scripts:
       - name: Install npm dependencies
         script: |
           npm install
           npm install @capacitor-community/admob
-      - name: Install Capacitor Android platform
-        script: npm install @capacitor/android
       - name: Add Android platform
         script: npx cap add android
       - name: Generate icon and splash screen
@@ -21,10 +21,32 @@ workflows:
           npx capacitor-assets generate --android
       - name: Sync Capacitor with Android
         script: npx cap sync android
-      - name: Build Android APK
+      - name: Configure release signing
+        script: |
+          cat > /tmp/sign.js << 'ENDOFSCRIPT'
+          const fs = require('fs');
+          const p = 'android/app/build.gradle';
+          let c = fs.readFileSync(p, 'utf8');
+          c = c.replace(/release\s*\{/, 'release {\n            signingConfig signingConfigs.release');
+          const block = `
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("CM_KEYSTORE_PATH"))
+            storePassword System.getenv("CM_KEYSTORE_PASSWORD")
+            keyAlias System.getenv("CM_KEY_ALIAS")
+            keyPassword System.getenv("CM_KEY_PASSWORD")
+        }
+    }
+`;
+          c = c.replace('android {', 'android {' + block);
+          fs.writeFileSync(p, c);
+          console.log('build.gradle patched for release signing');
+          ENDOFSCRIPT
+          node /tmp/sign.js
+      - name: Build signed Android App Bundle
         script: |
           cd android
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew bundleRelease
     artifacts:
-      - android/app/build/outputs/**/*.apk
+      - android/app/build/outputs/**/*.aab
