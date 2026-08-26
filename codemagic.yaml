@@ -8,7 +8,9 @@ workflows:
       java: 21
     scripts:
       - name: Install npm dependencies
-        script: npm install
+        script: |
+          npm install
+          npm install @capacitor-community/admob
       - name: Install Capacitor Android platform
         script: npm install @capacitor/android
       - name: Add Android platform
