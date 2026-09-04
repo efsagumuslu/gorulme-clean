@@ -96,10 +96,25 @@
   .powerup-btn:disabled{ opacity:0.5; cursor:default; }
   .powerup-btn.active{ border-color:var(--amber); box-shadow:0 0 12px -2px var(--amber); }
 
+  .level1-hint{
+    position:fixed; transform:translate(-50%,-50%) scale(1);
+    background:rgba(19,24,38,0.92); border:2px solid var(--amber);
+    color:var(--moon); font-size:17px; font-weight:800;
+    padding:12px 20px; border-radius:16px; white-space:nowrap;
+    z-index:15; pointer-events:none;
+    animation: hint-pulse 1.4s ease-in-out infinite;
+    box-shadow:0 0 22px -2px var(--amber);
+  }
+  @keyframes hint-pulse{
+    0%,100%{ opacity:0.85; transform:translate(-50%,-50%) scale(1); }
+    50%{ opacity:1; transform:translate(-50%,-50%) scale(1.06); }
+  }
+  .level1-hint.fade-out{ animation:none; transition:opacity 0.5s; opacity:0; }
+
   .overlay{
     position:fixed; inset:0;
     display:flex; align-items:center; justify-content:center;
-    background:radial-gradient(ellipse at 50% 30%, rgba(19,24,38,0.94), rgba(6,7,11,0.98));
+    background:radial-gradient(ellipse at 50% 30%, rgba(19,24,38,1), rgba(6,7,11,1));
     z-index:20;
     padding:24px;
   }
@@ -194,6 +209,10 @@
     display:inline-flex; align-items:center; gap:5px;
     color:var(--amber); font-weight:800; font-size:14px;
     margin-bottom:14px;
+  }
+  .lives-row{
+    display:flex; align-items:center; justify-content:center;
+    color:var(--danger); margin-bottom:10px;
   }
 
   .quest-card{
@@ -296,6 +315,7 @@
     <div class="hud-group">
       <div class="hud-pill"><span id="hudLevelLabel">Bölüm</span><span id="levelLabel">1</span></div>
       <div class="hud-pill" id="livesPill"><span id="livesLabel">♥♥♥</span></div>
+      <div class="hud-pill" id="hudLifeTimerPill" style="display:none;"><span id="hudLifeTimerText"></span></div>
       <div class="hud-pill" id="foodPill" style="display:none;"><span id="foodLabelText">Yem</span><span id="foodLabel">0/1</span></div>
       <div class="hud-pill" id="energyPill" style="display:none;"><span>⚡</span><span id="energyLabel">0</span></div>
     </div>
@@ -322,6 +342,12 @@
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
       <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
+
+      <div class="lives-row">
+        <span id="startLivesHearts" style="font-size:18px; letter-spacing:2px;">♥♥♥</span>
+        <span id="lifeTimerText" style="display:none; color:var(--muted); font-size:12.5px; margin-left:8px;"></span>
+      </div>
+      <button class="skin-btn" id="watchAdLifeBtn" style="display:none; margin-bottom:14px;">📺 İzle, Anında Can Kazan</button>
 
       <div class="quest-card" id="questSummaryCard" style="cursor:pointer;">
         <div class="quest-title" id="questSummaryTitleText">📅 Günlük Görevler</div>
@@ -528,6 +554,26 @@
       hunterBody:'#6b4a35', hunterDark:'#4a3220',
       preyBody:'#e8955a', preyDark:'#c9723a',
       deco:'riverbank'
+    },
+    {
+      id:'school', glyph:'👩‍🏫', color:'#e8a33d', accent:'#e8a33d', locked:true,
+      hunterName:'Öğretmen', preyName:'Öğrenci',
+      title:'Öğretmen & Öğrenci', sub:'Öğretmenin bakışından kaç, kopya kağıdına ulaş.',
+      hunterNameEn:'Teacher', preyNameEn:'Student',
+      titleEn:'Teacher & Student', subEn:'Dodge the teacher\'s gaze, reach the cheat sheet.',
+      hunterNameFr:'Professeur', preyNameFr:'Élève',
+      titleFr:'Professeur & Élève', subFr:'Échappe au regard du professeur, atteins l\'antisèche.',
+      hunterNameEs:'Profesor', preyNameEs:'Estudiante',
+      titleEs:'Profesor & Estudiante', subEs:'Esquiva la mirada del profesor, llega a la chuleta.',
+      hunterNameIt:'Insegnante', preyNameIt:'Studente',
+      titleIt:'Insegnante & Studente', subIt:'Evita lo sguardo dell\'insegnante, raggiungi il bigliettino.',
+      hunterNameRu:'Учитель', preyNameRu:'Ученик',
+      titleRu:'Учитель и Ученик', subRu:'Уклоняйся от взгляда учителя, доберись до шпаргалки.',
+      bg0:'#1a140c', bg1:'#2a2015', ground:'#241c12',
+      dayBg0:'#3d3020', dayBg1:'#5a4530',
+      hunterBody:'#3a4a6b', hunterDark:'#242e42',
+      preyBody:'#e8e4d8', preyDark:'#c4bfa8',
+      deco:'classroom'
     }
   ];
   let themeIndex = 0;
@@ -590,10 +636,12 @@
       dqReachLevel:t=>"Tek oyunda Bölüm "+t+"'a ulaş",
       dqCollectFood:t=>"Bugün "+t+" yem topla",
       dqNoHit:t=>"Can kaybetmeden "+t+" bölüm geç",
-      foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji', foodBear:'Yosun',
+      foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji', foodBear:'Yosun', foodSchool:'Kalem',
       themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
       powerUpIntroTitle:'Güçlendirmeler Açıldı!', powerUpIntroDesc:'Görünmezlik ve Hız güçlendirmelerini yıldızla ya da reklam izleyerek kullanabilirsin.',
       foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.',
+      nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan',
+      hintDrag:'👆 Sürükle', hintAvoid:'👁️ Bakış konisinden kaç!', hintGoal:'🏠 Buraya ulaş',
       shopPricingIntroTitle:'Mağaza Bilgisi', shopPricingIntroDesc:n=>'Her görünüm 20 yıldız. Yeterli yıldızın yoksa reklam izleyerek +'+n+' yıldız kazanabilirsin.',
       milestoneEyebrow:'Tebrikler', milestoneTitle:lv=>'Bölüm '+lv+"'u Tamamladın!", milestoneSub:'Harika gidiyorsun, böyle devam et! Bu başarını arkadaşlarınla paylaş.', milestoneContinueBtn:'Devam Et',
       powerUpInvis:'Görünmez', powerUpSpeed:'Hız', watchAdForStars:n=>'İzle +'+n+'⭐',
@@ -642,10 +690,12 @@
       dqReachLevel:t=>'Reach Level '+t+' in a single run',
       dqCollectFood:t=>'Collect '+t+' food items today',
       dqNoHit:t=>'Clear '+t+' levels without losing a life',
-      foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy', foodBear:'Kelp',
+      foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy', foodBear:'Kelp', foodSchool:'Pencil',
       themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
       powerUpIntroTitle:'Power-Ups Unlocked!', powerUpIntroDesc:'Use Invisibility and Speed power-ups with stars or by watching an ad.',
       foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.',
+      nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life',
+      hintDrag:'👆 Drag me', hintAvoid:'👁️ Avoid the vision cone!', hintGoal:'🏠 Reach here',
       shopPricingIntroTitle:'Shop Info', shopPricingIntroDesc:n=>'Each look costs 20 stars. If you don\'t have enough, watch an ad to earn +'+n+' stars.',
       milestoneEyebrow:'Congratulations', milestoneTitle:lv=>'Level '+lv+' Complete!', milestoneSub:'You\'re doing great, keep it up! Share this achievement with your friends.', milestoneContinueBtn:'Continue',
       powerUpInvis:'Invisible', powerUpSpeed:'Speed', watchAdForStars:n=>'Watch +'+n+'⭐',
@@ -694,10 +744,12 @@
       dqReachLevel:t=>'Atteins le Niveau '+t+' en une seule partie',
       dqCollectFood:t=>'Récolte '+t+' aliments aujourd\'hui',
       dqNoHit:t=>'Termine '+t+' niveaux sans perdre de vie',
-      foodWolf:'Herbe', foodCat:'Fromage', foodAlien:'Énergie', foodBear:'Algues',
+      foodWolf:'Herbe', foodCat:'Fromage', foodAlien:'Énergie', foodBear:'Algues', foodSchool:'Crayon',
       themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
       powerUpIntroTitle:'Bonus Débloqués !', powerUpIntroDesc:'Utilise les bonus Invisible et Vitesse avec des étoiles ou en regardant une pub.',
       foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.',
+      nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate',
+      hintDrag:'👆 Fais-moi glisser', hintAvoid:'👁️ Évite le cône de vision !', hintGoal:'🏠 Arrive ici',
       shopPricingIntroTitle:'Info Boutique', shopPricingIntroDesc:n=>'Chaque apparence coûte 20 étoiles. Si tu n\'en as pas assez, regarde une pub pour gagner +'+n+' étoiles.',
       milestoneEyebrow:'Félicitations', milestoneTitle:lv=>'Niveau '+lv+' Terminé !', milestoneSub:'Tu te débrouilles très bien, continue comme ça ! Partage cette réussite avec tes amis.', milestoneContinueBtn:'Continuer',
       powerUpInvis:'Invisible', powerUpSpeed:'Vitesse', watchAdForStars:n=>'Voir +'+n+'⭐',
@@ -746,10 +798,12 @@
       dqReachLevel:t=>'Alcanza el Nivel '+t+' en una sola partida',
       dqCollectFood:t=>'Recolecta '+t+' alimentos hoy',
       dqNoHit:t=>'Supera '+t+' niveles sin perder una vida',
-      foodWolf:'Hierba', foodCat:'Queso', foodAlien:'Energía', foodBear:'Algas',
+      foodWolf:'Hierba', foodCat:'Queso', foodAlien:'Energía', foodBear:'Algas', foodSchool:'Lápiz',
       themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
       powerUpIntroTitle:'¡Potenciadores Desbloqueados!', powerUpIntroDesc:'Usa los potenciadores Invisible y Velocidad con estrellas o viendo un anuncio.',
       foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.',
+      nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea',
+      hintDrag:'👆 Arrástrame', hintAvoid:'👁️ ¡Esquiva el cono de visión!', hintGoal:'🏠 Llega aquí',
       shopPricingIntroTitle:'Info de la Tienda', shopPricingIntroDesc:n=>'Cada apariencia cuesta 20 estrellas. Si no tienes suficientes, mira un anuncio para ganar +'+n+' estrellas.',
       milestoneEyebrow:'Felicidades', milestoneTitle:lv=>'¡Nivel '+lv+' Completado!', milestoneSub:'¡Lo estás haciendo genial, sigue así! Comparte este logro con tus amigos.', milestoneContinueBtn:'Continuar',
       powerUpInvis:'Invisible', powerUpSpeed:'Velocidad', watchAdForStars:n=>'Ver +'+n+'⭐',
@@ -798,10 +852,12 @@
       dqReachLevel:t=>'Raggiungi il Livello '+t+' in una sola partita',
       dqCollectFood:t=>'Raccogli '+t+' cibi oggi',
       dqNoHit:t=>'Supera '+t+' livelli senza perdere una vita',
-      foodWolf:'Erba', foodCat:'Formaggio', foodAlien:'Energia', foodBear:'Alghe',
+      foodWolf:'Erba', foodCat:'Formaggio', foodAlien:'Energia', foodBear:'Alghe', foodSchool:'Matita',
       themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
       powerUpIntroTitle:'Potenziamenti Sbloccati!', powerUpIntroDesc:'Usa i potenziamenti Invisibile e Velocità con le stelle o guardando una pubblicità.',
       foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.',
+      nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea',
+      hintDrag:'👆 Trascinami', hintAvoid:'👁️ Evita il cono visivo!', hintGoal:'🏠 Arriva qui',
       shopPricingIntroTitle:'Info Negozio', shopPricingIntroDesc:n=>'Ogni aspetto costa 20 stelle. Se non ne hai abbastanza, guarda una pubblicità per guadagnare +'+n+' stelle.',
       milestoneEyebrow:'Complimenti', milestoneTitle:lv=>'Livello '+lv+' Completato!', milestoneSub:'Stai andando alla grande, continua così! Condividi questo traguardo con i tuoi amici.', milestoneContinueBtn:'Continua',
       powerUpInvis:'Invisibile', powerUpSpeed:'Velocità', watchAdForStars:n=>'Guarda +'+n+'⭐',
@@ -850,10 +906,12 @@
       dqReachLevel:t=>'Достигни Уровня '+t+' за одну игру',
       dqCollectFood:t=>'Собери '+t+' еды сегодня',
       dqNoHit:t=>'Пройди '+t+' уровней без потери жизни',
-      foodWolf:'Трава', foodCat:'Сыр', foodAlien:'Энергия', foodBear:'Водоросли',
+      foodWolf:'Трава', foodCat:'Сыр', foodAlien:'Энергия', foodBear:'Водоросли', foodSchool:'Карандаш',
       themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
       powerUpIntroTitle:'Усиления Открыты!', powerUpIntroDesc:'Используй усиления Невидимка и Скорость за звёзды или посмотрев рекламу.',
       foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.',
+      nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу',
+      hintDrag:'👆 Тяни меня', hintAvoid:'👁️ Избегай конуса зрения!', hintGoal:'🏠 Доберись сюда',
       shopPricingIntroTitle:'Информация о Магазине', shopPricingIntroDesc:n=>'Каждый образ стоит 20 звёзд. Если звёзд не хватает, посмотри рекламу и получи +'+n+' звёзд.',
       milestoneEyebrow:'Поздравляем', milestoneTitle:lv=>'Уровень '+lv+' Пройден!', milestoneSub:'Ты отлично справляешься, продолжай в том же духе! Поделись этим достижением с друзьями.', milestoneContinueBtn:'Продолжить',
       powerUpInvis:'Невидимка', powerUpSpeed:'Скорость', watchAdForStars:n=>'Смотреть +'+n+'⭐',
@@ -890,27 +948,76 @@
   // ---------- Persistent progress (stars, achievements, cosmetics) ----------
   function defaultProgress(){
     return {
-      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0},
-      lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0}, totalFoodsEver:0, adWatches:0,
+      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0},
+      lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
-      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, dailyQuestSet:null,
-      skins:{wolf:'default', cat:'default', alien:'default', bear:'default'},
-      ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default']}
+      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, dailyQuestSet:null,
+      lives:MAX_LIVES, nextLifeAt:null,
+      skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default'},
+      ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default']}
     };
+  }
+  const SAVE_KEY = 'gorulme_progress';
+  const SAVE_SALT = 'gorulme_v1_9f3a';
+
+  function simpleHash(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){
+      h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+    }
+    return (h>>>0).toString(36);
+  }
+  function encodeSave(obj){
+    const json = JSON.stringify(obj);
+    const checksum = simpleHash(json + SAVE_SALT);
+    const payload = JSON.stringify({d: json, c: checksum});
+    try{ return btoa(unescape(encodeURIComponent(payload))); }
+    catch(e){ return null; }
+  }
+  function decodeSave(raw){
+    try{
+      const payload = JSON.parse(decodeURIComponent(escape(atob(raw))));
+      if(simpleHash(payload.d + SAVE_SALT) !== payload.c) return null; // tampered or corrupted
+      return JSON.parse(payload.d);
+    }catch(e){ return null; }
+  }
+  function sanitizeProgress(p){
+    const clampInt = (v,lo,hi)=> Math.max(lo, Math.min(hi, Math.floor(Number(v))||0));
+    p.stars = clampInt(p.stars, 0, 999999);
+    p.lives = clampInt(p.lives, 0, MAX_LIVES);
+    p.bestLevelEver = clampInt(p.bestLevelEver, 0, 100000);
+    p.totalFoodsEver = clampInt(p.totalFoodsEver, 0, 999999);
+    p.adWatches = clampInt(p.adWatches, 0, 999999);
+    p.noHitStreakBest = clampInt(p.noHitStreakBest, 0, 100000);
+    ['wolf','cat','alien','bear','school'].forEach(id=>{
+      if(p.bestLevelByTheme) p.bestLevelByTheme[id] = clampInt(p.bestLevelByTheme[id], 0, 100000);
+      if(p.lastLevelByTheme) p.lastLevelByTheme[id] = clampInt(p.lastLevelByTheme[id], 0, 100000);
+    });
+    if(!Array.isArray(p.themesUnlocked)) p.themesUnlocked = ['wolf'];
+    p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
+    if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
+    return p;
   }
   function loadProgress(){
     try{
-      const raw = localStorage.getItem('gorulme_progress');
+      const raw = localStorage.getItem(SAVE_KEY);
       if(!raw) return defaultProgress();
-      const p = JSON.parse(raw);
-      return Object.assign(defaultProgress(), p);
+      const decoded = decodeSave(raw);
+      if(!decoded) return defaultProgress(); // tampered or corrupted save — reset rather than trust it
+      return sanitizeProgress(Object.assign(defaultProgress(), decoded));
     }catch(e){ return defaultProgress(); }
   }
   function saveProgress(){
-    try{ localStorage.setItem('gorulme_progress', JSON.stringify(progress)); }catch(e){}
+    try{
+      const encoded = encodeSave(progress);
+      if(encoded) localStorage.setItem(SAVE_KEY, encoded);
+    }catch(e){}
   }
+  const MAX_LIVES = 3;
+  const LIFE_REGEN_MS = 20*60*1000;
   let progress = loadProgress();
   let runStreak = 0;
+  let catchSpeed = 0.5;
   const POWERUPS = { invis:{cost:50, duration:5000}, speed:{cost:30, duration:5000} };
   const POWERUP_AD_REWARD = 5;
   const SKIN_AD_REWARD = 5;
@@ -939,6 +1046,11 @@
       {id:'default', name:'Klasik Balık', nameEn:'Classic Fish', nameFr:'Poisson Classique', nameEs:'Pez Clásico', nameIt:'Pesce Classico', nameRu:'Обычная Рыба', cost:0, body:'#e8955a', dark:'#c9723a'},
       {id:'silver', name:'Gümüş Balık', nameEn:'Silver Fish', nameFr:'Poisson Argenté', nameEs:'Pez Plateado', nameIt:'Pesce Argentato', nameRu:'Серебряная Рыба', cost:20, body:'#c8d4dc', dark:'#9aabb5'},
       {id:'gold', name:'Altın Balık', nameEn:'Golden Fish', nameFr:'Poisson Doré', nameEs:'Pez Dorado', nameIt:'Pesce Dorato', nameRu:'Золотая Рыба', cost:20, body:'#f0c94a', dark:'#d1a52f'}
+    ],
+    school: [
+      {id:'default', name:'Klasik Öğrenci', nameEn:'Classic Student', nameFr:'Élève Classique', nameEs:'Estudiante Clásico', nameIt:'Studente Classico', nameRu:'Обычный Ученик', cost:0, body:'#e8e4d8', dark:'#c4bfa8'},
+      {id:'navy', name:'Lacivert Forma', nameEn:'Navy Uniform', nameFr:'Uniforme Marine', nameEs:'Uniforme Azul Marino', nameIt:'Uniforme Blu Navy', nameRu:'Тёмно-синяя Форма', cost:20, body:'#4a5a80', dark:'#2f3a54'},
+      {id:'red', name:'Kırmızı Forma', nameEn:'Red Uniform', nameFr:'Uniforme Rouge', nameEs:'Uniforme Rojo', nameIt:'Uniforme Rossa', nameRu:'Красная Форма', cost:20, body:'#c9584f', dark:'#8f3a33'}
     ]
   };
   function getCurrentSkin(){
@@ -1116,7 +1228,6 @@
   let state = 'start'; // start | playing | levelup | hit | paused | gameover
   let level = 1;
   let lives = 3;
-  const MAX_LIVES = 3;
   let energy = 0;
   const ENERGY_COST_PER_LIFE = 5;
   let hitMsgT = 0;
@@ -1207,6 +1318,8 @@
     } else if(theme.deco==='riverbank'){
       for(let i=0;i<5;i++) decor.push({type:'tree', x:rand(0,W), y:rand(0,H), r:rand(20,32)});
       for(let i=0;i<22;i++) decor.push({type:'glint', x:rand(0,W), y:rand(0,H), r:rand(3,6), a:rand(0.3,0.8)});
+    } else if(theme.deco==='classroom'){
+      for(let i=0;i<9;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(20,30), rot:rand(-0.15,0.15)});
     } else {
       for(let i=0;i<8;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(16,26), rot:rand(0,6)});
     }
@@ -1230,12 +1343,14 @@
     const gp = cornerPoint(goalC, pad);
     goal.x = gp.x; goal.y = gp.y;
 
-    // difficulty ramp: gradual hunter increase + slow, long-tail curve
-    // (previously flatlined around level ~20; now keeps easing in through ~level 60+)
-    const nHunters = lv<4 ? 1 : (lv<8 ? 2 : (lv<12 ? 3 : 4));
-    const coneHalf = clamp(0.60 - lv*0.011, 0.14, 0.60);
-    const coneRange = clamp(180 + lv*4.2, 180, 460);
-    const rotSpeed = clamp(0.5 + lv*0.032, 0.5, 2.4);
+    // difficulty ramp: steps up every 5 levels — cone reaches much further
+    // and stays wide for longer, so distance no longer feels "safe" as early
+    const tier = Math.floor((lv-1)/5);
+    const nHunters = lv<5 ? 1 : (lv<10 ? 2 : (lv<20 ? 3 : 4));
+    const coneHalf = clamp(0.55 - tier*0.012, 0.30, 0.55);
+    const coneRange = clamp(220 + tier*35, 220, 550);
+    const rotSpeed = clamp(0.5 + tier*0.10, 0.5, 2.0);
+    catchSpeed = clamp(0.65 - tier*0.012, 0.35, 0.65);
 
     hunters = [];
     for(let i=0;i<nHunters;i++){
@@ -1293,8 +1408,11 @@
   }
 
   function startGame(fromLevel){
+    syncLifeRegen();
+    if(progress.lives<=0) return; // guarded by UI, but double-check
+    stopLivesTicker();
     level = fromLevel || 1;
-    lives = MAX_LIVES;
+    lives = progress.lives;
     energy = 0;
     runStreak = 0;
     activePowerUp = null;
@@ -1312,12 +1430,52 @@
     updateHud();
     lastT = performance.now();
     requestAnimationFrame(loop);
+    if(level===1 && !progress.seenLevel1Hints){
+      progress.seenLevel1Hints = true;
+      saveProgress();
+      showLevel1Hints();
+    }
+  }
+
+  function showLevel1Hints(){
+    const container = document.getElementById('wrap') || document.body;
+    const hints = [];
+    if(herd[0]){
+      hints.push({x:herd[0].x, y:herd[0].y - 64, text:S().hintDrag});
+    }
+    if(hunters[0]){
+      hints.push({x:hunters[0].x, y:hunters[0].y - 58, text:S().hintAvoid});
+    }
+    hints.push({x:goal.x, y:goal.y - 62, text:S().hintGoal});
+    const els = hints.map(h=>{
+      const el = document.createElement('div');
+      el.className = 'level1-hint';
+      el.textContent = h.text;
+      el.style.left = h.x+'px';
+      el.style.top = h.y+'px';
+      container.appendChild(el);
+      const rect = el.getBoundingClientRect();
+      const halfW = rect.width/2 + 10;
+      const clampedX = Math.min(Math.max(h.x, halfW), window.innerWidth - halfW);
+      el.style.left = clampedX+'px';
+      return el;
+    });
+    const dismiss = ()=>{
+      els.forEach(el=>{
+        el.classList.add('fade-out');
+        setTimeout(()=> el.remove(), 550);
+      });
+      canvas.removeEventListener('pointerdown', dismiss);
+    };
+    canvas.addEventListener('pointerdown', dismiss, {once:true});
+    setTimeout(dismiss, 4500);
   }
 
   function updateHud(){
     document.getElementById('levelLabel').textContent = level;
     document.getElementById('bestLabel').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
     document.getElementById('livesLabel').textContent = '♥'.repeat(lives) + '♡'.repeat(MAX_LIVES-lives);
+    updateHudLifeTimer();
     const foodPill = document.getElementById('foodPill');
     if(foods.length>0){
       foodPill.style.display='inline-block';
@@ -1336,17 +1494,96 @@
     }
     renderPowerupBar();
   }
+  function updateHudLifeTimer(){
+    const pill = document.getElementById('hudLifeTimerPill');
+    if(!pill) return;
+    syncLifeRegen();
+    if(progress.lives<MAX_LIVES && progress.nextLifeAt){
+      pill.style.display='inline-block';
+      document.getElementById('hudLifeTimerText').textContent = '⏳ '+formatMMSS(progress.nextLifeAt-Date.now());
+    } else {
+      pill.style.display='none';
+    }
+  }
   function foodLabelFor(id){
     if(id==='wolf') return S().foodWolf;
     if(id==='cat') return S().foodCat;
     if(id==='bear') return S().foodBear;
+    if(id==='school') return S().foodSchool;
     return S().foodAlien;
+  }
+
+  // ---------- Persistent life regeneration (Candy-Crush style) ----------
+  function syncLifeRegen(){
+    let changed = false;
+    if(progress.lives>=MAX_LIVES){
+      if(progress.nextLifeAt!==null){ progress.nextLifeAt=null; changed=true; }
+    } else {
+      const now = Date.now();
+      if(!progress.nextLifeAt){ progress.nextLifeAt = now + LIFE_REGEN_MS; changed=true; }
+      while(progress.lives<MAX_LIVES && now>=progress.nextLifeAt){
+        progress.lives++;
+        progress.nextLifeAt += LIFE_REGEN_MS;
+        changed=true;
+      }
+      if(progress.lives>=MAX_LIVES){ progress.nextLifeAt=null; }
+    }
+    if(changed) saveProgress();
+  }
+
+  function formatMMSS(ms){
+    const totalSec = Math.max(0, Math.ceil(ms/1000));
+    const m = Math.floor(totalSec/60);
+    const s = totalSec%60;
+    return m+':'+String(s).padStart(2,'0');
+  }
+
+  let livesTickerInterval = null;
+  function renderLivesUI(){
+    syncLifeRegen();
+    const heartsEl = document.getElementById('startLivesHearts');
+    const timerEl = document.getElementById('lifeTimerText');
+    const adBtn = document.getElementById('watchAdLifeBtn');
+    const playBtn = document.getElementById('playBtn');
+    const continueBtn = document.getElementById('continueBtn');
+    if(!heartsEl) return;
+    heartsEl.textContent = '♥'.repeat(progress.lives) + '♡'.repeat(MAX_LIVES-progress.lives);
+    if(progress.lives<=0){
+      const remain = progress.nextLifeAt ? progress.nextLifeAt - Date.now() : LIFE_REGEN_MS;
+      timerEl.style.display='inline';
+      timerEl.textContent = '⏳ '+S().nextLifeIn(formatMMSS(remain));
+      adBtn.style.display='block';
+      adBtn.disabled = false;
+      adBtn.textContent = S().watchAdInstantLife;
+      playBtn.disabled = true; playBtn.style.opacity='0.5';
+      continueBtn.disabled = true; continueBtn.style.opacity='0.5';
+    } else {
+      if(progress.lives<MAX_LIVES && progress.nextLifeAt){
+        timerEl.style.display='inline';
+        timerEl.textContent = '⏳ '+S().nextLifeIn(formatMMSS(progress.nextLifeAt-Date.now()));
+      } else {
+        timerEl.style.display='none';
+      }
+      adBtn.style.display='none';
+      playBtn.disabled = false; playBtn.style.opacity='1';
+      continueBtn.disabled = false; continueBtn.style.opacity='1';
+    }
+  }
+  function startLivesTicker(){
+    stopLivesTicker();
+    renderLivesUI();
+    livesTickerInterval = setInterval(renderLivesUI, 1000);
+  }
+  function stopLivesTicker(){
+    if(livesTickerInterval){ clearInterval(livesTickerInterval); livesTickerInterval=null; }
   }
 
   // ---------- Life loss / continue flow ----------
   function loseHerdMember(idx){
     herd.splice(idx,1);
     lives--;
+    progress.lives = Math.max(0, lives);
+    syncLifeRegen();
     flashT = 0;
     runStreak = 0;
     updateHud();
@@ -1401,6 +1638,8 @@
     if(energy<ENERGY_COST_PER_LIFE) return;
     energy -= ENERGY_COST_PER_LIFE;
     lives = 1;
+    progress.lives = Math.max(progress.lives, 1);
+    syncLifeRegen();
     document.getElementById('endOverlay').style.display='none';
     document.getElementById('hud').style.display='flex';
     document.getElementById('meterWrap').style.display='block';
@@ -1412,12 +1651,23 @@
   }
 
   // ---------- AdMob (real ads on native, simulated fallback in browser) ----------
-  // NOTE: replace with your own AdMob App ID (capacitor.config.json) and Ad Unit ID
-  // (below) once your AdMob account is approved. These are Google's official
-  // public TEST ids — safe to ship while developing, must be swapped before release.
+  // Android IDs are live (real AdMob account). iOS IDs are placeholders —
+  // once you create the iOS app in AdMob (separate from the Android one),
+  // replace ADMOB_REWARDED_UNIT_ID_IOS and INTERSTITIAL_UNIT_ID_IOS below.
   const ADMOB_REWARDED_UNIT_ID_ANDROID = 'ca-app-pub-8061507782344181/1123043779';
+  const ADMOB_REWARDED_UNIT_ID_IOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY'; // TODO: replace once iOS AdMob app exists
   let admobReady = false;
   let admobRewardEarned = false;
+
+  function getPlatform(){
+    return (window.Capacitor && window.Capacitor.getPlatform) ? window.Capacitor.getPlatform() : 'web';
+  }
+  function getRewardedUnitId(){
+    return getPlatform()==='ios' ? ADMOB_REWARDED_UNIT_ID_IOS : ADMOB_REWARDED_UNIT_ID_ANDROID;
+  }
+  function getInterstitialUnitId(){
+    return getPlatform()==='ios' ? INTERSTITIAL_UNIT_ID_IOS : INTERSTITIAL_UNIT_ID_ANDROID;
+  }
 
   function getAdMob(){
     return (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) || null;
@@ -1439,7 +1689,7 @@
     try{
       const rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
       const dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
-      await AdMob.prepareRewardVideoAd({ adId: ADMOB_REWARDED_UNIT_ID_ANDROID });
+      await AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() });
       await AdMob.showRewardVideoAd();
       // give the dismiss/reward events a moment to fire before we check the flag
       await new Promise(res=>setTimeout(res, 600));
@@ -1451,13 +1701,13 @@
   }
 
   // Automatic milestone interstitial — shown every 20 completed levels.
-  // NOTE: replace with your own Interstitial Ad Unit ID once ready for release.
   const INTERSTITIAL_UNIT_ID_ANDROID = 'ca-app-pub-8061507782344181/4250704335';
+  const INTERSTITIAL_UNIT_ID_IOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ'; // TODO: replace once iOS AdMob app exists
   async function showInterstitial(){
     const AdMob = getAdMob();
     if(!AdMob) return; // browser testing / no native AdMob plugin — skip silently, never blocks gameplay
     try{
-      await AdMob.prepareInterstitial({ adId: INTERSTITIAL_UNIT_ID_ANDROID });
+      await AdMob.prepareInterstitial({ adId: getInterstitialUnitId() });
       await AdMob.showInterstitial();
     }catch(e){
       // ad failed to load or show — fail silently, gameplay must never be blocked by this
@@ -1515,6 +1765,8 @@
 
     const grantLifeAndResume = ()=>{
       lives = 1;
+      progress.lives = Math.max(progress.lives, 1);
+      syncLifeRegen();
       progress.adWatches++;
       saveProgress();
       checkAchievements();
@@ -1588,9 +1840,16 @@
   canvas.addEventListener('touchmove', e=>{ e.preventDefault(); }, {passive:false});
 
   // ---------- Update ----------
+  let hudTimerAccum = 0;
   function update(dt){
     if(state!=='playing') return;
     if(herd.length===0) return;
+
+    hudTimerAccum += dt;
+    if(hudTimerAccum>=1){
+      hudTimerAccum = 0;
+      updateHudLifeTimer();
+    }
 
     if(activePowerUp && performance.now()>powerUpEndTime){
       activePowerUp = null;
@@ -1603,7 +1862,7 @@
     const leader = herd[0];
     const dx = leader.tx - leader.x, dy = leader.ty - leader.y;
     const d = Math.hypot(dx,dy);
-    const speed = activePowerUp==='speed' ? 340*2.2 : 340;
+    const speed = activePowerUp==='speed' ? 400*2.2 : 400;
     if(d>1){
       const step = Math.min(d, speed*dt);
       leader.x += dx/d*step;
@@ -1639,18 +1898,24 @@
     for(let i=0;i<herd.length;i++){
       const m = herd[i];
       let seenThis = false;
+      let bumpedThis = false;
       if(activePowerUp!=='invis'){
         for(const h of hunters){
           const toM = Math.atan2(m.y-h.y, m.x-h.x);
           const dd = dist(h.x,h.y,m.x,m.y);
           const inCone = dd < h.coneRange && angDiff(h.angle, toM) < h.coneHalf/2;
           const bump = dd < (h.r+m.r+4);
-          if(inCone || bump){ seenThis = true; break; }
+          if(bump){ bumpedThis = true; break; }
+          if(inCone){ seenThis = true; }
         }
       }
-      if(seenThis){
+      if(bumpedThis){
         anySeen = true;
-        m.dangerT += dt/0.5;
+        m.dangerT = 1;
+        if(caughtIdx<0) caughtIdx = i;
+      } else if(seenThis){
+        anySeen = true;
+        m.dangerT += dt/catchSpeed;
         if(m.dangerT>=1 && caughtIdx<0) caughtIdx = i;
       } else {
         m.dangerT -= dt/1.1;
@@ -1765,25 +2030,6 @@
     const cyclePos = (performance.now()/1000 % DAY_CYCLE_SECONDS)/DAY_CYCLE_SECONDS;
     return (1+Math.cos(cyclePos*Math.PI*2))/2; // 1 = warm dusk peak, 0 = deep night
   }
-  function drawSkyOrb(brightness){
-    const cyclePos = (performance.now()/1000 % DAY_CYCLE_SECONDS)/DAY_CYCLE_SECONDS;
-    const arcX = cyclePos*W;
-    const arcY = H*0.14 - Math.sin(cyclePos*Math.PI)*H*0.05;
-    const warm = brightness>0.5;
-    const orbColor = warm ? '232,196,140' : '210,220,235';
-    const r = 13;
-    ctx.save();
-    ctx.globalAlpha = 0.3;
-    const grad = ctx.createRadialGradient(arcX,arcY,0,arcX,arcY,r*4.2);
-    grad.addColorStop(0, `rgba(${orbColor},0.55)`);
-    grad.addColorStop(1, `rgba(${orbColor},0)`);
-    ctx.fillStyle = grad;
-    ctx.beginPath(); ctx.arc(arcX,arcY,r*4.2,0,7); ctx.fill();
-    ctx.globalAlpha = 0.55;
-    ctx.fillStyle = `rgb(${orbColor})`;
-    ctx.beginPath(); ctx.arc(arcX,arcY,r,0,7); ctx.fill();
-    ctx.restore();
-  }
   function drawBackground(){
     const brightness = dayBrightness();
     const bg0 = lerpColor(theme.bg0, theme.dayBg0, brightness);
@@ -1793,8 +2039,6 @@
     g.addColorStop(1, bg0);
     ctx.fillStyle = g;
     ctx.fillRect(0,0,W,H);
-
-    drawSkyOrb(brightness);
 
     if(theme.deco==='stars'){
       for(const s of decor){
@@ -1835,6 +2079,25 @@
           ctx.fillStyle = '#7fc9e8';
           ctx.beginPath(); ctx.ellipse(0,0, d.r, d.r*0.4, 0, 0, 7); ctx.fill();
         }
+        ctx.restore();
+      }
+      ctx.globalAlpha=1;
+    } else if(theme.deco==='classroom'){
+      for(const d of decor){
+        ctx.save();
+        ctx.translate(d.x,d.y);
+        ctx.rotate(d.rot);
+        ctx.globalAlpha=0.6;
+        // desk top
+        ctx.fillStyle = '#6b4a30';
+        ctx.fillRect(-d.r*0.9,-d.r*0.55, d.r*1.8, d.r*0.35);
+        // desk legs
+        ctx.fillStyle = '#3a2a1a';
+        ctx.fillRect(-d.r*0.75,-d.r*0.2, d.r*0.14, d.r*0.75);
+        ctx.fillRect(d.r*0.6,-d.r*0.2, d.r*0.14, d.r*0.75);
+        // notebook on top
+        ctx.fillStyle = '#e8e4d8';
+        ctx.fillRect(-d.r*0.35,-d.r*0.72, d.r*0.7, d.r*0.4);
         ctx.restore();
       }
       ctx.globalAlpha=1;
@@ -2051,15 +2314,74 @@
     ctx.beginPath(); ctx.arc(r*0.55, r*0.28,r*0.13,0,7); ctx.fill();
   }
 
+  function drawTeacherBody(h, glowColor){
+    const r = h.r;
+    // legs
+    ctx.fillStyle = theme.hunterDark;
+    ctx.fillRect(-r*0.43, r*0.35, r*0.16, r*0.55);
+    ctx.fillRect(-r*0.13, r*0.35, r*0.16, r*0.55);
+    // arms
+    ctx.fillStyle = theme.hunterDark;
+    ctx.beginPath(); ctx.ellipse(-r*0.05,-r*0.55, r*0.22, r*0.4, 0.6,0,7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-r*0.05, r*0.55, r*0.22, r*0.4, -0.6,0,7); ctx.fill();
+    // torso (blazer)
+    ctx.fillStyle = theme.hunterDark;
+    ctx.beginPath(); ctx.ellipse(-r*0.1,0, r*0.68, r*0.62, 0,0,7); ctx.fill();
+    ctx.fillStyle = theme.hunterBody;
+    ctx.beginPath(); ctx.ellipse(-r*0.12,0, r*0.56, r*0.5, 0,0,7); ctx.fill();
+    // head
+    ctx.fillStyle = theme.hunterDark;
+    ctx.beginPath(); ctx.arc(r*0.55,0, r*0.5,0,7); ctx.fill();
+    ctx.fillStyle = '#e0b98f';
+    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.4,0,7); ctx.fill();
+    // hair
+    ctx.fillStyle = '#4a3a2a';
+    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.4, -2.5,2.5); ctx.fill();
+    // glasses frame (a stern authority-figure cue)
+    ctx.strokeStyle = '#241a10'; ctx.lineWidth = r*0.05;
+    ctx.beginPath(); ctx.ellipse(r*0.5,-r*0.14, r*0.14, r*0.11, 0,0,7); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(r*0.5, r*0.14, r*0.14, r*0.11, 0,0,7); ctx.stroke();
+    // glowing eyes behind the glasses
+    ctx.fillStyle = glowColor;
+    ctx.beginPath(); ctx.arc(r*0.5,-r*0.14,r*0.08,0,7); ctx.fill();
+    ctx.beginPath(); ctx.arc(r*0.5, r*0.14,r*0.08,0,7); ctx.fill();
+  }
+
   function drawHunter(h){
     ctx.save();
     ctx.translate(h.x,h.y);
+
+    // ground shadow (fixed under the character regardless of facing direction)
+    ctx.save();
+    ctx.scale(1, 0.4);
+    const shGrad = ctx.createRadialGradient(0,h.r*1.6,0, 0,h.r*1.6,h.r*1.3);
+    shGrad.addColorStop(0,'rgba(0,0,0,0.38)');
+    shGrad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = shGrad;
+    ctx.beginPath(); ctx.arc(0,h.r*1.6,h.r*1.3,0,7); ctx.fill();
+    ctx.restore();
+
+    ctx.save();
     ctx.rotate(h.angle);
     const glowColor = flashT>0.02 ? '#ff8c7d' : theme.accent;
     if(theme.id==='wolf') drawWolfBody(h, glowColor);
     else if(theme.id==='cat') drawCatBody(h, glowColor);
     else if(theme.id==='bear') drawBearBody(h, glowColor);
+    else if(theme.id==='school') drawTeacherBody(h, glowColor);
     else drawAlienBody(h, glowColor);
+    ctx.restore();
+
+    // fixed-direction light sheen (top-left light source) for a rounded, volumetric look
+    ctx.save();
+    ctx.globalCompositeOperation = 'overlay';
+    const sheen = ctx.createRadialGradient(-h.r*0.5,-h.r*0.6,0, -h.r*0.3,-h.r*0.4,h.r*2.2);
+    sheen.addColorStop(0,'rgba(255,255,255,0.4)');
+    sheen.addColorStop(0.5,'rgba(255,255,255,0.06)');
+    sheen.addColorStop(1,'rgba(0,0,0,0.18)');
+    ctx.fillStyle = sheen;
+    ctx.beginPath(); ctx.arc(0,0,h.r*1.8,0,7); ctx.fill();
+    ctx.restore();
+
     ctx.restore();
   }
 
@@ -2173,9 +2495,47 @@
     ctx.beginPath(); ctx.arc(r*0.72,-r*0.08,r*0.1,0,7); ctx.fill();
   }
 
+  function drawStudentBody(r, bodyColor, darkColor){
+    // legs
+    ctx.fillStyle = darkColor;
+    ctx.fillRect(-r*0.42, r*0.32, r*0.14, r*0.48);
+    ctx.fillRect(-r*0.12, r*0.32, r*0.14, r*0.48);
+    // backpack peeking out behind
+    ctx.fillStyle = darkColor;
+    ctx.beginPath(); ctx.ellipse(-r*0.55,0, r*0.28, r*0.4, 0,0,7); ctx.fill();
+    // arms
+    ctx.fillStyle = darkColor;
+    ctx.beginPath(); ctx.ellipse(-r*0.05,-r*0.5, r*0.2, r*0.35, 0.6,0,7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-r*0.05, r*0.5, r*0.2, r*0.35, -0.6,0,7); ctx.fill();
+    // torso (uniform)
+    ctx.fillStyle = darkColor;
+    ctx.beginPath(); ctx.ellipse(-r*0.1,0, r*0.62, r*0.56, 0,0,7); ctx.fill();
+    ctx.fillStyle = bodyColor;
+    ctx.beginPath(); ctx.ellipse(-r*0.12,0, r*0.5, r*0.44, 0,0,7); ctx.fill();
+    // head
+    ctx.fillStyle = darkColor;
+    ctx.beginPath(); ctx.arc(r*0.5,0, r*0.44,0,7); ctx.fill();
+    ctx.fillStyle = '#e8c9a0';
+    ctx.beginPath(); ctx.arc(r*0.53,0, r*0.35,0,7); ctx.fill();
+    // hair
+    ctx.fillStyle = '#2a2015';
+    ctx.beginPath(); ctx.arc(r*0.53,0, r*0.35, -2.4,2.4); ctx.fill();
+  }
+
   function drawHerdMember(m){
     ctx.save();
     ctx.translate(m.x,m.y);
+
+    // ground shadow (fixed regardless of facing direction)
+    ctx.save();
+    ctx.scale(1, 0.4);
+    const shGrad = ctx.createRadialGradient(0,m.r*1.5,0, 0,m.r*1.5,m.r*1.1);
+    shGrad.addColorStop(0,'rgba(0,0,0,0.32)');
+    shGrad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle = shGrad;
+    ctx.beginPath(); ctx.arc(0,m.r*1.5,m.r*1.1,0,7); ctx.fill();
+    ctx.restore();
+
     const isInvis = activePowerUp==='invis';
     const glowColor = isInvis ? '200,220,255' : hexToRgb(theme.color);
     const glow = ctx.createRadialGradient(0,0,0,0,0,m.r*(isInvis?3.4:2.8));
@@ -2185,14 +2545,30 @@
     ctx.beginPath(); ctx.arc(0,0,m.r*(isInvis?3.4:2.8),0,7); ctx.fill();
 
     if(isInvis) ctx.globalAlpha = 0.42 + Math.sin(performance.now()/120)*0.08;
+    ctx.save();
     ctx.rotate(m.angle||0);
     const skin = getCurrentSkin();
     const bodyColor = m.dangerT>0.5 ? '#e0554a' : skin.body;
     if(theme.id==='wolf') drawSheepBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='cat') drawMouseBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='bear') drawFishBody(m.r, bodyColor, skin.dark);
+    else if(theme.id==='school') drawStudentBody(m.r, bodyColor, skin.dark);
     else drawHumanBody(m.r, bodyColor, skin.dark);
+    ctx.restore();
     ctx.globalAlpha = 1;
+
+    if(!isInvis){
+      ctx.save();
+      ctx.globalCompositeOperation = 'overlay';
+      const sheen = ctx.createRadialGradient(-m.r*0.5,-m.r*0.6,0, -m.r*0.3,-m.r*0.4,m.r*2);
+      sheen.addColorStop(0,'rgba(255,255,255,0.38)');
+      sheen.addColorStop(0.5,'rgba(255,255,255,0.05)');
+      sheen.addColorStop(1,'rgba(0,0,0,0.15)');
+      ctx.fillStyle = sheen;
+      ctx.beginPath(); ctx.arc(0,0,m.r*1.6,0,7); ctx.fill();
+      ctx.restore();
+    }
+
     ctx.restore();
   }
   function drawPlayer(){
@@ -2224,6 +2600,7 @@
     if(theme.id==='wolf') drawGoalHut(goal.r, goalUnlocked);
     else if(theme.id==='cat') drawGoalMouseHouse(goal.r, goalUnlocked);
     else if(theme.id==='bear') drawGoalDen(goal.r, goalUnlocked);
+    else if(theme.id==='school') drawGoalCheatSheet(goal.r, goalUnlocked);
     else drawGoalHouse(goal.r, goalUnlocked);
     ctx.restore();
   }
@@ -2314,6 +2691,37 @@
     ctx.globalAlpha = 1;
   }
 
+  function drawGoalCheatSheet(r, unlocked){
+    const paper = unlocked ? '#f0ece0' : '#5a5f6a';
+    const paperDark = unlocked ? '#d8d0bc' : '#454a54';
+    const ink = unlocked ? '#3a4a6b' : '#3a3e48';
+    // folded paper, tilted like a note passed under a desk
+    ctx.save();
+    ctx.rotate(-0.15);
+    ctx.fillStyle = paperDark;
+    ctx.fillRect(-r*0.75, -r*0.95, r*1.5, r*1.9);
+    ctx.fillStyle = paper;
+    ctx.fillRect(-r*0.68, -r*0.88, r*1.36, r*1.76);
+    // folded corner
+    ctx.fillStyle = paperDark;
+    ctx.beginPath();
+    ctx.moveTo(r*0.68, -r*0.88);
+    ctx.lineTo(r*0.68, -r*0.5);
+    ctx.lineTo(r*0.3, -r*0.88);
+    ctx.closePath(); ctx.fill();
+    // scribbled answer lines
+    ctx.strokeStyle = ink; ctx.lineWidth = Math.max(1, r*0.07); ctx.lineCap='round';
+    ctx.globalAlpha = unlocked ? 0.75 : 0.4;
+    [[-0.5,0.4],[-0.2,0.55],[0.1,0.3],[0.4,0.5],[0.7,0.35]].forEach(l=>{
+      ctx.beginPath();
+      ctx.moveTo(-r*0.5, l[0]*r);
+      ctx.lineTo(-r*0.5+l[1]*r, l[0]*r);
+      ctx.stroke();
+    });
+    ctx.globalAlpha = 1;
+    ctx.restore();
+  }
+
   function drawFood(f){
     if(f.collected) return;
     const t = performance.now()/450;
@@ -2352,6 +2760,19 @@
         ctx.bezierCurveTo(o*f.r*1.4,f.r*0.1, -o*f.r*0.8,-f.r*0.3, o*f.r*0.5,-f.r*0.9);
         ctx.stroke();
       });
+    } else if(theme.id==='school'){
+      // pencil, tilted
+      ctx.save();
+      ctx.rotate(-0.6);
+      ctx.fillStyle = '#e8a33d';
+      ctx.fillRect(-f.r*0.22, -f.r*0.95, f.r*0.44, f.r*1.5);
+      ctx.fillStyle = '#c4bfa8';
+      ctx.beginPath(); ctx.moveTo(-f.r*0.22, -f.r*0.95); ctx.lineTo(f.r*0.22,-f.r*0.95); ctx.lineTo(0,-f.r*1.3); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#3a2e1c';
+      ctx.beginPath(); ctx.moveTo(-f.r*0.08,-f.r*1.08); ctx.lineTo(f.r*0.08,-f.r*1.08); ctx.lineTo(0,-f.r*1.24); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#e8917a';
+      ctx.fillRect(-f.r*0.22, f.r*0.42, f.r*0.44, f.r*0.16);
+      ctx.restore();
     } else {
       // energy cell
       ctx.fillStyle = '#5fd6a8';
@@ -2533,6 +2954,7 @@
       continueBtn.style.display='none';
     }
     renderDailyQuestSummary();
+    startLivesTicker();
   }
   applyLanguage();
   renderTabs();
@@ -2648,6 +3070,21 @@
   document.getElementById('continueBtn').addEventListener('click', ()=>{
     ensureAudio();
     startGame(progress.lastLevelByTheme[theme.id]||1);
+  });
+  document.getElementById('watchAdLifeBtn').addEventListener('click', ()=>{
+    const btn = document.getElementById('watchAdLifeBtn');
+    btn.disabled = true;
+    btn.textContent = S().adPlaying;
+    const grant = (earned)=>{
+      if(earned){
+        progress.lives = Math.min(MAX_LIVES, progress.lives+1);
+        syncLifeRegen();
+      }
+      renderLivesUI();
+    };
+    const AdMob = getAdMob();
+    if(AdMob){ showRealRewardedAd().then(grant); }
+    else { setTimeout(()=> grant(true), 1600); }
   });
 
   // ---------- Power-ups ----------
