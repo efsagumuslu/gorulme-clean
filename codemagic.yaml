@@ -13,6 +13,10 @@ workflows:
         script: |
           npm install
           npm install @capacitor-community/admob
+      - name: Minify game code
+        script: |
+          npm install terser --no-save
+          node scripts/minify-game.js
       - name: Add Android platform
         script: npx cap add android
       - name: Generate icon and splash screen
@@ -28,5 +32,55 @@ workflows:
           cd android
           chmod +x gradlew
           ./gradlew bundleRelease
+          ./gradlew assembleRelease
     artifacts:
       - android/app/build/outputs/**/*.aab
+      - android/app/build/outputs/**/*.apk
+
+  ios-workflow:
+    name: iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: gorulme_asc_key
+    environment:
+      node: 22
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.gorulme.app
+    scripts:
+      - name: Install npm dependencies
+        script: |
+          npm install
+          npm install @capacitor-community/admob
+      - name: Minify game code
+        script: |
+          npm install terser --no-save
+          node scripts/minify-game.js
+      - name: Add iOS platform
+        script: |
+          npm install @capacitor/ios
+          npx cap add ios
+      - name: Generate icon and splash screen
+        script: |
+          npm install @capacitor/assets --save-dev
+          npx capacitor-assets generate --ios
+      - name: Configure iOS AdMob settings
+        script: node scripts/configure-ios-admob.js
+      - name: Sync Capacitor with iOS
+        script: npx cap sync ios
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios/App
+          pod install
+      - name: Set up code signing
+        script: xcode-project use-profiles
+      - name: Build iOS app
+        script: |
+          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
