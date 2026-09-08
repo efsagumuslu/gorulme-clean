@@ -1,6 +1,6 @@
 {
   "appId": "com.gorulme.app",
-  "appName": "Gorulme",
+  "appName": "Stay Unseen",
   "webDir": "www",
   "plugins": {
     "AdMob": {
