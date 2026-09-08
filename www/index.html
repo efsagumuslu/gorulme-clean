@@ -448,9 +448,17 @@
         <span id="settingsSoundLabel">Ses</span>
         <button class="skin-btn" id="settingsSoundBtn">🔊 Açık</button>
       </div>
+      <div class="settings-row">
+        <span id="settingsHapticLabel">Titreşim</span>
+        <button class="skin-btn" id="settingsHapticBtn">📳 Açık</button>
+      </div>
       <div class="settings-row" style="flex-direction:column; align-items:flex-start; gap:10px;">
         <span id="settingsLangLabel">Dil</span>
         <div class="lang-grid" id="langGrid"></div>
+      </div>
+      <div class="settings-row">
+        <span id="settingsAdPrefLabel">Reklam Tercihleri</span>
+        <button class="skin-btn" id="settingsAdPrefBtn">Yönet</button>
       </div>
       <div class="close-link" id="closeSettingsBtn" style="margin-top:18px;">Kapat</div>
     </div>
@@ -609,7 +617,8 @@
       achTitle:'Başarımlar', achLink:'Başarımlar', shopLink:'Mağaza', progressEyebrow:'İlerleme',
       shopEyebrow:'Mağaza', shopTitle:'Görünüm', closeLink:'Kapat',
       settingsTitle:'Ayarlar', settingsSoundLabel:'Ses', settingsLangLabel:'Dil',
-      soundOn:'🔊 Açık', soundOff:'🔇 Kapalı',
+      settingsAdPrefLabel:'Reklam Tercihleri', settingsAdPrefBtn:'Yönet',
+      soundOn:'🔊 Açık', soundOff:'🔇 Kapalı', hapticOn:'📳 Açık', hapticOff:'📴 Kapalı', settingsHapticLabel:'Titreşim',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Başla', continueFromLevel:lv=>'Kaldığın Yerden Devam Et (Bölüm '+lv+')',
       pauseEyebrow:'Duraklatıldı', pauseTitle:'Mola',
@@ -663,7 +672,8 @@
       achTitle:'Achievements', achLink:'Achievements', shopLink:'Shop', progressEyebrow:'Progress',
       shopEyebrow:'Shop', shopTitle:'Appearance', closeLink:'Close',
       settingsTitle:'Settings', settingsSoundLabel:'Sound', settingsLangLabel:'Language',
-      soundOn:'🔊 On', soundOff:'🔇 Off',
+      settingsAdPrefLabel:'Ad Preferences', settingsAdPrefBtn:'Manage',
+      soundOn:'🔊 On', soundOff:'🔇 Off', hapticOn:'📳 On', hapticOff:'📴 Off', settingsHapticLabel:'Vibration',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Play', continueFromLevel:lv=>'Continue From Level '+lv,
       pauseEyebrow:'Paused', pauseTitle:'Break',
@@ -717,7 +727,8 @@
       achTitle:'Succès', achLink:'Succès', shopLink:'Boutique', progressEyebrow:'Progression',
       shopEyebrow:'Boutique', shopTitle:'Apparence', closeLink:'Fermer',
       settingsTitle:'Paramètres', settingsSoundLabel:'Son', settingsLangLabel:'Langue',
-      soundOn:'🔊 Activé', soundOff:'🔇 Désactivé',
+      settingsAdPrefLabel:'Préférences Publicitaires', settingsAdPrefBtn:'Gérer',
+      soundOn:'🔊 Activé', soundOff:'🔇 Désactivé', hapticOn:'📳 Activée', hapticOff:'📴 Désactivée', settingsHapticLabel:'Vibration',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Jouer', continueFromLevel:lv=>'Continuer au Niveau '+lv,
       pauseEyebrow:'En Pause', pauseTitle:'Pause',
@@ -771,7 +782,8 @@
       achTitle:'Logros', achLink:'Logros', shopLink:'Tienda', progressEyebrow:'Progreso',
       shopEyebrow:'Tienda', shopTitle:'Apariencia', closeLink:'Cerrar',
       settingsTitle:'Ajustes', settingsSoundLabel:'Sonido', settingsLangLabel:'Idioma',
-      soundOn:'🔊 Activado', soundOff:'🔇 Desactivado',
+      settingsAdPrefLabel:'Preferencias de Anuncios', settingsAdPrefBtn:'Gestionar',
+      soundOn:'🔊 Activado', soundOff:'🔇 Desactivado', hapticOn:'📳 Activada', hapticOff:'📴 Desactivada', settingsHapticLabel:'Vibración',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Jugar', continueFromLevel:lv=>'Continuar en el Nivel '+lv,
       pauseEyebrow:'En Pausa', pauseTitle:'Pausa',
@@ -825,7 +837,8 @@
       achTitle:'Obiettivi', achLink:'Obiettivi', shopLink:'Negozio', progressEyebrow:'Progressi',
       shopEyebrow:'Negozio', shopTitle:'Aspetto', closeLink:'Chiudi',
       settingsTitle:'Impostazioni', settingsSoundLabel:'Audio', settingsLangLabel:'Lingua',
-      soundOn:'🔊 Attivo', soundOff:'🔇 Disattivo',
+      settingsAdPrefLabel:'Preferenze Pubblicitarie', settingsAdPrefBtn:'Gestisci',
+      soundOn:'🔊 Attivo', soundOff:'🔇 Disattivo', hapticOn:'📳 Attiva', hapticOff:'📴 Disattiva', settingsHapticLabel:'Vibrazione',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Gioca', continueFromLevel:lv=>'Continua dal Livello '+lv,
       pauseEyebrow:'In Pausa', pauseTitle:'Pausa',
@@ -879,7 +892,8 @@
       achTitle:'Достижения', achLink:'Достижения', shopLink:'Магазин', progressEyebrow:'Прогресс',
       shopEyebrow:'Магазин', shopTitle:'Внешний вид', closeLink:'Закрыть',
       settingsTitle:'Настройки', settingsSoundLabel:'Звук', settingsLangLabel:'Язык',
-      soundOn:'🔊 Вкл', soundOff:'🔇 Выкл',
+      settingsAdPrefLabel:'Настройки Рекламы', settingsAdPrefBtn:'Управлять',
+      soundOn:'🔊 Вкл', soundOff:'🔇 Выкл', hapticOn:'📳 Вкл', hapticOff:'📴 Выкл', settingsHapticLabel:'Вибрация',
       langNameTr:'Türkçe', langNameEn:'English', langNameFr:'Français', langNameEs:'Español', langNameIt:'Italiano', langNameRu:'Русский',
       playBtn:'Играть', continueFromLevel:lv=>'Продолжить с Уровня '+lv,
       pauseEyebrow:'Пауза', pauseTitle:'Перерыв',
@@ -951,7 +965,7 @@
       stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0},
       lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
-      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, dailyQuestSet:null,
+      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null,
       lives:MAX_LIVES, nextLifeAt:null,
       skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default'},
       ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default']}
@@ -994,6 +1008,7 @@
       if(p.lastLevelByTheme) p.lastLevelByTheme[id] = clampInt(p.lastLevelByTheme[id], 0, 100000);
     });
     if(!Array.isArray(p.themesUnlocked)) p.themesUnlocked = ['wolf'];
+    if(!Array.isArray(p.reviewPromptLevels)) p.reviewPromptLevels = [];
     p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
     return p;
@@ -1254,6 +1269,11 @@
     const saved = localStorage.getItem('gorulme_sound');
     if(saved!==null) soundOn = saved==='1';
   }catch(e){}
+  let hapticOn = true;
+  try{
+    const savedHaptic = localStorage.getItem('gorulme_haptic');
+    if(savedHaptic!==null) hapticOn = savedHaptic==='1';
+  }catch(e){}
 
   function ensureAudio(){
     if(!audioCtx){
@@ -1279,7 +1299,7 @@
     osc.start(t0); osc.stop(t0+dur+0.03);
   }
   function vibrate(pattern){
-    if(!soundOn) return;
+    if(!hapticOn) return;
     if(navigator.vibrate){ try{ navigator.vibrate(pattern); }catch(e){} }
   }
   function sfxDetectBlip(){ tone(440,0.08,{type:'square',vol:0.1}); }
@@ -1294,6 +1314,12 @@
     try{ localStorage.setItem('gorulme_sound', soundOn?'1':'0'); }catch(e){}
     renderSettingsControls();
     if(soundOn){ ensureAudio(); sfxTap(); }
+  }
+  function toggleHaptic(){
+    hapticOn = !hapticOn;
+    try{ localStorage.setItem('gorulme_haptic', hapticOn?'1':'0'); }catch(e){}
+    renderSettingsControls();
+    if(hapticOn) vibrate(20);
   }
 
   function rand(a,b){ return a + Math.random()*(b-a); }
@@ -1673,10 +1699,31 @@
     return (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform() && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob) || null;
   }
 
+  // ---------- UMP consent (required for EEA/UK/Switzerland users under GDPR) ----------
+  async function handleConsent(){
+    const AdMob = getAdMob();
+    if(!AdMob || typeof AdMob.requestConsentInfo!=='function') return;
+    try{
+      const consentInfo = await AdMob.requestConsentInfo();
+      if(consentInfo && consentInfo.isConsentFormAvailable && consentInfo.status==='REQUIRED'){
+        await AdMob.showConsentForm();
+      }
+    }catch(e){
+      // never block gameplay over a consent-flow hiccup
+    }
+  }
+
+  async function openAdPreferences(){
+    const AdMob = getAdMob();
+    if(!AdMob || typeof AdMob.showConsentForm!=='function') return;
+    try{ await AdMob.showConsentForm(); }catch(e){}
+  }
+
   async function initAdMob(){
     const AdMob = getAdMob();
     if(!AdMob) return; // not running inside the native app (e.g. browser testing) — fine, simulation handles it
     try{
+      await handleConsent();
       await AdMob.initialize({ requestTrackingAuthorization: true, initializeForTesting: true });
       admobReady = true;
     }catch(e){ admobReady = false; }
@@ -1737,6 +1784,17 @@
       setTimeout(()=>{ s.remove(); }, 980);
     }
   }
+  const REVIEW_PROMPT_LEVELS = [20, 50, 70, 100];
+  async function maybeRequestReview(lvl){
+    if(!Array.isArray(progress.reviewPromptLevels)) progress.reviewPromptLevels = [];
+    if(progress.reviewPromptLevels.includes(lvl)) return;
+    const InAppReview = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.InAppReview;
+    if(!InAppReview || typeof InAppReview.requestReview!=='function') return;
+    progress.reviewPromptLevels.push(lvl);
+    saveProgress();
+    try{ await InAppReview.requestReview(); }catch(e){}
+  }
+
   function showMilestoneOverlay(lvl, alsoAd){
     document.getElementById('milestoneEyebrowText').textContent = S().milestoneEyebrow;
     document.getElementById('milestoneTitleText').textContent = S().milestoneTitle(lvl);
@@ -1747,11 +1805,12 @@
     state = 'milestone';
     spawnFireworkBurst();
     milestoneFireworkInterval = setInterval(spawnFireworkBurst, 650);
-    document.getElementById('milestoneContinueBtn').onclick = ()=>{
+    document.getElementById('milestoneContinueBtn').onclick = async ()=>{
       clearInterval(milestoneFireworkInterval);
       document.getElementById('fireworksLayer').innerHTML = '';
       document.getElementById('milestoneOverlay').style.display = 'none';
-      if(alsoAd) showInterstitial();
+      if(alsoAd){ await showInterstitial(); }
+      if(REVIEW_PROMPT_LEVELS.includes(lvl)){ maybeRequestReview(lvl); }
       state = 'levelup';
       levelUpT = 0.9;
       setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; } }, 750);
@@ -2930,7 +2989,9 @@
     document.getElementById('settingsEyebrowText').textContent = S().settingsTitle;
     document.getElementById('settingsTitleText').textContent = S().settingsTitle;
     document.getElementById('settingsSoundLabel').textContent = S().settingsSoundLabel;
+    document.getElementById('settingsHapticLabel').textContent = S().settingsHapticLabel;
     document.getElementById('settingsLangLabel').textContent = S().settingsLangLabel;
+    document.getElementById('settingsAdPrefLabel').textContent = S().settingsAdPrefLabel;
     document.getElementById('closeSettingsBtn').textContent = S().closeLink;
     renderSettingsControls();
   }
@@ -3065,6 +3126,41 @@
     }
   }
 
+  // ---------- App lifecycle: auto-pause when backgrounded ----------
+  document.addEventListener('visibilitychange', ()=>{
+    if(document.hidden && state==='playing'){
+      pauseGame();
+    }
+  });
+
+  // ---------- Android hardware/gesture back button ----------
+  function setupBackButton(){
+    const CapApp = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App;
+    if(!CapApp || typeof CapApp.addListener!=='function') return;
+    CapApp.addListener('backButton', ()=>{
+      const clickIfOpen = (overlayId, btnId)=>{
+        const el = document.getElementById(overlayId);
+        if(el && el.style.display!=='none' && el.style.display!==''){
+          const btn = document.getElementById(btnId);
+          if(btn) btn.click();
+          return true;
+        }
+        return false;
+      };
+      if(clickIfOpen('tutorialOverlay','tutSkipBtn')) return;
+      if(clickIfOpen('settingsOverlay','closeSettingsBtn')) return;
+      if(clickIfOpen('achievementsOverlay','closeAchBtn')) return;
+      if(clickIfOpen('shopOverlay','closeShopBtn')) return;
+      if(clickIfOpen('dailyQuestsOverlay','closeDqBtn')) return;
+      if(clickIfOpen('milestoneOverlay','milestoneContinueBtn')) return;
+      if(state==='paused'){ quitToMenu(); return; }
+      if(state==='playing'){ pauseGame(); return; }
+      if(state==='start'){ CapApp.exitApp(); return; }
+      CapApp.exitApp();
+    });
+  }
+  setupBackButton();
+
   initAdMob();
   document.getElementById('playBtn').addEventListener('click', ()=>{ ensureAudio(); startGame(); });
   document.getElementById('continueBtn').addEventListener('click', ()=>{
@@ -3158,6 +3254,7 @@
 
   function renderSettingsControls(){
     document.getElementById('settingsSoundBtn').textContent = soundOn ? S().soundOn : S().soundOff;
+    document.getElementById('settingsHapticBtn').textContent = hapticOn ? S().hapticOn : S().hapticOff;
     const grid = document.getElementById('langGrid');
     grid.innerHTML = '';
     const langKeyMap = {tr:'langNameTr', en:'langNameEn', fr:'langNameFr', es:'langNameEs', it:'langNameIt', ru:'langNameRu'};
@@ -3168,6 +3265,13 @@
       btn.addEventListener('click', ()=> selectLang(l));
       grid.appendChild(btn);
     });
+    const adPrefRow = document.getElementById('settingsAdPrefBtn').closest('.settings-row');
+    if(getAdMob()){
+      adPrefRow.style.display = 'flex';
+      document.getElementById('settingsAdPrefBtn').textContent = S().settingsAdPrefBtn;
+    } else {
+      adPrefRow.style.display = 'none';
+    }
   }
   function openSettings(){
     renderSettingsControls();
@@ -3180,6 +3284,8 @@
   document.getElementById('settingsBtnHud').addEventListener('click', openSettings);
   document.getElementById('closeSettingsBtn').addEventListener('click', closeSettings);
   document.getElementById('settingsSoundBtn').addEventListener('click', toggleSound);
+  document.getElementById('settingsHapticBtn').addEventListener('click', toggleHaptic);
+  document.getElementById('settingsAdPrefBtn').addEventListener('click', openAdPreferences);
   document.getElementById('pauseBtn').addEventListener('click', pauseGame);
   document.getElementById('resumeBtn').addEventListener('click', resumeGame);
   document.getElementById('quitBtn').addEventListener('click', quitToMenu);
