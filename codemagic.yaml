@@ -76,6 +76,16 @@ workflows:
         script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
+      - name: Verify iOS project structure
+        script: |
+          echo "--- ios/App contents ---"
+          ls -la ios/App || echo "ios/App does not exist!"
+          echo "--- Podfile check ---"
+          test -f ios/App/Podfile && echo "Podfile exists" || echo "Podfile MISSING"
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios/App
+          pod install --repo-update
       - name: Set up keychain
         script: keychain initialize
       - name: Fetch signing files
