@@ -13,8 +13,6 @@ workflows:
         script: |
           rm -rf node_modules package-lock.json
           npm install
-          # TEMP DIAGNOSTIC: explicitly UNINSTALL these (package.json may already list them)
-          npm uninstall @capacitor-community/admob @capacitor/app @capacitor-community/in-app-review || true
       - name: Minify game code
         script: |
           npm install terser --no-save
@@ -55,12 +53,10 @@ workflows:
         BUNDLE_ID: "com.gorulme.app"
         APP_STORE_APPLE_ID: 6810249133
     scripts:
-      - name: Install npm dependencies
+      - name: Install npm dependencies (diagnostic - no AdMob/App/InAppReview)
         script: |
+          rm -rf node_modules package-lock.json
           npm install
-          npm install @capacitor-community/admob
-          npm install @capacitor/app
-          npm install @capacitor-community/in-app-review
       - name: Minify game code
         script: |
           npm install terser --no-save
@@ -70,14 +66,6 @@ workflows:
           rm -rf ios
           npm install @capacitor/ios
           npx cap add ios
-      # TEMP DIAGNOSTIC: icon/splash generation disabled to isolate launch crash
-      # - name: Generate icon and splash screen
-      #   script: |
-      #     npm install @capacitor/assets --save-dev
-      #     npx capacitor-assets generate --ios
-      # TEMP DIAGNOSTIC: Info.plist customization disabled to isolate launch crash
-      # - name: Configure iOS AdMob settings
-      #   script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
       - name: Set up keychain
@@ -92,7 +80,7 @@ workflows:
         script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
-      - name: Increment build number (PlistBuddy, diagnostic alternative to agvtool)
+      - name: Increment build number
         script: |
           NEW_BUILD=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $NEW_BUILD" ios/App/App/Info.plist
