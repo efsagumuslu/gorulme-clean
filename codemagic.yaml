@@ -53,6 +53,7 @@ workflows:
         - appstore_credentials
       vars:
         BUNDLE_ID: "com.gorulme.app"
+        APP_STORE_APPLE_ID: 6810249133
     scripts:
       - name: Install npm dependencies
         script: |
@@ -88,6 +89,10 @@ workflows:
         script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd ios/App
+          agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
       - name: Build iOS app
         script: |
           xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
