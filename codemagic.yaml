@@ -12,8 +12,8 @@ workflows:
       - name: Install npm dependencies
         script: |
           npm install
-          npm install @capacitor-community/admob
-          # TEMP DIAGNOSTIC: app + in-app-review disabled to isolate launch crash
+          # TEMP DIAGNOSTIC: admob + app + in-app-review ALL disabled to isolate launch crash
+          # npm install @capacitor-community/admob
           # npm install @capacitor/app
           # npm install @capacitor-community/in-app-review
       - name: Minify game code
