@@ -58,6 +58,7 @@ workflows:
           rm -rf node_modules package-lock.json
           npm install
           npm install @capacitor/app
+          npm install @capacitor-community/in-app-review
       - name: Minify game code
         script: |
           npm install terser --no-save
