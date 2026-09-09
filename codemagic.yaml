@@ -69,7 +69,7 @@ workflows:
       - name: Add iOS platform
         script: |
           npm install @capacitor/ios
-          npx cap add ios --packagemanager Cocoapods
+          npx cap add ios
       # TEMP DIAGNOSTIC: icon/splash generation disabled to isolate launch crash
       # - name: Generate icon and splash screen
       #   script: |
@@ -80,10 +80,6 @@ workflows:
       #   script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
-      - name: Install CocoaPods dependencies
-        script: |
-          cd ios/App
-          pod install --repo-update
       - name: Set up keychain
         script: keychain initialize
       - name: Fetch signing files
@@ -102,7 +98,7 @@ workflows:
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $NEW_BUILD" ios/App/App/Info.plist
       - name: Build iOS app
         script: |
-          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+          xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
