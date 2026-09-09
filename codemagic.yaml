@@ -53,9 +53,6 @@ workflows:
         - appstore_credentials
       vars:
         BUNDLE_ID: "com.gorulme.app"
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.gorulme.app
     scripts:
       - name: Install npm dependencies
         script: |
