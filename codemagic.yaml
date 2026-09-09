@@ -53,10 +53,11 @@ workflows:
         BUNDLE_ID: "com.gorulme.app"
         APP_STORE_APPLE_ID: 6810249133
     scripts:
-      - name: Install npm dependencies (diagnostic - no AdMob/App/InAppReview)
+      - name: Install npm dependencies
         script: |
           rm -rf node_modules package-lock.json
           npm install
+          npm install @capacitor/app
       - name: Minify game code
         script: |
           npm install terser --no-save
