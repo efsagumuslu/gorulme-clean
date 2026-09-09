@@ -70,10 +70,11 @@ workflows:
         script: |
           npm install @capacitor/ios
           npx cap add ios --packagemanager Cocoapods
-      - name: Generate icon and splash screen
-        script: |
-          npm install @capacitor/assets --save-dev
-          npx capacitor-assets generate --ios
+      # TEMP DIAGNOSTIC: icon/splash generation disabled to isolate launch crash
+      # - name: Generate icon and splash screen
+      #   script: |
+      #     npm install @capacitor/assets --save-dev
+      #     npx capacitor-assets generate --ios
       # TEMP DIAGNOSTIC: Info.plist customization disabled to isolate launch crash
       # - name: Configure iOS AdMob settings
       #   script: node scripts/configure-ios-admob.js
