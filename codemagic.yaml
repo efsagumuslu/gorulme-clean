@@ -66,6 +66,12 @@ workflows:
           rm -rf ios
           npm install @capacitor/ios
           npx cap add ios
+      - name: Generate icon and splash screen
+        script: |
+          npm install @capacitor/assets --save-dev
+          npx capacitor-assets generate --ios
+      - name: Configure iOS AdMob settings
+        script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
       - name: Set up keychain
