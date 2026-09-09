@@ -11,6 +11,7 @@ workflows:
     scripts:
       - name: Install npm dependencies
         script: |
+          rm -rf node_modules package-lock.json
           npm install
           # TEMP DIAGNOSTIC: explicitly UNINSTALL these (package.json may already list them)
           npm uninstall @capacitor-community/admob @capacitor/app @capacitor-community/in-app-review || true
@@ -66,6 +67,7 @@ workflows:
           node scripts/minify-game.js
       - name: Add iOS platform
         script: |
+          rm -rf ios
           npm install @capacitor/ios
           npx cap add ios
       # TEMP DIAGNOSTIC: icon/splash generation disabled to isolate launch crash
