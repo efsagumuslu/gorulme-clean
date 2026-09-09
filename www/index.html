@@ -3161,7 +3161,8 @@
   }
   setupBackButton();
 
-  initAdMob();
+  // TEMP DIAGNOSTIC: AdMob init disabled to isolate iOS launch crash — re-enable once confirmed
+  // initAdMob();
   document.getElementById('playBtn').addEventListener('click', ()=>{ ensureAudio(); startGame(); });
   document.getElementById('continueBtn').addEventListener('click', ()=>{
     ensureAudio();
