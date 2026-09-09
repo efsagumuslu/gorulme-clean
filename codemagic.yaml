@@ -49,6 +49,8 @@ workflows:
       app_store_connect: gorulme_asc_key
     environment:
       node: 22
+      vars:
+        BUNDLE_ID: "com.gorulme.app"
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.gorulme.app
@@ -79,7 +81,16 @@ workflows:
         script: |
           cd ios/App
           pod install
-      - name: Set up code signing
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Set up signing certificate
+        script: keychain add-certificates
+      - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
       - name: Build iOS app
         script: |
