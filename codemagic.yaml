@@ -12,10 +12,8 @@ workflows:
       - name: Install npm dependencies
         script: |
           npm install
-          # TEMP DIAGNOSTIC: admob + app + in-app-review ALL disabled to isolate launch crash
-          # npm install @capacitor-community/admob
-          # npm install @capacitor/app
-          # npm install @capacitor-community/in-app-review
+          # TEMP DIAGNOSTIC: explicitly UNINSTALL these (package.json may already list them)
+          npm uninstall @capacitor-community/admob @capacitor/app @capacitor-community/in-app-review || true
       - name: Minify game code
         script: |
           npm install terser --no-save
