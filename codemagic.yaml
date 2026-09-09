@@ -49,6 +49,8 @@ workflows:
       app_store_connect: gorulme_asc_key
     environment:
       node: 22
+      groups:
+        - appstore_credentials
       vars:
         BUNDLE_ID: "com.gorulme.app"
       ios_signing:
