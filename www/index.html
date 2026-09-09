@@ -1681,7 +1681,7 @@
   // once you create the iOS app in AdMob (separate from the Android one),
   // replace ADMOB_REWARDED_UNIT_ID_IOS and INTERSTITIAL_UNIT_ID_IOS below.
   const ADMOB_REWARDED_UNIT_ID_ANDROID = 'ca-app-pub-8061507782344181/1123043779';
-  const ADMOB_REWARDED_UNIT_ID_IOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/YYYYYYYYYY'; // TODO: replace once iOS AdMob app exists
+  const ADMOB_REWARDED_UNIT_ID_IOS = 'ca-app-pub-8061507782344181/5647432516';
   let admobReady = false;
   let admobRewardEarned = false;
 
@@ -1724,7 +1724,7 @@
     if(!AdMob) return; // not running inside the native app (e.g. browser testing) — fine, simulation handles it
     try{
       await handleConsent();
-      await AdMob.initialize({ requestTrackingAuthorization: true, initializeForTesting: true });
+      await AdMob.initialize();
       admobReady = true;
     }catch(e){ admobReady = false; }
   }
@@ -1749,7 +1749,7 @@
 
   // Automatic milestone interstitial — shown every 20 completed levels.
   const INTERSTITIAL_UNIT_ID_ANDROID = 'ca-app-pub-8061507782344181/4250704335';
-  const INTERSTITIAL_UNIT_ID_IOS = 'ca-app-pub-XXXXXXXXXXXXXXXX/ZZZZZZZZZZ'; // TODO: replace once iOS AdMob app exists
+  const INTERSTITIAL_UNIT_ID_IOS = 'ca-app-pub-8061507782344181/3386537586';
   async function showInterstitial(){
     const AdMob = getAdMob();
     if(!AdMob) return; // browser testing / no native AdMob plugin — skip silently, never blocks gameplay
