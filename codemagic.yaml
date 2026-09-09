@@ -68,7 +68,7 @@ workflows:
       - name: Add iOS platform
         script: |
           npm install @capacitor/ios
-          npx cap add ios
+          npx cap add ios --packagemanager Cocoapods
       - name: Generate icon and splash screen
         script: |
           npm install @capacitor/assets --save-dev
@@ -77,6 +77,10 @@ workflows:
         script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
+      - name: Install CocoaPods dependencies
+        script: |
+          cd ios/App
+          pod install --repo-update
       - name: Set up keychain
         script: keychain initialize
       - name: Fetch signing files
@@ -95,7 +99,7 @@ workflows:
           agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
       - name: Build iOS app
         script: |
-          xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
+          xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
