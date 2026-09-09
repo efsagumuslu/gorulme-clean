@@ -76,10 +76,6 @@ workflows:
         script: node scripts/configure-ios-admob.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
-      - name: Install CocoaPods dependencies
-        script: |
-          cd ios/App
-          pod install
       - name: Set up keychain
         script: keychain initialize
       - name: Fetch signing files
