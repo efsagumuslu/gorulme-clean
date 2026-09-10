@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Stay Unseen: Sneak Escape</title>
 <style>
   :root{
@@ -117,6 +117,8 @@
     background:radial-gradient(ellipse at 50% 30%, rgba(19,24,38,1), rgba(6,7,11,1));
     z-index:20;
     padding:24px;
+    padding-top:max(24px, env(safe-area-inset-top));
+    padding-bottom:max(24px, env(safe-area-inset-bottom));
   }
   .panel{
     width:100%; max-width:380px;
