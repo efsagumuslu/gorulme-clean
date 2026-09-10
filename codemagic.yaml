@@ -59,6 +59,7 @@ workflows:
           npm install
           npm install @capacitor/app
           npm install @capacitor-community/in-app-review
+          npm install @capacitor-community/admob
       - name: Minify game code
         script: |
           npm install terser --no-save
