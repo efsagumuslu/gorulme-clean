@@ -47,22 +47,26 @@ if (plist.includes('GADApplicationIdentifier')) {
   console.log('Injected AdMob + ATT entries into Info.plist');
 }
 
-// Lock to portrait-only (the game is designed exclusively for a vertical layout)
+// Lock to portrait-only (the game is designed exclusively for a vertical layout).
+// Capacitor's default Info.plist already ships a UISupportedInterfaceOrientations
+// key (with all orientations enabled), so we must REPLACE its value, not just
+// insert one if missing.
 plist = fs.readFileSync(plistPath, 'utf8');
-if (plist.includes('UISupportedInterfaceOrientations')) {
-  console.log('Orientation already configured — skipping.');
+const portraitOnly = '<array>\n\t\t<string>UIInterfaceOrientationPortrait</string>\n\t</array>';
+const orientationKeyRegex = /<key>UISupportedInterfaceOrientations<\/key>\s*<array>[\s\S]*?<\/array>/;
+const orientationIpadKeyRegex = /<key>UISupportedInterfaceOrientations~ipad<\/key>\s*<array>[\s\S]*?<\/array>/;
+
+if (orientationKeyRegex.test(plist)) {
+  plist = plist.replace(orientationKeyRegex, '<key>UISupportedInterfaceOrientations</key>\n\t' + portraitOnly);
 } else {
-  const orientationBlock = `
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-`;
-  plist = plist.replace('<dict>', '<dict>' + orientationBlock);
-  fs.writeFileSync(plistPath, plist);
-  console.log('Locked iOS app to portrait orientation.');
+  plist = plist.replace('<dict>', '<dict>\n\t<key>UISupportedInterfaceOrientations</key>\n\t' + portraitOnly);
 }
+
+if (orientationIpadKeyRegex.test(plist)) {
+  plist = plist.replace(orientationIpadKeyRegex, '<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + portraitOnly);
+} else {
+  plist = plist.replace('<dict>', '<dict>\n\t<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + portraitOnly);
+}
+
+fs.writeFileSync(plistPath, plist);
+console.log('Locked iOS app to portrait orientation (replaced existing key if present).');
