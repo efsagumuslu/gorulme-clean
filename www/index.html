@@ -78,9 +78,9 @@
 
   .powerup-bar{
     position:fixed;
-    top:calc(max(14px, env(safe-area-inset-top)) + 58px);
-    left:16px;
-    display:flex; gap:8px;
+    bottom:max(20px, env(safe-area-inset-bottom));
+    left:50%; transform:translateX(-50%);
+    display:flex; gap:10px;
     z-index:5;
   }
   .powerup-btn{
@@ -1354,8 +1354,9 @@
   }
 
   function cornerPoint(idx, pad){
+    const topPad = 190; // extra room for HUD (safe-area notch + multiple pill rows)
     const pts = [
-      {x:pad,y:pad},{x:W-pad,y:pad},{x:pad,y:H-pad},{x:W-pad,y:H-pad}
+      {x:pad,y:topPad},{x:W-pad,y:topPad},{x:pad,y:H-pad},{x:W-pad,y:H-pad}
     ];
     return pts[idx%4];
   }
