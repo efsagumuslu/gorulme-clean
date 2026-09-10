@@ -47,12 +47,15 @@ if (plist.includes('GADApplicationIdentifier')) {
   console.log('Injected AdMob + ATT entries into Info.plist');
 }
 
-// Lock to portrait-only (the game is designed exclusively for a vertical layout).
+// Lock iPhone to portrait-only (the game is designed exclusively for a vertical
+// layout). iPad, however, MUST support all four orientations — Apple rejects
+// uploads otherwise, since iPad's multitasking/Split View requires it.
 // Capacitor's default Info.plist already ships a UISupportedInterfaceOrientations
 // key (with all orientations enabled), so we must REPLACE its value, not just
 // insert one if missing.
 plist = fs.readFileSync(plistPath, 'utf8');
 const portraitOnly = '<array>\n\t\t<string>UIInterfaceOrientationPortrait</string>\n\t</array>';
+const allOrientations = '<array>\n\t\t<string>UIInterfaceOrientationPortrait</string>\n\t\t<string>UIInterfaceOrientationPortraitUpsideDown</string>\n\t\t<string>UIInterfaceOrientationLandscapeLeft</string>\n\t\t<string>UIInterfaceOrientationLandscapeRight</string>\n\t</array>';
 const orientationKeyRegex = /<key>UISupportedInterfaceOrientations<\/key>\s*<array>[\s\S]*?<\/array>/;
 const orientationIpadKeyRegex = /<key>UISupportedInterfaceOrientations~ipad<\/key>\s*<array>[\s\S]*?<\/array>/;
 
@@ -63,10 +66,10 @@ if (orientationKeyRegex.test(plist)) {
 }
 
 if (orientationIpadKeyRegex.test(plist)) {
-  plist = plist.replace(orientationIpadKeyRegex, '<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + portraitOnly);
+  plist = plist.replace(orientationIpadKeyRegex, '<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + allOrientations);
 } else {
-  plist = plist.replace('<dict>', '<dict>\n\t<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + portraitOnly);
+  plist = plist.replace('<dict>', '<dict>\n\t<key>UISupportedInterfaceOrientations~ipad</key>\n\t' + allOrientations);
 }
 
 fs.writeFileSync(plistPath, plist);
-console.log('Locked iOS app to portrait orientation (replaced existing key if present).');
+console.log('Locked iPhone to portrait; iPad allows all orientations (Apple multitasking requirement).');
