@@ -13,6 +13,7 @@ workflows:
         script: |
           rm -rf node_modules package-lock.json
           npm install
+          npm install @capacitor/local-notifications
       - name: Minify game code
         script: |
           npm install terser --no-save
@@ -29,6 +30,10 @@ workflows:
         script: npx cap sync android
       - name: Configure release signing
         script: node scripts/configure-signing.js
+      - name: Set unique version code
+        script: |
+          sed -i.bak "s/versionCode [0-9]*/versionCode $BUILD_NUMBER/" android/app/build.gradle
+          cat android/app/build.gradle | grep versionCode
       - name: Build signed Android App Bundle
         script: |
           cd android
@@ -60,6 +65,7 @@ workflows:
           npm install @capacitor/app
           npm install @capacitor-community/in-app-review
           npm install @capacitor-community/admob
+          npm install @capacitor/local-notifications
       - name: Minify game code
         script: |
           npm install terser --no-save
