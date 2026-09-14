@@ -630,7 +630,7 @@
       themeBestPrefix:'🏅 En İyi: ',
       energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)',
       adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...',
-      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', reachedLabel:'Ulaşılan',
+      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan',
       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
       caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.",
       levelUpLabel:lv=>'Bölüm '+lv,
@@ -685,7 +685,7 @@
       themeBestPrefix:'🏅 Best: ',
       energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)',
       adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...',
-      shareBtn:'Share Score', retryBtn:'Start Over', reachedLabel:'Reached',
+      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached',
       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
       caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.',
       levelUpLabel:lv=>'Level '+lv,
@@ -740,7 +740,7 @@
       themeBestPrefix:'🏅 Meilleur : ',
       energyContinuePrefix:'Continuer avec de l\'Énergie (-', energySuffix:'⚡)',
       adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...',
-      shareBtn:'Partager le Score', retryBtn:'Recommencer', reachedLabel:'Atteint',
+      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint',
       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
       caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.',
       levelUpLabel:lv=>'Niveau '+lv,
@@ -795,7 +795,7 @@
       themeBestPrefix:'🏅 Mejor: ',
       energyContinuePrefix:'Continuar con Energía (-', energySuffix:'⚡)',
       adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...',
-      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', reachedLabel:'Alcanzado',
+      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado',
       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
       caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.',
       levelUpLabel:lv=>'Nivel '+lv,
@@ -850,7 +850,7 @@
       themeBestPrefix:'🏅 Record: ',
       energyContinuePrefix:'Continua con Energia (-', energySuffix:'⚡)',
       adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...',
-      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', reachedLabel:'Raggiunto',
+      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto',
       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
       caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.',
       levelUpLabel:lv=>'Livello '+lv,
@@ -905,7 +905,7 @@
       themeBestPrefix:'🏅 Рекорд: ',
       energyContinuePrefix:'Продолжить за Энергию (-', energySuffix:'⚡)',
       adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...',
-      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', reachedLabel:'Достигнуто',
+      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто',
       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
       caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.',
       levelUpLabel:lv=>'Уровень '+lv,
@@ -1389,12 +1389,31 @@
         hy = rand(H*0.25, H*0.75);
         tries++;
       } while((dist(hx,hy,sp.x,sp.y)<160 || dist(hx,hy,gp.x,gp.y)<140) && tries<30);
+      const swing = rand(0.9,2.2);
+      const speed = rotSpeed * rand(0.85,1.15) * (i%2===0?1:-1);
+      const phase = rand(0,10);
+      // Never let a hunter start a level already facing the player's spawn.
+      // The hunter's actual first-frame angle is baseAngle + a swing offset
+      // driven by `phase`, so we must solve for baseAngle accounting for
+      // that offset — checking baseAngle alone isn't enough.
+      const initialOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
+      const angleToSpawn = Math.atan2(sp.y-hy, sp.x-hx);
+      let baseAngle = rand(0,Math.PI*2);
+      if(angDiff(baseAngle + initialOffset, angleToSpawn) < coneHalf/2 + 0.5){
+        baseAngle = angleToSpawn + Math.PI - initialOffset; // face away from spawn instead
+      }
+      // Defensive re-check: recompute the offset (timing may have drifted a
+      // hair between the calculation above and now) and nudge further if needed.
+      const recheckOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
+      if(angDiff(baseAngle + recheckOffset, angleToSpawn) < coneHalf/2 + 0.15){
+        baseAngle = angleToSpawn + Math.PI - recheckOffset;
+      }
       hunters.push({
         x:hx, y:hy,
-        baseAngle: rand(0,Math.PI*2),
-        swing: rand(0.9,2.2),
-        speed: rotSpeed * rand(0.85,1.15) * (i%2===0?1:-1),
-        phase: rand(0,10),
+        baseAngle,
+        swing,
+        speed,
+        phase,
         coneHalf, coneRange,
         r:16,
         angle:0
@@ -1423,6 +1442,7 @@
       saveProgress();
       setTimeout(()=> showAchievementToast({title:S().foodIntroTitle, desc:S().foodIntroDesc(foodLabelFor(theme.id))}, '🔒', S().foodIntroTitle), 900);
     }
+
 
     // herd: how many lambs/mice/humans the player is guiding this level
     const herdSize = lv<5 ? 1 : (lv<15 ? 2 : 3);
@@ -1658,6 +1678,11 @@
     adBtn.disabled = false;
     adBtn.textContent = S().adContinue;
 
+    // When the player is genuinely out of lives, "Start Over" is misleading —
+    // they can't actually start a fresh attempt until a life regenerates or
+    // they watch an ad above. Make the exit button honest about what it does.
+    document.getElementById('retryBtn').textContent = progress.lives<=0 ? S().backToMenuBtn : S().retryBtn;
+
     document.getElementById('endOverlay').style.display='flex';
     document.getElementById('hud').style.display='none';
     document.getElementById('meterWrap').style.display='none';
@@ -1732,21 +1757,33 @@
     }catch(e){ admobReady = false; }
   }
 
+  // Races any promise against a timeout so a stuck native ad call (e.g. no
+  // fill, SDK never fires its close/dismiss event) can never freeze the game.
+  function withTimeout(promise, ms){
+    return Promise.race([
+      promise,
+      new Promise((_, reject)=> setTimeout(()=> reject(new Error('ad-timeout')), ms))
+    ]);
+  }
+
   async function showRealRewardedAd(){
     const AdMob = getAdMob();
     if(!AdMob) return false;
     admobRewardEarned = false;
+    let rewardListener, dismissListener;
     try{
-      const rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
-      const dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
-      await AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() });
-      await AdMob.showRewardVideoAd();
+      rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
+      dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
+      await withTimeout(AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() }), 10000);
+      await withTimeout(AdMob.showRewardVideoAd(), 15000);
       // give the dismiss/reward events a moment to fire before we check the flag
       await new Promise(res=>setTimeout(res, 600));
-      rewardListener.remove(); dismissListener.remove();
       return admobRewardEarned;
     }catch(e){
       return false;
+    }finally{
+      if(rewardListener) rewardListener.remove();
+      if(dismissListener) dismissListener.remove();
     }
   }
 
@@ -1757,10 +1794,10 @@
     const AdMob = getAdMob();
     if(!AdMob) return; // browser testing / no native AdMob plugin — skip silently, never blocks gameplay
     try{
-      await AdMob.prepareInterstitial({ adId: getInterstitialUnitId() });
-      await AdMob.showInterstitial();
+      await withTimeout(AdMob.prepareInterstitial({ adId: getInterstitialUnitId() }), 10000);
+      await withTimeout(AdMob.showInterstitial(), 15000);
     }catch(e){
-      // ad failed to load or show — fail silently, gameplay must never be blocked by this
+      // ad failed to load, failed to show, or timed out — fail silently, gameplay must never be blocked by this
     }
   }
 
@@ -2981,7 +3018,7 @@
     document.getElementById('reachedLabelText').textContent = S().reachedLabel;
     document.getElementById('endBestLabelText').textContent = S().hudBestLabel;
     document.getElementById('shareBtn').textContent = S().shareBtn;
-    document.getElementById('retryBtn').textContent = S().retryBtn;
+    document.getElementById('retryBtn').textContent = progress.lives<=0 ? S().backToMenuBtn : S().retryBtn;
     document.getElementById('pauseEyebrowText').textContent = S().pauseEyebrow;
     document.getElementById('pauseTitleText').textContent = S().pauseTitle;
     document.getElementById('pauseSubText').textContent = S().pauseSub;
