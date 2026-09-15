@@ -26,7 +26,7 @@
 
   .hud{
     position:fixed; top:0; left:0; right:0;
-    display:flex; align-items:center; justify-content:space-between;
+    display:flex; flex-direction:column; gap:6px;
     padding: max(14px, env(safe-area-inset-top)) 16px 0 16px;
     pointer-events:none;
     z-index:5;
@@ -44,7 +44,9 @@
   }
   .hud-pill span{color:var(--muted); font-weight:500; margin-right:5px;}
 
-  .hud-group{display:flex; align-items:center; gap:8px; flex-wrap:wrap; row-gap:6px;}
+  .hud-top-row{display:flex; align-items:center; justify-content:space-between;}
+  .hud-group{display:flex; align-items:center; gap:8px;}
+  .hud-second-row{display:flex; align-items:center; gap:8px; min-height:0;}
 
   .pause-btn{
     width:38px; height:38px; border-radius:50%;
@@ -60,13 +62,9 @@
   .pause-btn:active{ transform:scale(0.94); }
 
   .meter-wrap{
-    position:fixed;
-    top:calc(max(14px, env(safe-area-inset-top)) + 44px);
-    left:16px; right:16px;
     height:6px; border-radius:4px;
     background:rgba(255,255,255,0.08);
     overflow:hidden;
-    z-index:5;
     pointer-events:none;
   }
   .meter-fill{
@@ -190,6 +188,7 @@
   #startOverlay, #endOverlay{ }
   #endOverlay{ display:none; }
   .caught-icon{ font-size:44px; margin-bottom:6px; }
+  .caught-icon svg{ width:64px; height:64px; }
   .footer-hint{
     margin-top:22px; color:var(--muted); font-size:12px; opacity:0.7;
   }
@@ -200,7 +199,7 @@
   .tut-dot{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:background 0.2s ease, transform 0.2s ease; }
   .tut-dot.active{ background:var(--amber); transform:scale(1.3); }
   .icon-link-btn{
-    flex:1; padding:10px 6px; border-radius:14px;
+    flex:1 1 calc(50% - 4px); padding:10px 6px; border-radius:14px;
     border:1.5px solid var(--line); background:rgba(255,255,255,0.02);
     color:var(--moon); font-size:12px; font-weight:700;
     display:flex; flex-direction:column; align-items:center; gap:4px;
@@ -243,6 +242,16 @@
   #achToast .t1{ color:var(--amber); font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; }
   #achToast .t2{ color:var(--moon); font-size:13.5px; font-weight:700; }
   #achToast .t3{ color:var(--muted); font-size:11.5px; }
+
+  #foodCountPopup{
+    position:fixed; top:38%; left:50%; transform:translate(-50%,-50%) scale(0.88);
+    font-size:32px; font-weight:900; color:rgba(244,241,234,0.55);
+    text-shadow:0 2px 14px rgba(0,0,0,0.55);
+    pointer-events:none; z-index:35; text-align:center; white-space:nowrap;
+    opacity:0; transition:opacity 0.25s ease, transform 0.25s ease;
+  }
+  #foodCountPopup.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  #foodCountPopup.ready{ color:rgba(127,174,134,0.65); }
 
   .list-overlay .panel{ max-width:420px; }
   .scroll-list{ width:100%; max-height:52vh; overflow-y:auto; margin-bottom:16px; }
@@ -310,25 +319,30 @@
       <div class="t3" id="achToastDesc">—</div>
     </div>
   </div>
+  <div id="foodCountPopup"></div>
 <div id="wrap">
   <canvas id="game"></canvas>
 
   <div class="hud" id="hud" style="display:none;">
-    <div class="hud-group">
-      <div class="hud-pill"><span id="hudLevelLabel">Bölüm</span><span id="levelLabel">1</span></div>
-      <div class="hud-pill" id="livesPill"><span id="livesLabel">♥♥♥</span></div>
+    <div class="hud-top-row">
+      <div class="hud-group">
+        <div class="hud-pill"><span id="hudLevelLabel">Bölüm</span><span id="levelLabel">1</span></div>
+        <div class="hud-pill" id="livesPill"><span id="livesLabel">♥♥♥</span></div>
+      </div>
+      <div class="hud-group">
+        <div class="hud-pill"><span id="hudBestLabel">En İyi</span><span id="bestLabel">1</span></div>
+        <button class="pause-btn" id="settingsBtnHud" aria-label="Ayarlar">⚙️</button>
+        <button class="pause-btn" id="pauseBtn" aria-label="Duraklat">❚❚</button>
+      </div>
+    </div>
+    <div class="hud-second-row">
       <div class="hud-pill" id="hudLifeTimerPill" style="display:none;"><span id="hudLifeTimerText"></span></div>
       <div class="hud-pill" id="foodPill" style="display:none;"><span id="foodLabelText">Yem</span><span id="foodLabel">0/1</span></div>
       <div class="hud-pill" id="energyPill" style="display:none;"><span>⚡</span><span id="energyLabel">0</span></div>
     </div>
-    <div class="hud-group">
-      <div class="hud-pill"><span id="hudBestLabel">En İyi</span><span id="bestLabel">1</span></div>
-      <button class="pause-btn" id="settingsBtnHud" aria-label="Ayarlar">⚙️</button>
-      <button class="pause-btn" id="pauseBtn" aria-label="Duraklat">❚❚</button>
+    <div class="meter-wrap" id="meterWrap" style="display:none;">
+      <div class="meter-fill" id="meterFill"></div>
     </div>
-  </div>
-  <div class="meter-wrap" id="meterWrap" style="display:none;">
-    <div class="meter-fill" id="meterFill"></div>
   </div>
 
   <div class="powerup-bar" id="powerupBar" style="display:none;">
@@ -359,10 +373,11 @@
       <div class="theme-tabs" id="themeTabs"></div>
       <div class="lock-hint" id="lockHintText">🔒 Diğer temalar 100⭐ ile açılır</div>
 
-      <div class="icon-row">
+      <div class="icon-row" style="flex-wrap:wrap;">
         <div class="icon-link-btn" id="openAchBtn"><span class="glyph">🏆</span><span id="openAchLabel">Başarımlar</span></div>
         <div class="icon-link-btn" id="openShopBtn"><span class="glyph">🛍️</span><span id="openShopLabel">Mağaza</span></div>
         <div class="icon-link-btn" id="openTutBtn"><span class="glyph">❓</span><span id="openTutLabel">Nasıl Oynanır?</span></div>
+        <div class="icon-link-btn" id="openStoryBtn"><span class="glyph">📖</span><span id="openStoryLabel">Hikaye</span></div>
       </div>
 
       <button class="play-btn" id="continueBtn" style="margin-bottom:10px; display:none; background:transparent; border:1.5px solid var(--amber); color:var(--amber); box-shadow:none;">Kaldığın Yerden Devam Et</button>
@@ -417,7 +432,7 @@
 
   <div class="overlay" id="endOverlay">
     <div class="panel">
-      <div class="caught-icon" id="caughtIcon">👁️</div>
+      <div class="caught-icon" id="caughtIcon">🐺 😋</div>
       <div class="eyebrow" id="endEyebrowText" style="color:var(--danger);">Görüldün</div>
       <h1 id="endLevelText">Bölüm 4</h1>
       <p class="sub" id="endSub">Bir sonrakinde daha dikkatli ol.</p>
@@ -432,12 +447,22 @@
     </div>
   </div>
 
+  <div class="overlay" id="themeStoryOverlay" style="display:none;">
+    <div class="panel">
+      <div style="font-size:52px; margin-bottom:8px;" id="storyIcon">🧑‍🌾</div>
+      <div class="eyebrow" id="storyNarratorText">Narrator</div>
+      <p class="sub" id="storyText" style="font-size:16px; line-height:1.5; margin-top:8px;">—</p>
+      <button class="play-btn" id="storyContinueBtn" style="margin-top:16px;">Let's Go!</button>
+    </div>
+  </div>
+
   <div class="overlay" id="pauseOverlay" style="display:none;">
     <div class="panel">
       <div class="eyebrow" id="pauseEyebrowText">Duraklatıldı</div>
       <h1 id="pauseTitleText">Mola</h1>
       <p class="sub" id="pauseSubText">Devam etmek için hazır olduğunda dokun.</p>
       <button class="play-btn" id="resumeBtn">Devam Et</button>
+      <button class="play-btn" id="restartLevelBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Bölüme Yeniden Başla</button>
       <button class="play-btn" id="quitBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Ana Menüye Dön</button>
     </div>
   </div>
@@ -465,6 +490,14 @@
       <div class="close-link" id="closeSettingsBtn" style="margin-top:18px;">Kapat</div>
     </div>
   </div>
+
+  <div class="overlay" id="adLoadingOverlay" style="display:none; background:rgba(10,14,10,0.88); z-index:200;">
+    <div class="panel" style="text-align:center;">
+      <div class="ad-spinner" style="width:44px;height:44px;border:4px solid rgba(255,255,255,0.15);border-top-color:var(--amber);border-radius:50%;margin:0 auto 16px;animation:ad-spin 0.8s linear infinite;"></div>
+      <div id="adLoadingText" style="font-weight:700; font-size:15px;">Reklam yükleniyor…</div>
+    </div>
+  </div>
+  <style>@keyframes ad-spin{to{transform:rotate(360deg);}}</style>
 
   <div class="overlay" id="milestoneOverlay" style="display:none;">
     <div class="fireworks-layer" id="fireworksLayer"></div>
@@ -625,12 +658,12 @@
       playBtn:'Başla', continueFromLevel:lv=>'Kaldığın Yerden Devam Et (Bölüm '+lv+')',
       pauseEyebrow:'Duraklatıldı', pauseTitle:'Mola',
       pauseSub:'Devam etmek için hazır olduğunda dokun.',
-      resumeBtn:'Devam Et', quitBtn:'Ana Menüye Dön',
+      resumeBtn:'Devam Et', restartLevelBtn:'Bölüme Yeniden Başla', quitBtn:'Ana Menüye Dön',
       endEyebrow:'Görüldün', hudLevelLabel:'Bölüm', hudBestLabel:'En İyi',
       themeBestPrefix:'🏅 En İyi: ',
       energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)',
-      adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...',
-      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan',
+      adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...', adLoadingText:'Reklam yükleniyor…', adNotAvailable:'Şu an reklam bulunamadı, birazdan tekrar dene',
+      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
       caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.",
       levelUpLabel:lv=>'Bölüm '+lv,
@@ -650,7 +683,7 @@
       foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji', foodBear:'Yosun', foodSchool:'Kalem',
       themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
       powerUpIntroTitle:'Güçlendirmeler Açıldı!', powerUpIntroDesc:'Görünmezlik ve Hız güçlendirmelerini yıldızla ya da reklam izleyerek kullanabilirsin.',
-      foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.',
+      foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.', foodRemainingPopup:(n,item)=>n+' '+item+' kaldı', foodReadyPopup:'Artık eve gidebilirsin!',
       nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan',
       hintDrag:'👆 Sürükle', hintAvoid:'👁️ Bakış konisinden kaç!', hintGoal:'🏠 Buraya ulaş',
       shopPricingIntroTitle:'Mağaza Bilgisi', shopPricingIntroDesc:n=>'Her görünüm 20 yıldız. Yeterli yıldızın yoksa reklam izleyerek +'+n+' yıldız kazanabilirsin.',
@@ -680,12 +713,12 @@
       playBtn:'Play', continueFromLevel:lv=>'Continue From Level '+lv,
       pauseEyebrow:'Paused', pauseTitle:'Break',
       pauseSub:'Tap when you\'re ready to continue.',
-      resumeBtn:'Resume', quitBtn:'Back to Menu',
+      resumeBtn:'Resume', restartLevelBtn:'Restart Level', quitBtn:'Back to Menu',
       endEyebrow:'Spotted', hudLevelLabel:'Level', hudBestLabel:'Best',
       themeBestPrefix:'🏅 Best: ',
       energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)',
-      adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...',
-      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached',
+      adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...', adLoadingText:'Loading ad…', adNotAvailable:'No ad available right now, try again shortly',
+      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
       caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.',
       levelUpLabel:lv=>'Level '+lv,
@@ -705,7 +738,7 @@
       foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy', foodBear:'Kelp', foodSchool:'Pencil',
       themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
       powerUpIntroTitle:'Power-Ups Unlocked!', powerUpIntroDesc:'Use Invisibility and Speed power-ups with stars or by watching an ad.',
-      foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.',
+      foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.', foodRemainingPopup:(n,item)=>n+' '+item+' left', foodReadyPopup:'You can go home now!',
       nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life',
       hintDrag:'👆 Drag me', hintAvoid:'👁️ Avoid the vision cone!', hintGoal:'🏠 Reach here',
       shopPricingIntroTitle:'Shop Info', shopPricingIntroDesc:n=>'Each look costs 20 stars. If you don\'t have enough, watch an ad to earn +'+n+' stars.',
@@ -735,12 +768,12 @@
       playBtn:'Jouer', continueFromLevel:lv=>'Continuer au Niveau '+lv,
       pauseEyebrow:'En Pause', pauseTitle:'Pause',
       pauseSub:'Touche l\'écran quand tu es prêt à continuer.',
-      resumeBtn:'Reprendre', quitBtn:'Retour au Menu',
+      resumeBtn:'Reprendre', restartLevelBtn:'Recommencer le Niveau', quitBtn:'Retour au Menu',
       endEyebrow:'Repéré', hudLevelLabel:'Niveau', hudBestLabel:'Meilleur',
       themeBestPrefix:'🏅 Meilleur : ',
       energyContinuePrefix:'Continuer avec de l\'Énergie (-', energySuffix:'⚡)',
-      adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...',
-      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint',
+      adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...', adLoadingText:'Chargement de la pub…', adNotAvailable:'Aucune pub disponible pour le moment, réessayez bientôt',
+      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
       caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.',
       levelUpLabel:lv=>'Niveau '+lv,
@@ -760,7 +793,7 @@
       foodWolf:'Herbe', foodCat:'Fromage', foodAlien:'Énergie', foodBear:'Algues', foodSchool:'Crayon',
       themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
       powerUpIntroTitle:'Bonus Débloqués !', powerUpIntroDesc:'Utilise les bonus Invisible et Vitesse avec des étoiles ou en regardant une pub.',
-      foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.',
+      foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.', foodRemainingPopup:(n,item)=>n+' '+item+' restant(s)', foodReadyPopup:'Tu peux rentrer maintenant !',
       nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate',
       hintDrag:'👆 Fais-moi glisser', hintAvoid:'👁️ Évite le cône de vision !', hintGoal:'🏠 Arrive ici',
       shopPricingIntroTitle:'Info Boutique', shopPricingIntroDesc:n=>'Chaque apparence coûte 20 étoiles. Si tu n\'en as pas assez, regarde une pub pour gagner +'+n+' étoiles.',
@@ -790,12 +823,12 @@
       playBtn:'Jugar', continueFromLevel:lv=>'Continuar en el Nivel '+lv,
       pauseEyebrow:'En Pausa', pauseTitle:'Pausa',
       pauseSub:'Toca cuando estés listo para continuar.',
-      resumeBtn:'Reanudar', quitBtn:'Volver al Menú',
+      resumeBtn:'Reanudar', restartLevelBtn:'Reiniciar Nivel', quitBtn:'Volver al Menú',
       endEyebrow:'Detectado', hudLevelLabel:'Nivel', hudBestLabel:'Mejor',
       themeBestPrefix:'🏅 Mejor: ',
       energyContinuePrefix:'Continuar con Energía (-', energySuffix:'⚡)',
-      adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...',
-      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado',
+      adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...', adLoadingText:'Cargando anuncio…', adNotAvailable:'No hay anuncios disponibles ahora, inténtalo en breve',
+      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
       caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.',
       levelUpLabel:lv=>'Nivel '+lv,
@@ -815,7 +848,7 @@
       foodWolf:'Hierba', foodCat:'Queso', foodAlien:'Energía', foodBear:'Algas', foodSchool:'Lápiz',
       themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
       powerUpIntroTitle:'¡Potenciadores Desbloqueados!', powerUpIntroDesc:'Usa los potenciadores Invisible y Velocidad con estrellas o viendo un anuncio.',
-      foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.',
+      foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.', foodRemainingPopup:(n,item)=>n+' '+item+' restante(s)', foodReadyPopup:'¡Ya puedes ir a casa!',
       nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea',
       hintDrag:'👆 Arrástrame', hintAvoid:'👁️ ¡Esquiva el cono de visión!', hintGoal:'🏠 Llega aquí',
       shopPricingIntroTitle:'Info de la Tienda', shopPricingIntroDesc:n=>'Cada apariencia cuesta 20 estrellas. Si no tienes suficientes, mira un anuncio para ganar +'+n+' estrellas.',
@@ -845,12 +878,12 @@
       playBtn:'Gioca', continueFromLevel:lv=>'Continua dal Livello '+lv,
       pauseEyebrow:'In Pausa', pauseTitle:'Pausa',
       pauseSub:'Tocca quando sei pronto a continuare.',
-      resumeBtn:'Riprendi', quitBtn:'Torna al Menu',
+      resumeBtn:'Riprendi', restartLevelBtn:'Ricomincia Livello', quitBtn:'Torna al Menu',
       endEyebrow:'Avvistato', hudLevelLabel:'Livello', hudBestLabel:'Record',
       themeBestPrefix:'🏅 Record: ',
       energyContinuePrefix:'Continua con Energia (-', energySuffix:'⚡)',
-      adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...',
-      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto',
+      adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...', adLoadingText:'Caricamento annuncio…', adNotAvailable:'Nessun annuncio disponibile ora, riprova a breve',
+      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
       caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.',
       levelUpLabel:lv=>'Livello '+lv,
@@ -870,7 +903,7 @@
       foodWolf:'Erba', foodCat:'Formaggio', foodAlien:'Energia', foodBear:'Alghe', foodSchool:'Matita',
       themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
       powerUpIntroTitle:'Potenziamenti Sbloccati!', powerUpIntroDesc:'Usa i potenziamenti Invisibile e Velocità con le stelle o guardando una pubblicità.',
-      foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.',
+      foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.', foodRemainingPopup:(n,item)=>n+' '+item+' rimasti', foodReadyPopup:'Ora puoi tornare a casa!',
       nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea',
       hintDrag:'👆 Trascinami', hintAvoid:'👁️ Evita il cono visivo!', hintGoal:'🏠 Arriva qui',
       shopPricingIntroTitle:'Info Negozio', shopPricingIntroDesc:n=>'Ogni aspetto costa 20 stelle. Se non ne hai abbastanza, guarda una pubblicità per guadagnare +'+n+' stelle.',
@@ -900,12 +933,12 @@
       playBtn:'Играть', continueFromLevel:lv=>'Продолжить с Уровня '+lv,
       pauseEyebrow:'Пауза', pauseTitle:'Перерыв',
       pauseSub:'Нажми, когда будешь готов продолжить.',
-      resumeBtn:'Продолжить', quitBtn:'В Главное Меню',
+      resumeBtn:'Продолжить', restartLevelBtn:'Начать Уровень Заново', quitBtn:'В Главное Меню',
       endEyebrow:'Обнаружен', hudLevelLabel:'Уровень', hudBestLabel:'Рекорд',
       themeBestPrefix:'🏅 Рекорд: ',
       energyContinuePrefix:'Продолжить за Энергию (-', energySuffix:'⚡)',
-      adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...',
-      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто',
+      adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...', adLoadingText:'Загрузка рекламы…', adNotAvailable:'Реклама сейчас недоступна, попробуйте позже',
+      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
       caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.',
       levelUpLabel:lv=>'Уровень '+lv,
@@ -925,7 +958,7 @@
       foodWolf:'Трава', foodCat:'Сыр', foodAlien:'Энергия', foodBear:'Водоросли', foodSchool:'Карандаш',
       themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
       powerUpIntroTitle:'Усиления Открыты!', powerUpIntroDesc:'Используй усиления Невидимка и Скорость за звёзды или посмотрев рекламу.',
-      foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.',
+      foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.', foodRemainingPopup:(n,item)=>'Осталось '+n+' '+item, foodReadyPopup:'Теперь можно домой!',
       nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу',
       hintDrag:'👆 Тяни меня', hintAvoid:'👁️ Избегай конуса зрения!', hintGoal:'🏠 Доберись сюда',
       shopPricingIntroTitle:'Информация о Магазине', shopPricingIntroDesc:n=>'Каждый образ стоит 20 звёзд. Если звёзд не хватает, посмотри рекламу и получи +'+n+' звёзд.',
@@ -967,7 +1000,7 @@
       stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0},
       lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
-      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null,
+      seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null, seenThemeStory:{},
       lives:MAX_LIVES, nextLifeAt:null,
       skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default'},
       ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default']}
@@ -1011,6 +1044,7 @@
     });
     if(!Array.isArray(p.themesUnlocked)) p.themesUnlocked = ['wolf'];
     if(!Array.isArray(p.reviewPromptLevels)) p.reviewPromptLevels = [];
+    if(typeof p.seenThemeStory!=='object' || p.seenThemeStory===null) p.seenThemeStory = {};
     p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
     return p;
@@ -1040,6 +1074,70 @@
   const SKIN_AD_REWARD = 5;
   const THEME_UNLOCK_COST = 100;
   const THEME_UNLOCK_AD_REWARD = 20;
+
+  // Hand-drawn "gotcha, delighted" faces for the caught screen — one per
+  // theme's hunter, matching the game's cute flat-shape art style.
+  const HAPPY_FACE_SVG = {
+    wolf: `<svg viewBox="0 0 100 100">
+      <polygon points="18,35 8,8 38,28" fill="#8a8a92"/>
+      <polygon points="82,35 92,8 62,28" fill="#8a8a92"/>
+      <polygon points="22,32 16,16 34,27" fill="#c9c5c0"/>
+      <polygon points="78,32 84,16 66,27" fill="#c9c5c0"/>
+      <ellipse cx="50" cy="55" rx="34" ry="30" fill="#a8a4a0"/>
+      <ellipse cx="50" cy="68" rx="18" ry="14" fill="#e8e4dc"/>
+      <ellipse cx="50" cy="62" rx="5" ry="4" fill="#2a2a2a"/>
+      <path d="M 28 46 Q 34 38 40 46" stroke="#2a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 60 46 Q 66 38 72 46" stroke="#2a2a2a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 38 72 Q 50 86 62 72 Q 50 80 38 72 Z" fill="#5a2a28"/>
+      <path d="M 44 74 Q 50 79 56 74" stroke="#e85a5a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>`,
+    cat: `<svg viewBox="0 0 100 100">
+      <polygon points="20,32 14,6 42,26" fill="#e8994d"/>
+      <polygon points="80,32 86,6 58,26" fill="#e8994d"/>
+      <polygon points="24,30 21,15 37,26" fill="#f6c88a"/>
+      <polygon points="76,30 79,15 63,26" fill="#f6c88a"/>
+      <ellipse cx="50" cy="56" rx="33" ry="29" fill="#f0a860"/>
+      <ellipse cx="50" cy="68" rx="16" ry="12" fill="#fbe4c2"/>
+      <polygon points="50,58 45,65 55,65" fill="#e8708a"/>
+      <path d="M 27 46 Q 33 39 39 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 61 46 Q 67 39 73 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 50 65 Q 44 74 36 70" stroke="#3a2418" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M 50 65 Q 56 74 64 70" stroke="#3a2418" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <line x1="8" y1="60" x2="28" y2="62" stroke="#3a2418" stroke-width="1.5"/>
+      <line x1="8" y1="68" x2="28" y2="67" stroke="#3a2418" stroke-width="1.5"/>
+      <line x1="92" y1="60" x2="72" y2="62" stroke="#3a2418" stroke-width="1.5"/>
+      <line x1="92" y1="68" x2="72" y2="67" stroke="#3a2418" stroke-width="1.5"/>
+    </svg>`,
+    alien: `<svg viewBox="0 0 100 100">
+      <ellipse cx="50" cy="58" rx="30" ry="36" fill="#8fd9a8"/>
+      <circle cx="50" cy="20" r="4" fill="#8fd9a8"/>
+      <line x1="50" y1="24" x2="50" y2="34" stroke="#8fd9a8" stroke-width="3"/>
+      <path d="M 26 48 Q 33 40 40 48 Q 33 46 26 48 Z" fill="#1a2e22"/>
+      <path d="M 74 48 Q 67 40 60 48 Q 67 46 74 48 Z" fill="#1a2e22"/>
+      <path d="M 38 76 Q 50 88 62 76 Q 50 82 38 76 Z" fill="#1a2e22"/>
+    </svg>`,
+    bear: `<svg viewBox="0 0 100 100">
+      <circle cx="20" cy="22" r="14" fill="#a97a52"/>
+      <circle cx="80" cy="22" r="14" fill="#a97a52"/>
+      <circle cx="20" cy="22" r="7" fill="#d3a87a"/>
+      <circle cx="80" cy="22" r="7" fill="#d3a87a"/>
+      <ellipse cx="50" cy="58" rx="34" ry="30" fill="#a97a52"/>
+      <ellipse cx="50" cy="70" rx="19" ry="15" fill="#e8ceac"/>
+      <ellipse cx="50" cy="62" rx="6" ry="4.5" fill="#2a1a10"/>
+      <path d="M 27 48 Q 33 40 39 48" stroke="#2a1a10" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 61 48 Q 67 40 73 48" stroke="#2a1a10" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 38 74 Q 50 88 62 74 Q 50 82 38 74 Z" fill="#5a2a28"/>
+    </svg>`,
+    school: `<svg viewBox="0 0 100 100">
+      <path d="M 16 45 Q 12 8 50 8 Q 88 8 84 45 L 78 40 Q 76 18 50 18 Q 24 18 22 40 Z" fill="#5a4030"/>
+      <ellipse cx="50" cy="55" rx="30" ry="32" fill="#f0c9a0"/>
+      <path d="M 29 46 Q 35 39 41 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M 59 46 Q 65 39 71 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="50" cy="60" rx="3" ry="4" fill="#d9a878"/>
+      <path d="M 36 70 Q 50 84 64 70 Q 50 78 36 70 Z" fill="#8a3a30"/>
+      <path d="M 42 72 Q 50 77 58 72" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>`
+  };
   let activePowerUp = null;
   let powerUpEndTime = 0;
 
@@ -1363,6 +1461,8 @@
   let lastGoalCorner = -1, lastSpawnCorner = -1;
 
   function setupLevel(lv){
+    levelJustStartedAt = performance.now();
+    pointer.active = false; // never let a stale drag-in-progress flag leak into a fresh level
     const pad = 60;
     let spawnC, goalC;
     do{ spawnC = Math.floor(rand(0,4)); } while(spawnC===lastGoalCorner && lv>1);
@@ -1392,6 +1492,13 @@
       const swing = rand(0.9,2.2);
       const speed = rotSpeed * rand(0.85,1.15) * (i%2===0?1:-1);
       const phase = rand(0,10);
+      // Give each hunter its own cone "shape" instead of a level-wide
+      // constant — some end up wider-but-shorter, others narrower-but-longer,
+      // so no two hunters (or levels) feel quite the same. The trade-off keeps
+      // overall danger roughly balanced around the level's difficulty tier.
+      const coneVariant = rand(-1,1);
+      const hunterConeHalf = clamp(coneHalf * (1 + coneVariant*0.35), 0.22, 0.62);
+      const hunterConeRange = clamp(coneRange * (1 - coneVariant*0.35), 170, 650);
       // Never let a hunter start a level already facing the player's spawn.
       // The hunter's actual first-frame angle is baseAngle + a swing offset
       // driven by `phase`, so we must solve for baseAngle accounting for
@@ -1399,13 +1506,13 @@
       const initialOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
       const angleToSpawn = Math.atan2(sp.y-hy, sp.x-hx);
       let baseAngle = rand(0,Math.PI*2);
-      if(angDiff(baseAngle + initialOffset, angleToSpawn) < coneHalf/2 + 0.5){
+      if(angDiff(baseAngle + initialOffset, angleToSpawn) < hunterConeHalf/2 + 0.5){
         baseAngle = angleToSpawn + Math.PI - initialOffset; // face away from spawn instead
       }
       // Defensive re-check: recompute the offset (timing may have drifted a
       // hair between the calculation above and now) and nudge further if needed.
       const recheckOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
-      if(angDiff(baseAngle + recheckOffset, angleToSpawn) < coneHalf/2 + 0.15){
+      if(angDiff(baseAngle + recheckOffset, angleToSpawn) < hunterConeHalf/2 + 0.15){
         baseAngle = angleToSpawn + Math.PI - recheckOffset;
       }
       hunters.push({
@@ -1414,7 +1521,7 @@
         swing,
         speed,
         phase,
-        coneHalf, coneRange,
+        coneHalf:hunterConeHalf, coneRange:hunterConeRange,
         r:16,
         angle:0
       });
@@ -1562,6 +1669,19 @@
     return S().foodAlien;
   }
 
+  const STORY_NARRATOR_ICON = { wolf:'🧑‍🌾', cat:'🐭', alien:'👨‍🚀', bear:'🎣', school:'🧑' };
+  function showThemeStory(themeObj, onContinue){
+    document.getElementById('storyIcon').textContent = STORY_NARRATOR_ICON[themeObj.id] || '🧑';
+    document.getElementById('storyNarratorText').textContent = S()['storyNarrator_'+themeObj.id] || '';
+    document.getElementById('storyText').textContent = S()['storyText_'+themeObj.id] || '';
+    document.getElementById('storyContinueBtn').textContent = S().storyContinueBtn;
+    document.getElementById('themeStoryOverlay').style.display = 'flex';
+    document.getElementById('storyContinueBtn').onclick = ()=>{
+      document.getElementById('themeStoryOverlay').style.display = 'none';
+      if(onContinue) onContinue();
+    };
+  }
+
   // ---------- Persistent life regeneration (Candy-Crush style) ----------
   function syncLifeRegen(){
     let changed = false;
@@ -1649,7 +1769,7 @@
       setupLevel(level);
       setTimeout(()=>{ if(state==='hit'){ state='playing'; } }, 750);
     } else {
-      syncLeaderTarget(); // avoid a snap if the leader that was caught gets replaced
+      if(pointer.active) syncLeaderTarget(); // avoid a snap if the leader that was caught gets replaced
     }
   }
 
@@ -1664,7 +1784,7 @@
     document.getElementById('endSub').textContent = S().caughtSub(level);
     document.getElementById('reachedLabel').textContent = level;
     document.getElementById('bestLabel2').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
-    document.getElementById('caughtIcon').textContent = theme.glyph;
+    document.getElementById('caughtIcon').innerHTML = HAPPY_FACE_SVG[theme.id] || HAPPY_FACE_SVG.wolf;
 
     const energyBtn = document.getElementById('energyContinueBtn');
     if(energy>=ENERGY_COST_PER_LIFE){
@@ -1766,22 +1886,52 @@
     ]);
   }
 
+  function showAdLoading(){
+    const el = document.getElementById('adLoadingOverlay');
+    document.getElementById('adLoadingText').textContent = S().adLoadingText;
+    el.style.display = 'flex';
+  }
+  function hideAdLoading(){
+    document.getElementById('adLoadingOverlay').style.display = 'none';
+  }
+  function showAdNotAvailableToast(){
+    showAchievementToast({title:S().adNotAvailable, desc:''}, '📭', '');
+  }
+
+  let foodPopupTimer = null;
+  function showFoodCountPopup(remaining, itemLabel){
+    const el = document.getElementById('foodCountPopup');
+    if(remaining>0){
+      el.textContent = S().foodRemainingPopup(remaining, itemLabel);
+      el.classList.remove('ready');
+    } else {
+      el.textContent = S().foodReadyPopup;
+      el.classList.add('ready');
+    }
+    el.classList.add('show');
+    clearTimeout(foodPopupTimer);
+    foodPopupTimer = setTimeout(()=> el.classList.remove('show'), 1100);
+  }
+
   async function showRealRewardedAd(){
     const AdMob = getAdMob();
     if(!AdMob) return false;
     admobRewardEarned = false;
     let rewardListener, dismissListener;
+    showAdLoading();
     try{
       rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
       dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
-      await withTimeout(AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() }), 10000);
-      await withTimeout(AdMob.showRewardVideoAd(), 15000);
+      await withTimeout(AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() }), 6000);
+      await withTimeout(AdMob.showRewardVideoAd(), 8000);
       // give the dismiss/reward events a moment to fire before we check the flag
       await new Promise(res=>setTimeout(res, 600));
       return admobRewardEarned;
     }catch(e){
+      showAdNotAvailableToast();
       return false;
     }finally{
+      hideAdLoading();
       if(rewardListener) rewardListener.remove();
       if(dismissListener) dismissListener.remove();
     }
@@ -1793,11 +1943,14 @@
   async function showInterstitial(){
     const AdMob = getAdMob();
     if(!AdMob) return; // browser testing / no native AdMob plugin — skip silently, never blocks gameplay
+    showAdLoading();
     try{
-      await withTimeout(AdMob.prepareInterstitial({ adId: getInterstitialUnitId() }), 10000);
-      await withTimeout(AdMob.showInterstitial(), 15000);
+      await withTimeout(AdMob.prepareInterstitial({ adId: getInterstitialUnitId() }), 6000);
+      await withTimeout(AdMob.showInterstitial(), 8000);
     }catch(e){
       // ad failed to load, failed to show, or timed out — fail silently, gameplay must never be blocked by this
+    }finally{
+      hideAdLoading();
     }
   }
 
@@ -1853,6 +2006,7 @@
       if(REVIEW_PROMPT_LEVELS.includes(lvl)){ maybeRequestReview(lvl); }
       state = 'levelup';
       levelUpT = 0.9;
+      requestAnimationFrame(loop); // the loop stops scheduling itself during 'milestone' — restart it
       setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; } }, 750);
     };
   }
@@ -1909,6 +2063,13 @@
     lastT = performance.now();
     requestAnimationFrame(loop);
   }
+  function restartLevel(){
+    document.getElementById('pauseOverlay').style.display='none';
+    setupLevel(level);
+    state = 'playing';
+    lastT = performance.now();
+    requestAnimationFrame(loop);
+  }
   function quitToMenu(){
     progress.lastLevelByTheme[theme.id] = Math.max(progress.lastLevelByTheme[theme.id]||0, level);
     saveProgress();
@@ -1933,8 +2094,19 @@
     herd[0].tx = clamp(pointer.x, herd[0].r+4, W-herd[0].r-4);
     herd[0].ty = clamp(pointer.y, herd[0].r+4, H-herd[0].r-4);
   }
-  canvas.addEventListener('pointerdown', e=>{ setPointer(e.clientX, e.clientY); });
-  canvas.addEventListener('pointermove', e=>{ if(pointer.active) setPointer(e.clientX, e.clientY); });
+  let levelJustStartedAt = 0;
+  canvas.addEventListener('pointerdown', e=>{
+    // Ignore a pointerdown that fires within ~200ms of a level starting —
+    // some browsers dispatch a phantom canvas event right as the Play/Continue
+    // button (sitting on top of the canvas) disappears mid-click, which would
+    // otherwise yank the character toward a bogus (0,0)-ish target instantly.
+    if(performance.now() - levelJustStartedAt < 200) return;
+    setPointer(e.clientX, e.clientY);
+  });
+  canvas.addEventListener('pointermove', e=>{
+    if(performance.now() - levelJustStartedAt < 200) return;
+    if(pointer.active) setPointer(e.clientX, e.clientY);
+  });
   window.addEventListener('pointerup', ()=>{ pointer.active=false; });
   canvas.addEventListener('touchmove', e=>{ e.preventDefault(); }, {passive:false});
 
@@ -2058,7 +2230,9 @@
         }
       }
       if(changed){
-        if(foods.every(f=>f.collected)) goalUnlocked = true;
+        const remaining = foods.filter(f=>!f.collected).length;
+        showFoodCountPopup(remaining, foodLabelFor(theme.id));
+        if(remaining===0) goalUnlocked = true;
         saveProgress();
         checkAchievements();
         updateHud();
@@ -2067,6 +2241,7 @@
 
     // members reaching the goal are saved one by one
     if(goalUnlocked){
+      let anySaved = false;
       for(let i=herd.length-1;i>=0;i--){
         const m = herd[i];
         if(dist(m.x,m.y,goal.x,goal.y) < goal.r){
@@ -2074,9 +2249,15 @@
             particles.push({x:m.x,y:m.y,r:2.6,a:0.7,vx:rand(-50,50),vy:rand(-50,50)});
           }
           herd.splice(i,1);
+          anySaved = true;
         }
       }
-      if(herd.length>0) syncLeaderTarget();
+      // Only resync the target when the leader identity actually changed this
+      // frame (a member reached the goal) — calling this every single frame
+      // regardless would overwrite the leader's real target with the pointer's
+      // default (0,0) position before the player has touched the screen,
+      // making the character visibly "walk itself" toward a corner at level start.
+      if(anySaved && herd.length>0 && pointer.active) syncLeaderTarget();
       if(herd.length===0){
         const completedLevel = level;
         level++;
@@ -2093,7 +2274,7 @@
         sfxLevelUp();
         vibrate(20);
         if(completedLevel%10===0){
-          showMilestoneOverlay(completedLevel, completedLevel%20===0);
+          showMilestoneOverlay(completedLevel, completedLevel%10===0);
           return;
         }
         state='levelup';
@@ -2821,6 +3002,134 @@
     ctx.restore();
   }
 
+  function drawGrassFoodIcon(ctx, x, y, size) {
+    ctx.save();
+    ctx.translate(x, y);
+
+    const blades = [
+      { dx: -0.35, h: 0.55, w: 0.10, tilt: -0.25, color: '#5cb32e' },
+      { dx: -0.20, h: 0.70, w: 0.11, tilt: -0.10, color: '#3f8f1f' },
+      { dx: -0.05, h: 0.85, w: 0.12, tilt: -0.02, color: '#5cb32e' },
+      { dx:  0.08, h: 0.78, w: 0.11, tilt:  0.08, color: '#3f8f1f' },
+      { dx:  0.22, h: 0.65, w: 0.10, tilt:  0.18, color: '#5cb32e' },
+      { dx:  0.35, h: 0.50, w: 0.09, tilt:  0.28, color: '#3f8f1f' },
+    ];
+
+    const baseY = size * 0.40;
+    blades.forEach(b => {
+      const bx = b.dx * size;
+      const bh = b.h * size;
+      const bw = b.w * size;
+      ctx.save();
+      ctx.translate(bx, baseY);
+      ctx.rotate(b.tilt);
+      ctx.fillStyle = b.color;
+      ctx.beginPath();
+      ctx.moveTo(-bw / 2, 0);
+      ctx.quadraticCurveTo(-bw * 0.3, -bh * 0.6, 0, -bh);
+      ctx.quadraticCurveTo(bw * 0.3, -bh * 0.6, bw / 2, 0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    });
+
+    ctx.restore();
+  }
+
+  function drawPawIcon(ctx, x, y, size) {
+    const s = size / 24; // 24px reference scale
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(s, s);
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    const fillMain = '#ffb020';
+    const fillLight = '#ffc94d';
+    const strokeColor = '#7a4a12';
+    const lineColor = '#7a4a12';
+
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.85;
+
+    const speedLines = [
+      { y: -5, x1: -12, x2: -5, w: 1.3 },
+      { y: -1.5, x1: -13, x2: -4, w: 1.6 },
+      { y: 1.5, x1: -13, x2: -4, w: 1.6 },
+      { y: 5, x1: -12, x2: -5, w: 1.3 },
+    ];
+    speedLines.forEach(l => {
+      ctx.lineWidth = l.w;
+      ctx.beginPath();
+      ctx.moveTo(l.x1, l.y);
+      ctx.lineTo(l.x2, l.y);
+      ctx.stroke();
+    });
+    ctx.fillStyle = lineColor;
+    ctx.beginPath();
+    ctx.arc(-15, 0, 0.6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    ctx.beginPath();
+    ctx.moveTo(-3, 10);
+    ctx.bezierCurveTo(-7, 9, -8, 4, -6, 0);
+    ctx.bezierCurveTo(-5, -3, -1, -4, 2, -3);
+    ctx.bezierCurveTo(6, -2, 8, 2, 6.5, 6);
+    ctx.bezierCurveTo(5.5, 9, 1, 11, -3, 10);
+    ctx.closePath();
+    ctx.fillStyle = fillMain;
+    ctx.fill();
+    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = strokeColor;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.ellipse(-2, 2, 2.2, 1.3, -0.5, 0, Math.PI * 2);
+    ctx.fillStyle = fillLight;
+    ctx.globalAlpha = 0.7;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    const toes = [
+      { cx: -3.5, cy: -7, rx: 2.1, ry: 2.7, rot: -0.35 },
+      { cx: 0.5,  cy: -9.5, rx: 2.1, ry: 2.7, rot: -0.05 },
+      { cx: 4.5,  cy: -9,   rx: 2.1, ry: 2.7, rot: 0.15 },
+      { cx: 7.5,  cy: -5.5, rx: 2.0, ry: 2.5, rot: 0.5 },
+    ];
+
+    toes.forEach(t => {
+      ctx.beginPath();
+      ctx.ellipse(t.cx, t.cy, t.rx, t.ry, t.rot, 0, Math.PI * 2);
+      ctx.fillStyle = fillMain;
+      ctx.fill();
+      ctx.lineWidth = 1.1;
+      ctx.strokeStyle = strokeColor;
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.ellipse(t.cx - 0.5, t.cy - 0.8, 0.7, 0.4, t.rot, 0, Math.PI * 2);
+      ctx.fillStyle = fillLight;
+      ctx.globalAlpha = 0.7;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    });
+
+    ctx.restore();
+  }
+  let _pawIconDataURL = null;
+  function getPawIconImgTag(){
+    if(!_pawIconDataURL){
+      const off = document.createElement('canvas');
+      off.width = 48; off.height = 48;
+      drawPawIcon(off.getContext('2d'), 24, 24, 40);
+      _pawIconDataURL = off.toDataURL();
+    }
+    return '<img src="'+_pawIconDataURL+'" style="width:22px;height:22px;display:block;margin:0 auto;">';
+  }
+
   function drawFood(f){
     if(f.collected) return;
     const t = performance.now()/450;
@@ -2834,13 +3143,7 @@
     ctx.beginPath(); ctx.arc(0,0,f.r*2.4*pulse,0,7); ctx.fill();
 
     if(theme.id==='wolf'){
-      // grass tuft
-      ctx.strokeStyle = '#8fbf7a'; ctx.lineWidth=3; ctx.lineCap='round';
-      [-0.5,0,0.5].forEach(o=>{
-        ctx.beginPath(); ctx.moveTo(o*f.r*0.7,f.r*0.7);
-        ctx.quadraticCurveTo(o*f.r*1.1,-f.r*0.2, o*f.r*0.4,-f.r*0.9);
-        ctx.stroke();
-      });
+      drawGrassFoodIcon(ctx, 0, 0, f.r*2.6);
     } else if(theme.id==='cat'){
       // cheese wedge
       ctx.fillStyle = '#e8c14a';
@@ -3006,6 +3309,7 @@
     document.getElementById('openAchLabel').textContent = S().achLink;
     document.getElementById('openShopLabel').textContent = S().shopLink;
     document.getElementById('openTutLabel').textContent = S().tutLink;
+    document.getElementById('openStoryLabel').textContent = S().storyBtn;
     document.getElementById('themeBestLabel').textContent = S().themeBestPrefix;
     document.getElementById('lockHintText').textContent = S().lockHint(THEME_UNLOCK_COST);
     document.getElementById('achEyebrowText').textContent = S().progressEyebrow;
@@ -3023,6 +3327,7 @@
     document.getElementById('pauseTitleText').textContent = S().pauseTitle;
     document.getElementById('pauseSubText').textContent = S().pauseSub;
     document.getElementById('resumeBtn').textContent = S().resumeBtn;
+    document.getElementById('restartLevelBtn').textContent = S().restartLevelBtn;
     document.getElementById('quitBtn').textContent = S().quitBtn;
     document.getElementById('hudLevelLabel').textContent = S().hudLevelLabel;
     document.getElementById('hudBestLabel').textContent = S().hudBestLabel;
@@ -3202,7 +3507,17 @@
   setupBackButton();
 
   initAdMob();
-  document.getElementById('playBtn').addEventListener('click', ()=>{ ensureAudio(); startGame(); });
+  document.getElementById('playBtn').addEventListener('click', ()=>{
+    ensureAudio();
+    if(!progress.seenThemeStory[theme.id]){
+      progress.seenThemeStory[theme.id] = true;
+      saveProgress();
+      showThemeStory(theme, ()=> startGame());
+    } else {
+      startGame();
+    }
+  });
+  document.getElementById('openStoryBtn').addEventListener('click', ()=> showThemeStory(theme, null));
   document.getElementById('continueBtn').addEventListener('click', ()=>{
     ensureAudio();
     startGame(progress.lastLevelByTheme[theme.id]||1);
@@ -3237,7 +3552,7 @@
     ['invis','speed'].forEach(type=>{
       const btn = document.getElementById('pu_'+type);
       const cfg = POWERUPS[type];
-      const icon = type==='invis' ? '👻' : '⚡';
+      const icon = type==='invis' ? '👻' : getPawIconImgTag();
       const label = type==='invis' ? S().powerUpInvis : S().powerUpSpeed;
       if(activePowerUp===type){
         const remain = Math.max(0, Math.ceil((powerUpEndTime-performance.now())/1000));
@@ -3328,6 +3643,7 @@
   document.getElementById('settingsAdPrefBtn').addEventListener('click', openAdPreferences);
   document.getElementById('pauseBtn').addEventListener('click', pauseGame);
   document.getElementById('resumeBtn').addEventListener('click', resumeGame);
+  document.getElementById('restartLevelBtn').addEventListener('click', restartLevel);
   document.getElementById('quitBtn').addEventListener('click', quitToMenu);
   document.getElementById('energyContinueBtn').addEventListener('click', continueWithEnergy);
   document.getElementById('adContinueBtn').addEventListener('click', continueWithAd);
