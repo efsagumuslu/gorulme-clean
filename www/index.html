@@ -98,7 +98,8 @@
     position:fixed; transform:translate(-50%,-50%) scale(1);
     background:rgba(19,24,38,0.92); border:2px solid var(--amber);
     color:var(--moon); font-size:17px; font-weight:800;
-    padding:12px 20px; border-radius:16px; white-space:nowrap;
+    padding:12px 20px; border-radius:16px;
+    max-width:min(88vw, 340px); text-align:center; line-height:1.3;
     z-index:15; pointer-events:none;
     animation: hint-pulse 1.4s ease-in-out infinite;
     box-shadow:0 0 22px -2px var(--amber);
@@ -162,6 +163,12 @@
     border-style:dashed;
   }
   .theme-tab.locked .glyph{ font-size:16px; }
+  .theme-tab.seasonal{
+    opacity:0.9;
+    border-style:solid;
+    border-color:var(--amber);
+    box-shadow:0 0 10px rgba(232,163,61,0.35);
+  }
   .play-btn{
     width:100%; padding:16px; border-radius:16px; border:none;
     background: linear-gradient(180deg, #f0dcae, var(--amber));
@@ -199,13 +206,14 @@
   .tut-dot{ width:7px; height:7px; border-radius:50%; background:var(--line); transition:background 0.2s ease, transform 0.2s ease; }
   .tut-dot.active{ background:var(--amber); transform:scale(1.3); }
   .icon-link-btn{
-    flex:1 1 calc(50% - 4px); padding:10px 6px; border-radius:14px;
+    flex:1; padding:8px 4px; border-radius:14px;
     border:1.5px solid var(--line); background:rgba(255,255,255,0.02);
-    color:var(--moon); font-size:12px; font-weight:700;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
+    color:var(--moon); font-size:10.5px; font-weight:700;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
     cursor:pointer; touch-action:manipulation;
+    white-space:nowrap;
   }
-  .icon-link-btn .glyph{ font-size:18px; }
+  .icon-link-btn .glyph{ font-size:16px; }
   .star-badge{
     display:inline-flex; align-items:center; gap:5px;
     color:var(--amber); font-weight:800; font-size:14px;
@@ -217,8 +225,8 @@
   }
 
   .quest-card{
-    width:100%; border:1.5px solid var(--line); border-radius:14px;
-    padding:12px 14px; margin-bottom:16px; text-align:left;
+    flex:1; border:1.5px solid var(--line); border-radius:14px;
+    padding:12px 14px; text-align:left;
     background:rgba(255,255,255,0.02);
   }
   .quest-title{ color:var(--amber); font-size:11px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:5px; }
@@ -358,6 +366,7 @@
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
       <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
+      <div id="challengeLink" style="color:var(--muted); font-size:12.5px; font-weight:700; text-decoration:underline; cursor:pointer; margin:-8px 0 14px;">👥 Arkadaşını Davet Et</div>
 
       <div class="lives-row">
         <span id="startLivesHearts" style="font-size:18px; letter-spacing:2px;">♥♥♥</span>
@@ -365,15 +374,21 @@
       </div>
       <button class="skin-btn" id="watchAdLifeBtn" style="display:none; margin-bottom:14px;">📺 İzle, Anında Can Kazan</button>
 
-      <div class="quest-card" id="questSummaryCard" style="cursor:pointer;">
-        <div class="quest-title" id="questSummaryTitleText">📅 Günlük Görevler</div>
-        <div class="quest-status" id="questSummaryStatus" style="font-size:13px;">0/8 Tamamlandı</div>
+      <div style="display:flex; gap:8px; width:100%; margin-bottom:16px;">
+        <div class="quest-card" id="questSummaryCard" style="cursor:pointer;">
+          <div class="quest-title" id="questSummaryTitleText">📅 Günlük Görevler</div>
+          <div class="quest-status" id="questSummaryStatus" style="font-size:13px;">0/8 Tamamlandı</div>
+        </div>
+        <div class="quest-card" id="spinWheelCard" style="cursor:pointer;">
+          <div class="quest-title" id="spinCardTitleText">🎡 Şans Çarkı</div>
+          <div class="quest-status" id="spinCardStatus" style="font-size:13px;">Çevirmeye hazır!</div>
+        </div>
       </div>
 
       <div class="theme-tabs" id="themeTabs"></div>
       <div class="lock-hint" id="lockHintText">🔒 Diğer temalar 100⭐ ile açılır</div>
 
-      <div class="icon-row" style="flex-wrap:wrap;">
+      <div class="icon-row">
         <div class="icon-link-btn" id="openAchBtn"><span class="glyph">🏆</span><span id="openAchLabel">Başarımlar</span></div>
         <div class="icon-link-btn" id="openShopBtn"><span class="glyph">🛍️</span><span id="openShopLabel">Mağaza</span></div>
         <div class="icon-link-btn" id="openTutBtn"><span class="glyph">❓</span><span id="openTutLabel">Nasıl Oynanır?</span></div>
@@ -453,6 +468,49 @@
       <div class="eyebrow" id="storyNarratorText">Narrator</div>
       <p class="sub" id="storyText" style="font-size:16px; line-height:1.5; margin-top:8px;">—</p>
       <button class="play-btn" id="storyContinueBtn" style="margin-top:16px;">Let's Go!</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="spinWheelOverlay" style="display:none;">
+    <div class="panel">
+      <div class="eyebrow" id="spinEyebrowText">Daily Spin</div>
+      <h1 style="font-size:26px;" id="spinTitleText">Spin the Wheel!</h1>
+      <div style="position:relative; width:250px; height:250px; margin:16px auto 8px;">
+        <div style="position:absolute; top:-6px; left:50%; transform:translateX(-50%); font-size:26px; z-index:3; filter:drop-shadow(0 2px 3px rgba(0,0,0,0.5));">🔻</div>
+        <div id="spinWheel" style="width:250px; height:250px; border-radius:50%; border:6px solid #3a3020; position:relative; box-shadow:0 6px 24px rgba(0,0,0,0.4);"></div>
+        <div style="position:absolute; top:50%; left:50%; width:20px; height:20px; margin:-10px 0 0 -10px; border-radius:50%; background:var(--amber); border:3px solid #3a3020; z-index:3;"></div>
+      </div>
+      <p class="sub" id="spinStatusText" style="font-size:14px; min-height:20px;"></p>
+      <button class="play-btn" id="spinBtn" style="margin-top:8px;">Spin!</button>
+      <button class="play-btn" id="closeSpinBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Close</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="challengeOverlay" style="display:none;">
+    <div class="panel">
+      <div class="eyebrow" id="challengeEyebrowText">Multiplayer</div>
+      <h1 style="font-size:24px;" id="challengeTitleText">Challenge a Friend</h1>
+      <p class="sub" id="challengeIntroText" style="font-size:14px; margin-bottom:16px;">Send your code, or enter theirs.</p>
+
+      <div id="challengeMainButtons">
+        <button class="play-btn" id="genCodeBtn">Get My Code</button>
+        <button class="play-btn" id="showEnterCodeBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Enter a Code</button>
+      </div>
+
+      <div id="challengeCodeView" style="display:none;">
+        <p class="sub" id="challengeCodeDesc" style="font-size:14px;">—</p>
+        <div id="challengeCodeDisplay" style="font-size:36px; font-weight:900; letter-spacing:0.08em; color:var(--amber); margin:16px 0; font-variant-numeric:tabular-nums;">00000</div>
+        <button class="play-btn" id="copyCodeBtn">Copy Code</button>
+      </div>
+
+      <div id="challengeEnterView" style="display:none;">
+        <input id="challengeCodeInput" type="tel" inputmode="numeric" maxlength="5" placeholder="00000"
+          style="width:100%; font-size:32px; font-weight:900; text-align:center; letter-spacing:0.1em; padding:14px; border-radius:14px; border:1.5px solid var(--line); background:rgba(255,255,255,0.03); color:var(--moon); margin-bottom:14px; font-variant-numeric:tabular-nums;">
+        <button class="play-btn" id="submitCodeBtn">Accept Challenge</button>
+        <p class="sub" id="challengeResultText" style="font-size:14px; margin-top:14px; min-height:20px;"></p>
+      </div>
+
+      <button class="play-btn" id="closeChallengeBtn" style="margin-top:16px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Close</button>
     </div>
   </div>
 
@@ -617,6 +675,26 @@
       hunterBody:'#3a4a6b', hunterDark:'#242e42',
       preyBody:'#e8e4d8', preyDark:'#c4bfa8',
       deco:'classroom'
+    },
+    {
+      id:'halloween', glyph:'🎃', color:'#e8833d', accent:'#ff8c3d', locked:true, seasonal:{startMonth:10,startDay:20,endMonth:11,endDay:2}, shape:'wolf',
+      hunterName:'Hayalet', preyName:'Cadı Çırağı',
+      title:'Cadılar Bayramı Kaçışı', sub:'Hayaletin bakışından kaç, kabak fenerine ulaş.',
+      hunterNameEn:'Ghost', preyNameEn:'Trick-or-Treater',
+      titleEn:'Halloween Escape', subEn:'Stay out of the ghost\'s sight, reach the jack-o\'-lantern.',
+      hunterNameFr:'Fantôme', preyNameFr:'Enfant Déguisé',
+      titleFr:'Évasion d\'Halloween', subFr:'Reste hors de la vue du fantôme, atteins la citrouille.',
+      hunterNameEs:'Fantasma', preyNameEs:'Niño Disfrazado',
+      titleEs:'Escape de Halloween', subEs:'Mantente fuera de la vista del fantasma, llega a la calabaza.',
+      hunterNameIt:'Fantasma', preyNameIt:'Bambino in Costume',
+      titleIt:'Fuga di Halloween', subIt:'Resta fuori dalla vista del fantasma, raggiungi la zucca.',
+      hunterNameRu:'Призрак', preyNameRu:'Ребёнок в Костюме',
+      titleRu:'Побег на Хэллоуин', subRu:'Не попадайся на глаза призраку, доберись до тыквы.',
+      bg0:'#150a1a', bg1:'#241230', ground:'#1c0f24',
+      dayBg0:'#2e1838', dayBg1:'#452554',
+      hunterBody:'#d8d0e8', hunterDark:'#a89ac0',
+      preyBody:'#e8833d', preyDark:'#b8602a',
+      deco:'halloween'
     }
   ];
   let themeIndex = 0;
@@ -673,7 +751,7 @@
       dailyQuestToastLabel:'Günlük Görev',
       dailyQuestCompleteTitle:'Günlük Görev Tamamlandı',
       dailyQuestRewardDesc:s=>'+'+s+' Yıldız kazandın',
-      achToastLabel:'Başarım Kazandın',
+      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', challengeLinkText:'👥 Arkadaşını Davet Et', challengeEyebrow:'Çok Oyunculu', challengeTitle:'Arkadaşını Davet Et', challengeIntro:'Kodunu gönder, ya da arkadaşının kodunu gir.', genCodeBtnText:'Kodumu Al', showEnterCodeBtnText:'Kod Gir', copyCodeBtnText:'Kodu Kopyala', codeCopiedText:'Kopyalandı!', submitCodeBtnText:'Meydan Okumayı Kabul Et', closeChallengeBtnText:'Kapat', challengeCodeDesc:(name,lvl)=>'Arkadaşın bu kodu girince, senin '+name+' temandaki '+lvl+'. bölüm rekorunu görecek.', invalidCodeText:'Geçersiz kod, tekrar kontrol et.', challengeAcceptedText:(name,lvl)=>'Meydan okuma kabul edildi! '+name+' temasında '+lvl+'. bölümü geçmeye çalış.', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
       shareText:(t,lv)=>'Stay Unseen: Sneak Escape ('+t+") oyununda Bölüm "+lv+"'e ulaştım! 🎮",
       shareCopied:'Skor panoya kopyalandı!',
       skinSelected:'Seçili', skinSelect:'Seç',
@@ -683,7 +761,7 @@
       foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji', foodBear:'Yosun', foodSchool:'Kalem',
       themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
       powerUpIntroTitle:'Güçlendirmeler Açıldı!', powerUpIntroDesc:'Görünmezlik ve Hız güçlendirmelerini yıldızla ya da reklam izleyerek kullanabilirsin.',
-      foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.', foodRemainingPopup:(n,item)=>n+' '+item+' kaldı', foodReadyPopup:'Artık eve gidebilirsin!',
+      wallIntroTitle:'Hareketli Duvar!', wallIntroDesc:'Duvarlar hem yolunu keser hem avcının görüşünü engeller — arkasına saklanabilirsin.', safeZoneIntroTitle:'Güvenli Bölge!', safeZoneIntroDesc:'Parlayan yeşil alanın içindeyken hiçbir avcı seni göremez.', foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.', foodRemainingPopup:(n,item)=>n+' '+item+' kaldı', foodReadyPopup:'Artık eve gidebilirsin!',
       nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan',
       hintDrag:'👆 Sürükle', hintAvoid:'👁️ Bakış konisinden kaç!', hintGoal:'🏠 Buraya ulaş',
       shopPricingIntroTitle:'Mağaza Bilgisi', shopPricingIntroDesc:n=>'Her görünüm 20 yıldız. Yeterli yıldızın yoksa reklam izleyerek +'+n+' yıldız kazanabilirsin.',
@@ -728,7 +806,7 @@
       dailyQuestToastLabel:'Daily Quest',
       dailyQuestCompleteTitle:'Daily Quest Completed',
       dailyQuestRewardDesc:s=>'+'+s+' Stars earned',
-      achToastLabel:'Achievement Unlocked',
+      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', challengeLinkText:'👥 Invite a Friend', challengeEyebrow:'Multiplayer', challengeTitle:'Challenge a Friend', challengeIntro:'Send your code, or enter theirs.', genCodeBtnText:'Get My Code', showEnterCodeBtnText:'Enter a Code', copyCodeBtnText:'Copy Code', codeCopiedText:'Copied!', submitCodeBtnText:'Accept Challenge', closeChallengeBtnText:'Close', challengeCodeDesc:(name,lvl)=>'When your friend enters this code, they\'ll see your level '+lvl+' record in '+name+'.', invalidCodeText:'Invalid code, check it again.', challengeAcceptedText:(name,lvl)=>'Challenge accepted! Try to beat level '+lvl+' in '+name+'.', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
       shareText:(t,lv)=>'I reached Level '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Score copied to clipboard!',
       skinSelected:'Selected', skinSelect:'Select',
@@ -738,7 +816,7 @@
       foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy', foodBear:'Kelp', foodSchool:'Pencil',
       themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
       powerUpIntroTitle:'Power-Ups Unlocked!', powerUpIntroDesc:'Use Invisibility and Speed power-ups with stars or by watching an ad.',
-      foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.', foodRemainingPopup:(n,item)=>n+' '+item+' left', foodReadyPopup:'You can go home now!',
+      wallIntroTitle:'Moving Wall!', wallIntroDesc:'Walls block your path AND the hunter\'s sight — hide behind one.', safeZoneIntroTitle:'Safe Zone!', safeZoneIntroDesc:'While inside the glowing green patch, no hunter can spot you.', foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.', foodRemainingPopup:(n,item)=>n+' '+item+' left', foodReadyPopup:'You can go home now!',
       nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life',
       hintDrag:'👆 Drag me', hintAvoid:'👁️ Avoid the vision cone!', hintGoal:'🏠 Reach here',
       shopPricingIntroTitle:'Shop Info', shopPricingIntroDesc:n=>'Each look costs 20 stars. If you don\'t have enough, watch an ad to earn +'+n+' stars.',
@@ -783,7 +861,7 @@
       dailyQuestToastLabel:'Mission Quotidienne',
       dailyQuestCompleteTitle:'Mission Quotidienne Terminée',
       dailyQuestRewardDesc:s=>'+'+s+' étoiles gagnées',
-      achToastLabel:'Succès Débloqué',
+      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', challengeLinkText:'👥 Inviter un Ami', challengeEyebrow:'Multijoueur', challengeTitle:'Défier un Ami', challengeIntro:'Envoie ton code, ou entre le sien.', genCodeBtnText:'Obtenir Mon Code', showEnterCodeBtnText:'Entrer un Code', copyCodeBtnText:'Copier le Code', codeCopiedText:'Copié !', submitCodeBtnText:'Accepter le Défi', closeChallengeBtnText:'Fermer', challengeCodeDesc:(name,lvl)=>'Quand ton ami entre ce code, il verra ton record de niveau '+lvl+' en '+name+'.', invalidCodeText:'Code invalide, vérifie à nouveau.', challengeAcceptedText:(name,lvl)=>'Défi accepté ! Essaie de battre le niveau '+lvl+' en '+name+'.', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
       shareText:(t,lv)=>'J\'ai atteint le Niveau '+lv+' dans Stay Unseen: Sneak Escape ('+t+') ! 🎮',
       shareCopied:'Score copié dans le presse-papiers !',
       skinSelected:'Sélectionné', skinSelect:'Choisir',
@@ -793,7 +871,7 @@
       foodWolf:'Herbe', foodCat:'Fromage', foodAlien:'Énergie', foodBear:'Algues', foodSchool:'Crayon',
       themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
       powerUpIntroTitle:'Bonus Débloqués !', powerUpIntroDesc:'Utilise les bonus Invisible et Vitesse avec des étoiles ou en regardant une pub.',
-      foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.', foodRemainingPopup:(n,item)=>n+' '+item+' restant(s)', foodReadyPopup:'Tu peux rentrer maintenant !',
+      wallIntroTitle:'Mur Mobile !', wallIntroDesc:'Les murs bloquent votre chemin ET la vue du chasseur — cachez-vous derrière.', safeZoneIntroTitle:'Zone Sûre !', safeZoneIntroDesc:'À l\'intérieur de la zone verte lumineuse, aucun chasseur ne peut vous repérer.', foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.', foodRemainingPopup:(n,item)=>n+' '+item+' restant(s)', foodReadyPopup:'Tu peux rentrer maintenant !',
       nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate',
       hintDrag:'👆 Fais-moi glisser', hintAvoid:'👁️ Évite le cône de vision !', hintGoal:'🏠 Arrive ici',
       shopPricingIntroTitle:'Info Boutique', shopPricingIntroDesc:n=>'Chaque apparence coûte 20 étoiles. Si tu n\'en as pas assez, regarde une pub pour gagner +'+n+' étoiles.',
@@ -838,7 +916,7 @@
       dailyQuestToastLabel:'Misión Diaria',
       dailyQuestCompleteTitle:'Misión Diaria Completada',
       dailyQuestRewardDesc:s=>'+'+s+' estrellas ganadas',
-      achToastLabel:'Logro Desbloqueado',
+      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', challengeLinkText:'👥 Invitar a un Amigo', challengeEyebrow:'Multijugador', challengeTitle:'Desafiar a un Amigo', challengeIntro:'Envía tu código, o ingresa el suyo.', genCodeBtnText:'Obtener Mi Código', showEnterCodeBtnText:'Ingresar Código', copyCodeBtnText:'Copiar Código', codeCopiedText:'¡Copiado!', submitCodeBtnText:'Aceptar Desafío', closeChallengeBtnText:'Cerrar', challengeCodeDesc:(name,lvl)=>'Cuando tu amigo ingrese este código, verá tu récord de nivel '+lvl+' en '+name+'.', invalidCodeText:'Código inválido, revísalo de nuevo.', challengeAcceptedText:(name,lvl)=>'¡Desafío aceptado! Intenta superar el nivel '+lvl+' en '+name+'.', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
       shareText:(t,lv)=>'¡Alcancé el Nivel '+lv+' en Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'¡Puntuación copiada al portapapeles!',
       skinSelected:'Seleccionado', skinSelect:'Elegir',
@@ -848,7 +926,7 @@
       foodWolf:'Hierba', foodCat:'Queso', foodAlien:'Energía', foodBear:'Algas', foodSchool:'Lápiz',
       themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
       powerUpIntroTitle:'¡Potenciadores Desbloqueados!', powerUpIntroDesc:'Usa los potenciadores Invisible y Velocidad con estrellas o viendo un anuncio.',
-      foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.', foodRemainingPopup:(n,item)=>n+' '+item+' restante(s)', foodReadyPopup:'¡Ya puedes ir a casa!',
+      wallIntroTitle:'¡Muro Móvil!', wallIntroDesc:'Los muros bloquean tu camino Y la vista del cazador — escóndete detrás.', safeZoneIntroTitle:'¡Zona Segura!', safeZoneIntroDesc:'Dentro del área verde brillante, ningún cazador puede verte.', foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.', foodRemainingPopup:(n,item)=>n+' '+item+' restante(s)', foodReadyPopup:'¡Ya puedes ir a casa!',
       nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea',
       hintDrag:'👆 Arrástrame', hintAvoid:'👁️ ¡Esquiva el cono de visión!', hintGoal:'🏠 Llega aquí',
       shopPricingIntroTitle:'Info de la Tienda', shopPricingIntroDesc:n=>'Cada apariencia cuesta 20 estrellas. Si no tienes suficientes, mira un anuncio para ganar +'+n+' estrellas.',
@@ -893,7 +971,7 @@
       dailyQuestToastLabel:'Missione Giornaliera',
       dailyQuestCompleteTitle:'Missione Giornaliera Completata',
       dailyQuestRewardDesc:s=>'+'+s+' stelle guadagnate',
-      achToastLabel:'Obiettivo Sbloccato',
+      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', challengeLinkText:'👥 Invita un Amico', challengeEyebrow:'Multigiocatore', challengeTitle:'Sfida un Amico', challengeIntro:'Invia il tuo codice, o inserisci il suo.', genCodeBtnText:'Ottieni il Mio Codice', showEnterCodeBtnText:'Inserisci Codice', copyCodeBtnText:'Copia Codice', codeCopiedText:'Copiato!', submitCodeBtnText:'Accetta Sfida', closeChallengeBtnText:'Chiudi', challengeCodeDesc:(name,lvl)=>'Quando il tuo amico inserisce questo codice, vedrà il tuo record di livello '+lvl+' in '+name+'.', invalidCodeText:'Codice non valido, controlla di nuovo.', challengeAcceptedText:(name,lvl)=>'Sfida accettata! Prova a battere il livello '+lvl+' in '+name+'.', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
       shareText:(t,lv)=>'Ho raggiunto il Livello '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Punteggio copiato negli appunti!',
       skinSelected:'Selezionato', skinSelect:'Scegli',
@@ -903,7 +981,7 @@
       foodWolf:'Erba', foodCat:'Formaggio', foodAlien:'Energia', foodBear:'Alghe', foodSchool:'Matita',
       themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
       powerUpIntroTitle:'Potenziamenti Sbloccati!', powerUpIntroDesc:'Usa i potenziamenti Invisibile e Velocità con le stelle o guardando una pubblicità.',
-      foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.', foodRemainingPopup:(n,item)=>n+' '+item+' rimasti', foodReadyPopup:'Ora puoi tornare a casa!',
+      wallIntroTitle:'Muro Mobile!', wallIntroDesc:'I muri bloccano il tuo cammino E la vista del cacciatore — nasconditi dietro.', safeZoneIntroTitle:'Zona Sicura!', safeZoneIntroDesc:'Dentro l\'area verde luminosa, nessun cacciatore può vederti.', foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.', foodRemainingPopup:(n,item)=>n+' '+item+' rimasti', foodReadyPopup:'Ora puoi tornare a casa!',
       nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea',
       hintDrag:'👆 Trascinami', hintAvoid:'👁️ Evita il cono visivo!', hintGoal:'🏠 Arriva qui',
       shopPricingIntroTitle:'Info Negozio', shopPricingIntroDesc:n=>'Ogni aspetto costa 20 stelle. Se non ne hai abbastanza, guarda una pubblicità per guadagnare +'+n+' stelle.',
@@ -948,7 +1026,7 @@
       dailyQuestToastLabel:'Ежедневное Задание',
       dailyQuestCompleteTitle:'Ежедневное Задание Выполнено',
       dailyQuestRewardDesc:s=>'+'+s+' звёзд получено',
-      achToastLabel:'Достижение Получено',
+      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', challengeLinkText:'👥 Пригласить Друга', challengeEyebrow:'Мультиплеер', challengeTitle:'Бросить Вызов Другу', challengeIntro:'Отправь свой код или введи код друга.', genCodeBtnText:'Получить Мой Код', showEnterCodeBtnText:'Ввести Код', copyCodeBtnText:'Копировать Код', codeCopiedText:'Скопировано!', submitCodeBtnText:'Принять Вызов', closeChallengeBtnText:'Закрыть', challengeCodeDesc:(name,lvl)=>'Когда друг введёт этот код, он увидит твой рекорд уровня '+lvl+' в '+name+'.', invalidCodeText:'Неверный код, проверь ещё раз.', challengeAcceptedText:(name,lvl)=>'Вызов принят! Попробуй пройти уровень '+lvl+' в '+name+'.', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
       shareText:(t,lv)=>'Я достиг Уровня '+lv+' в Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Результат скопирован в буфер обмена!',
       skinSelected:'Выбрано', skinSelect:'Выбрать',
@@ -958,7 +1036,7 @@
       foodWolf:'Трава', foodCat:'Сыр', foodAlien:'Энергия', foodBear:'Водоросли', foodSchool:'Карандаш',
       themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
       powerUpIntroTitle:'Усиления Открыты!', powerUpIntroDesc:'Используй усиления Невидимка и Скорость за звёзды или посмотрев рекламу.',
-      foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.', foodRemainingPopup:(n,item)=>'Осталось '+n+' '+item, foodReadyPopup:'Теперь можно домой!',
+      wallIntroTitle:'Подвижная Стена!', wallIntroDesc:'Стены блокируют путь И обзор охотника — спрячься за ней.', safeZoneIntroTitle:'Безопасная Зона!', safeZoneIntroDesc:'Внутри светящегося зелёного пятна охотники тебя не видят.', foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.', foodRemainingPopup:(n,item)=>'Осталось '+n+' '+item, foodReadyPopup:'Теперь можно домой!',
       nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу',
       hintDrag:'👆 Тяни меня', hintAvoid:'👁️ Избегай конуса зрения!', hintGoal:'🏠 Доберись сюда',
       shopPricingIntroTitle:'Информация о Магазине', shopPricingIntroDesc:n=>'Каждый образ стоит 20 звёзд. Если звёзд не хватает, посмотри рекламу и получи +'+n+' звёзд.',
@@ -997,13 +1075,14 @@
   // ---------- Persistent progress (stars, achievements, cosmetics) ----------
   function defaultProgress(){
     return {
-      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0},
-      lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0}, totalFoodsEver:0, adWatches:0,
+      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0},
+      lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
       seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null, seenThemeStory:{},
+      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, spinLastDate:null, challengeTarget:null,
       lives:MAX_LIVES, nextLifeAt:null,
-      skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default'},
-      ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default']}
+      skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default', halloween:'default'},
+      ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default'], halloween:['default']}
     };
   }
   const SAVE_KEY = 'gorulme_progress';
@@ -1045,6 +1124,10 @@
     if(!Array.isArray(p.themesUnlocked)) p.themesUnlocked = ['wolf'];
     if(!Array.isArray(p.reviewPromptLevels)) p.reviewPromptLevels = [];
     if(typeof p.seenThemeStory!=='object' || p.seenThemeStory===null) p.seenThemeStory = {};
+    if(typeof p.streakCount!=='number' || p.streakCount<0) p.streakCount = 0;
+    if(typeof p.streakLastDate!=='string') p.streakLastDate = null;
+    if(typeof p.spinLastDate!=='string') p.spinLastDate = null;
+    if(p.challengeTarget && (typeof p.challengeTarget!=='object' || typeof p.challengeTarget.themeIdx!=='number' || typeof p.challengeTarget.level!=='number')) p.challengeTarget = null;
     p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
     return p;
@@ -1166,6 +1249,11 @@
       {id:'default', name:'Klasik Öğrenci', nameEn:'Classic Student', nameFr:'Élève Classique', nameEs:'Estudiante Clásico', nameIt:'Studente Classico', nameRu:'Обычный Ученик', cost:0, body:'#e8e4d8', dark:'#c4bfa8'},
       {id:'navy', name:'Lacivert Forma', nameEn:'Navy Uniform', nameFr:'Uniforme Marine', nameEs:'Uniforme Azul Marino', nameIt:'Uniforme Blu Navy', nameRu:'Тёмно-синяя Форма', cost:20, body:'#4a5a80', dark:'#2f3a54'},
       {id:'red', name:'Kırmızı Forma', nameEn:'Red Uniform', nameFr:'Uniforme Rouge', nameEs:'Uniforme Rojo', nameIt:'Uniforme Rossa', nameRu:'Красная Форма', cost:20, body:'#c9584f', dark:'#8f3a33'}
+    ],
+    halloween: [
+      {id:'default', name:'Klasik Kostüm', nameEn:'Classic Costume', nameFr:'Costume Classique', nameEs:'Disfraz Clásico', nameIt:'Costume Classico', nameRu:'Обычный Костюм', cost:0, body:'#e8833d', dark:'#b8602a'},
+      {id:'ghostly', name:'Hayalet Kostüm', nameEn:'Ghostly Costume', nameFr:'Costume Fantomatique', nameEs:'Disfraz Fantasmal', nameIt:'Costume Fantasma', nameRu:'Костюм Призрака', cost:20, body:'#d8e8e0', dark:'#a8c0b5'},
+      {id:'witchy', name:'Cadı Kostümü', nameEn:'Witchy Costume', nameFr:'Costume de Sorcière', nameEs:'Disfraz de Bruja', nameIt:'Costume da Strega', nameRu:'Костюм Ведьмы', cost:20, body:'#6a4a8a', dark:'#453060'}
     ]
   };
   function getCurrentSkin(){
@@ -1220,6 +1308,195 @@
     document.getElementById('achToastDesc').textContent = tField(a,'desc');
     el.classList.add('show');
     setTimeout(()=> el.classList.remove('show'), 2600);
+  }
+  function showStreakToast(day, stars){
+    const el = document.getElementById('achToast');
+    document.getElementById('achToastIcon').textContent = '🔥';
+    document.getElementById('achToastLabel').textContent = S().streakToastLabel;
+    document.getElementById('achToastTitle').textContent = S().streakToastTitle(day);
+    document.getElementById('achToastDesc').textContent = S().streakToastDesc(stars);
+    el.classList.add('show');
+    setTimeout(()=> el.classList.remove('show'), 2600);
+  }
+
+  // ---------- Daily login streak ----------
+  const STREAK_REWARD_TIERS = [5,8,12,16,20,25,30]; // day 1..7+, caps at 30
+  function streakReward(day){
+    const idx = Math.min(day, STREAK_REWARD_TIERS.length) - 1;
+    return STREAK_REWARD_TIERS[idx];
+  }
+  function dateStrOffset(daysAgo){
+    const d = new Date(Date.now() - daysAgo*86400000);
+    return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+  }
+  function checkDailyStreak(){
+    const today = dateStrOffset(0);
+    if(progress.streakLastDate === today) return; // already counted today
+    const yesterday = dateStrOffset(1);
+    if(progress.streakLastDate === yesterday){
+      progress.streakCount = (progress.streakCount||0) + 1;
+    } else {
+      progress.streakCount = 1; // first visit, or streak broken
+    }
+    progress.streakLastDate = today;
+    const stars = streakReward(progress.streakCount);
+    progress.stars = (progress.stars||0) + stars;
+    saveProgress();
+    setTimeout(()=> showStreakToast(progress.streakCount, stars), 900);
+    updateStartText();
+  }
+
+  // ---------- Daily spin wheel ----------
+  const SPIN_SEGMENTS = [5,10,15,5,20,10,5,30];
+  const SPIN_COLORS = ['#e8a33d','#c9584f','#7fae86','#4a90c9','#e8a33d','#c9584f','#7fae86','#e0b84f'];
+  let spinInProgress = false;
+  let spinCurrentRotation = 0;
+  // ---------- Challenge a friend (offline numeric code) ----------
+  function generateChallengeCode(){
+    const tIdx = THEMES.findIndex(t=>t.id===theme.id);
+    const lvl = Math.min(999, Math.max(1, progress.bestLevelByTheme[theme.id] || 1));
+    const lvlStr = String(lvl).padStart(3,'0');
+    const base = String(tIdx) + lvlStr;
+    let sum = 0;
+    for(const ch of base) sum += parseInt(ch,10);
+    const checksum = sum % 10;
+    return base + checksum;
+  }
+  function decodeChallengeCode(code){
+    if(!/^\d{5}$/.test(code)) return null;
+    const base = code.slice(0,4);
+    const checksum = parseInt(code[4],10);
+    let sum = 0;
+    for(const ch of base) sum += parseInt(ch,10);
+    if(sum % 10 !== checksum) return null;
+    const tIdx = parseInt(code[0],10);
+    const lvl = parseInt(code.slice(1,4),10);
+    if(tIdx<0 || tIdx>=THEMES.length || lvl<1) return null;
+    return {themeIdx: tIdx, level: lvl};
+  }
+
+  function canSpinToday(){
+    return progress.spinLastDate !== dateStrOffset(0);
+  }
+  function renderSpinWheelFace(){
+    const wheel = document.getElementById('spinWheel');
+    if(!wheel) return;
+    const n = SPIN_SEGMENTS.length;
+    const seg = 360/n;
+    const stops = SPIN_COLORS.map((c,i)=> `${c} ${i*seg}deg ${(i+1)*seg}deg`).join(', ');
+    wheel.style.background = `conic-gradient(${stops})`;
+    wheel.querySelectorAll('.spin-label').forEach(el=>el.remove());
+    SPIN_SEGMENTS.forEach((val,i)=>{
+      const midAngle = i*seg + seg/2;
+      const label = document.createElement('div');
+      label.className = 'spin-label';
+      label.textContent = val+'⭐';
+      label.style.cssText = `position:absolute; left:50%; top:50%; width:0; height:0; transform:rotate(${midAngle}deg);`;
+      const inner = document.createElement('div');
+      inner.textContent = val+'⭐';
+      inner.style.cssText = `position:absolute; left:0; top:-92px; transform:translateX(-50%) rotate(${-midAngle}deg); color:#fff; font-weight:800; font-size:13px; text-shadow:0 1px 3px rgba(0,0,0,0.6); white-space:nowrap;`;
+      label.innerHTML = '';
+      label.appendChild(inner);
+      wheel.appendChild(label);
+    });
+  }
+  function updateSpinCardStatus(){
+    const statusEl = document.getElementById('spinCardStatus');
+    if(!statusEl) return;
+    if(canSpinToday()){
+      statusEl.textContent = S().spinReadyStatus;
+    } else {
+      const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1); tomorrow.setHours(0,0,0,0);
+      const hrsLeft = Math.max(1, Math.ceil((tomorrow-Date.now())/3600000));
+      statusEl.textContent = S().spinDoneStatus(hrsLeft+'h');
+    }
+  }
+  function openSpinWheel(){
+    renderSpinWheelFace();
+    document.getElementById('spinWheel').style.transform = `rotate(${spinCurrentRotation}deg)`;
+    document.getElementById('spinWheel').style.transition = 'none';
+    document.getElementById('spinStatusText').textContent = '';
+    const btn = document.getElementById('spinBtn');
+    if(canSpinToday()){
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.textContent = S().spinBtnText;
+    } else {
+      btn.disabled = true;
+      btn.style.opacity = '0.5';
+      btn.textContent = S().spinBtnDisabled;
+    }
+    document.getElementById('spinWheelOverlay').style.display = 'flex';
+  }
+  function spinWheel(){
+    if(spinInProgress || !canSpinToday()) return;
+    spinInProgress = true;
+    const btn = document.getElementById('spinBtn');
+    btn.disabled = true; btn.style.opacity = '0.5';
+    const n = SPIN_SEGMENTS.length;
+    const seg = 360/n;
+    const idx = Math.floor(Math.random()*n);
+    // land the pointer (fixed at top, 0deg) on the middle of segment idx
+    const targetAngle = 360 - (idx*seg + seg/2);
+    const extraSpins = 5*360;
+    const finalRotation = spinCurrentRotation - (spinCurrentRotation % 360) + extraSpins + targetAngle;
+    const wheel = document.getElementById('spinWheel');
+    wheel.style.transition = 'transform 4s cubic-bezier(0.12,0.67,0.1,0.99)';
+    wheel.style.transform = `rotate(${finalRotation}deg)`;
+    spinCurrentRotation = finalRotation;
+    setTimeout(()=>{
+      const reward = SPIN_SEGMENTS[idx];
+      progress.stars = (progress.stars||0) + reward;
+      progress.spinLastDate = dateStrOffset(0);
+      saveProgress();
+      updateStartText();
+      document.getElementById('spinStatusText').textContent = S().spinResultText(reward);
+      btn.textContent = S().spinBtnDisabled;
+      spinInProgress = false;
+      updateSpinCardStatus();
+    }, 4100);
+  }
+
+  function getLocalNotif(){
+    return window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications;
+  }
+  let notifPermissionAsked = false;
+  async function ensureNotifPermission(){
+    const LN = getLocalNotif();
+    if(!LN) return false;
+    try{
+      if(notifPermissionAsked){
+        const perm = await LN.checkPermissions();
+        return perm.display === 'granted';
+      }
+      notifPermissionAsked = true;
+      const perm = await LN.requestPermissions();
+      return perm.display === 'granted';
+    }catch(e){ return false; }
+  }
+  const LIFE_NOTIF_ID = 8801;
+  let lastScheduledLifeAt = null;
+  async function scheduleLifeNotification(atTimestamp){
+    const LN = getLocalNotif();
+    if(!LN || !atTimestamp) return;
+    if(lastScheduledLifeAt === atTimestamp) return;
+    const granted = await ensureNotifPermission();
+    if(!granted) return;
+    try{
+      await LN.schedule({ notifications: [{
+        id: LIFE_NOTIF_ID,
+        title: S().notifLifeTitle,
+        body: S().notifLifeBody,
+        schedule: { at: new Date(atTimestamp) }
+      }]});
+      lastScheduledLifeAt = atTimestamp;
+    }catch(e){}
+  }
+  async function cancelLifeNotification(){
+    const LN = getLocalNotif();
+    if(!LN || lastScheduledLifeAt === null) return;
+    try{ await LN.cancel({ notifications: [{ id: LIFE_NOTIF_ID }] }); }catch(e){}
+    lastScheduledLifeAt = null;
   }
 
   // ---------- Daily quest ----------
@@ -1290,6 +1567,20 @@
     ensureDailyQuestSet();
     const done = progress.dailyQuestSet.quests.filter(q=>!q.adUnlock && q.claimed).length;
     document.getElementById('questSummaryTitleText').textContent = S().dailyQuestTitle;
+    document.getElementById('spinCardTitleText').textContent = S().spinCardTitle;
+    document.getElementById('spinEyebrowText').textContent = S().spinEyebrow;
+    document.getElementById('spinTitleText').textContent = S().spinTitle;
+    document.getElementById('closeSpinBtn').textContent = S().spinCloseBtn;
+    document.getElementById('challengeLink').textContent = S().challengeLinkText;
+    document.getElementById('challengeEyebrowText').textContent = S().challengeEyebrow;
+    document.getElementById('challengeTitleText').textContent = S().challengeTitle;
+    document.getElementById('challengeIntroText').textContent = S().challengeIntro;
+    document.getElementById('genCodeBtn').textContent = S().genCodeBtnText;
+    document.getElementById('showEnterCodeBtn').textContent = S().showEnterCodeBtnText;
+    document.getElementById('copyCodeBtn').textContent = S().copyCodeBtnText;
+    document.getElementById('submitCodeBtn').textContent = S().submitCodeBtnText;
+    document.getElementById('closeChallengeBtn').textContent = S().closeChallengeBtnText;
+    updateSpinCardStatus();
     document.getElementById('questSummaryStatus').textContent = S().dqSummary(done, FREE_DAILY_QUESTS);
   }
   function renderDailyQuestsList(){
@@ -1348,6 +1639,8 @@
   let hitMsgT = 0;
   let hunters = [];
   let foods = [];
+  let walls = [];
+  let safeZones = [];
   let goalUnlocked = true;
   let herd = [];
   let leaderTrail = [];
@@ -1446,6 +1739,9 @@
       for(let i=0;i<22;i++) decor.push({type:'glint', x:rand(0,W), y:rand(0,H), r:rand(3,6), a:rand(0.3,0.8)});
     } else if(theme.deco==='classroom'){
       for(let i=0;i<9;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(20,30), rot:rand(-0.15,0.15)});
+    } else if(theme.deco==='halloween'){
+      for(let i=0;i<5;i++) decor.push({type:'pumpkin', x:rand(0,W), y:rand(0,H), r:rand(18,28)});
+      for(let i=0;i<20;i++) decor.push({type:'grass', x:rand(0,W), y:rand(0,H), r:rand(10,18), rot:rand(-0.3,0.3)});
     } else {
       for(let i=0;i<8;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(16,26), rot:rand(0,6)});
     }
@@ -1459,6 +1755,24 @@
     return pts[idx%4];
   }
   let lastGoalCorner = -1, lastSpawnCorner = -1;
+
+  function wallRect(wl){
+    const off = Math.sin(performance.now()/1000*wl.speed + wl.phase) * wl.range;
+    const cx = wl.x + (wl.axis==='x' ? off : 0);
+    const cy = wl.y + (wl.axis==='y' ? off : 0);
+    return {left:cx-wl.w/2, right:cx+wl.w/2, top:cy-wl.h/2, bottom:cy+wl.h/2, cx, cy};
+  }
+  function segmentIntersectsRect(x1,y1,x2,y2,rect){
+    if(Math.max(x1,x2)<rect.left || Math.min(x1,x2)>rect.right) return false;
+    if(Math.max(y1,y2)<rect.top || Math.min(y1,y2)>rect.bottom) return false;
+    const steps = 12;
+    for(let i=0;i<=steps;i++){
+      const t = i/steps;
+      const px = x1+(x2-x1)*t, py = y1+(y2-y1)*t;
+      if(px>=rect.left && px<=rect.right && py>=rect.top && py<=rect.bottom) return true;
+    }
+    return false;
+  }
 
   function setupLevel(lv){
     levelJustStartedAt = performance.now();
@@ -1550,6 +1864,52 @@
       setTimeout(()=> showAchievementToast({title:S().foodIntroTitle, desc:S().foodIntroDesc(foodLabelFor(theme.id))}, '🔒', S().foodIntroTitle), 900);
     }
 
+    // moving walls: block movement AND hunter sightlines. Unlocks at level 15+.
+    const nWalls = lv<15 ? 0 : (lv<30 ? 1 : 2);
+    walls = [];
+    for(let i=0;i<nWalls;i++){
+      let wx,wy,tries=0,ok=false, axis, w,h;
+      axis = Math.random()<0.5 ? 'x' : 'y';
+      w = axis==='x' ? 90 : 16;
+      h = axis==='x' ? 16 : 90;
+      do{
+        wx = rand(W*0.25, W*0.75);
+        wy = rand(H*0.3, H*0.7);
+        tries++;
+        ok = dist(wx,wy,sp.x,sp.y)>180 && dist(wx,wy,gp.x,gp.y)>150 &&
+             hunters.every(hh=>dist(wx,wy,hh.x,hh.y)>90) &&
+             walls.every(ww=>dist(wx,wy,ww.x,ww.y)>140);
+      } while(!ok && tries<40);
+      walls.push({x:wx, y:wy, w, h, axis, range: rand(70,120), speed: rand(0.35,0.6), phase: rand(0,10)});
+    }
+    if(nWalls>0 && !progress.seenWallIntro){
+      progress.seenWallIntro = true;
+      saveProgress();
+      const wl = walls[0];
+      setTimeout(()=> showElementHints([{x:wl.x, y:wl.y-70, text:'🧱 '+S().wallIntroTitle+' '+S().wallIntroDesc}], 5500), 400);
+    }
+
+    // safe zones: standing inside hides you from every hunter. Unlocks at level 8+.
+    safeZones = [];
+    if(lv>=8){
+      let zx,zy,tries=0,ok=false;
+      do{
+        zx = rand(W*0.2, W*0.8);
+        zy = rand(H*0.25, H*0.75);
+        tries++;
+        ok = dist(zx,zy,sp.x,sp.y)>170 && dist(zx,zy,gp.x,gp.y)>170 &&
+             hunters.every(hh=>dist(zx,zy,hh.x,hh.y)>100) &&
+             walls.every(ww=>dist(zx,zy,ww.x,ww.y)>90);
+      } while(!ok && tries<40);
+      safeZones.push({x:zx, y:zy, r:55});
+    }
+    if(safeZones.length>0 && !progress.seenSafeZoneIntro){
+      progress.seenSafeZoneIntro = true;
+      saveProgress();
+      const z = safeZones[0];
+      setTimeout(()=> showElementHints([{x:z.x, y:z.y-z.r-30, text:'🌿 '+S().safeZoneIntroTitle+' '+S().safeZoneIntroDesc}], 5500), nWalls>0 ? 2200 : 400);
+    }
+
 
     // herd: how many lambs/mice/humans the player is guiding this level
     const herdSize = lv<5 ? 1 : (lv<15 ? 2 : 3);
@@ -1593,16 +1953,8 @@
     }
   }
 
-  function showLevel1Hints(){
+  function showElementHints(hints, autoDismissMs){
     const container = document.getElementById('wrap') || document.body;
-    const hints = [];
-    if(herd[0]){
-      hints.push({x:herd[0].x, y:herd[0].y - 64, text:S().hintDrag});
-    }
-    if(hunters[0]){
-      hints.push({x:hunters[0].x, y:hunters[0].y - 58, text:S().hintAvoid});
-    }
-    hints.push({x:goal.x, y:goal.y - 62, text:S().hintGoal});
     const els = hints.map(h=>{
       const el = document.createElement('div');
       el.className = 'level1-hint';
@@ -1624,7 +1976,19 @@
       canvas.removeEventListener('pointerdown', dismiss);
     };
     canvas.addEventListener('pointerdown', dismiss, {once:true});
-    setTimeout(dismiss, 4500);
+    if(autoDismissMs) setTimeout(dismiss, autoDismissMs);
+    return dismiss;
+  }
+  function showLevel1Hints(){
+    const hints = [];
+    if(herd[0]){
+      hints.push({x:herd[0].x, y:herd[0].y - 64, text:S().hintDrag});
+    }
+    if(hunters[0]){
+      hints.push({x:hunters[0].x, y:hunters[0].y - 58, text:S().hintAvoid});
+    }
+    hints.push({x:goal.x, y:goal.y - 62, text:S().hintGoal});
+    showElementHints(hints, 4500);
   }
 
   function updateHud(){
@@ -1726,7 +2090,9 @@
       adBtn.textContent = S().watchAdInstantLife;
       playBtn.disabled = true; playBtn.style.opacity='0.5';
       continueBtn.disabled = true; continueBtn.style.opacity='0.5';
+      scheduleLifeNotification(progress.nextLifeAt);
     } else {
+      cancelLifeNotification();
       if(progress.lives<MAX_LIVES && progress.nextLifeAt){
         timerEl.style.display='inline';
         timerEl.textContent = '⏳ '+S().nextLifeIn(formatMMSS(progress.nextLifeAt-Date.now()));
@@ -2143,6 +2509,24 @@
     leader.x = clamp(leader.x, leader.r+2, W-leader.r-2);
     leader.y = clamp(leader.y, leader.r+2, H-leader.r-2);
 
+    // moving-wall collision: push the leader back out if it overlaps a wall
+    for(const wl of walls){
+      const rect = wallRect(wl);
+      const cx = clamp(leader.x, rect.left, rect.right);
+      const cy = clamp(leader.y, rect.top, rect.bottom);
+      const ddx = leader.x-cx, ddy = leader.y-cy;
+      const distToRect = Math.hypot(ddx,ddy);
+      if(distToRect < leader.r){
+        if(distToRect>0.001){
+          const push = leader.r-distToRect;
+          leader.x += ddx/distToRect*push;
+          leader.y += ddy/distToRect*push;
+        } else {
+          leader.x += leader.r;
+        }
+      }
+    }
+
     // record leader trail, then have followers trail behind it with a tight delay
     leaderTrail.push({x:leader.x, y:leader.y});
     if(leaderTrail.length>TRAIL_LEN) leaderTrail.shift();
@@ -2170,12 +2554,18 @@
       const m = herd[i];
       let seenThis = false;
       let bumpedThis = false;
-      if(activePowerUp!=='invis'){
+      const inSafeZone = safeZones.some(z => dist(m.x,m.y,z.x,z.y) < z.r);
+      if(activePowerUp!=='invis' && !inSafeZone){
         for(const h of hunters){
           const toM = Math.atan2(m.y-h.y, m.x-h.x);
           const dd = dist(h.x,h.y,m.x,m.y);
-          const inCone = dd < h.coneRange && angDiff(h.angle, toM) < h.coneHalf/2;
+          let inCone = dd < h.coneRange && angDiff(h.angle, toM) < h.coneHalf/2;
           const bump = dd < (h.r+m.r+4);
+          if(inCone && !bump){
+            for(const wl of walls){
+              if(segmentIntersectsRect(h.x,h.y,m.x,m.y, wallRect(wl))){ inCone = false; break; }
+            }
+          }
           if(bump){ bumpedThis = true; break; }
           if(inCone){ seenThis = true; }
         }
@@ -2378,6 +2768,27 @@
         // notebook on top
         ctx.fillStyle = '#e8e4d8';
         ctx.fillRect(-d.r*0.35,-d.r*0.72, d.r*0.7, d.r*0.4);
+        ctx.restore();
+      }
+      ctx.globalAlpha=1;
+    } else if(theme.deco==='halloween'){
+      for(const d of decor){
+        ctx.save();
+        ctx.translate(d.x,d.y);
+        if(d.type==='pumpkin'){
+          ctx.globalAlpha=0.55;
+          ctx.fillStyle = '#3a1a12';
+          ctx.beginPath(); ctx.ellipse(0,0, d.r*0.85, d.r*0.65, 0, 0, 7); ctx.fill();
+          ctx.fillStyle = '#2a1208';
+          ctx.fillRect(-d.r*0.08,-d.r*0.95,d.r*0.16,d.r*0.4);
+        } else {
+          ctx.rotate(d.rot);
+          ctx.globalAlpha = 0.3 + brightness*0.15;
+          ctx.fillStyle = '#4a3020';
+          [[-0.3,0],[0.3,0],[0,-0.3]].forEach(p=>{
+            ctx.beginPath(); ctx.ellipse(p[0]*d.r, p[1]*d.r, d.r*0.26, d.r*0.16, Math.atan2(p[1],p[0]), 0, 7); ctx.fill();
+          });
+        }
         ctx.restore();
       }
       ctx.globalAlpha=1;
@@ -2644,7 +3055,7 @@
     ctx.save();
     ctx.rotate(h.angle);
     const glowColor = flashT>0.02 ? '#ff8c7d' : theme.accent;
-    if(theme.id==='wolf') drawWolfBody(h, glowColor);
+    if((theme.shape||theme.id)==='wolf') drawWolfBody(h, glowColor);
     else if(theme.id==='cat') drawCatBody(h, glowColor);
     else if(theme.id==='bear') drawBearBody(h, glowColor);
     else if(theme.id==='school') drawTeacherBody(h, glowColor);
@@ -2829,7 +3240,7 @@
     ctx.rotate(m.angle||0);
     const skin = getCurrentSkin();
     const bodyColor = m.dangerT>0.5 ? '#e0554a' : skin.body;
-    if(theme.id==='wolf') drawSheepBody(m.r, bodyColor, skin.dark);
+    if((theme.shape||theme.id)==='wolf') drawSheepBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='cat') drawMouseBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='bear') drawFishBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='school') drawStudentBody(m.r, bodyColor, skin.dark);
@@ -2877,7 +3288,7 @@
     }
 
     ctx.scale(pulse, pulse);
-    if(theme.id==='wolf') drawGoalHut(goal.r, goalUnlocked);
+    if((theme.shape||theme.id)==='wolf') drawGoalHut(goal.r, goalUnlocked);
     else if(theme.id==='cat') drawGoalMouseHouse(goal.r, goalUnlocked);
     else if(theme.id==='bear') drawGoalDen(goal.r, goalUnlocked);
     else if(theme.id==='school') drawGoalCheatSheet(goal.r, goalUnlocked);
@@ -3175,6 +3586,33 @@
       ctx.fillStyle = '#e8917a';
       ctx.fillRect(-f.r*0.22, f.r*0.42, f.r*0.44, f.r*0.16);
       ctx.restore();
+    } else if(theme.id==='halloween'){
+      // candy corn
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(-f.r*0.55, f.r*0.7);
+      ctx.lineTo(f.r*0.55, f.r*0.7);
+      ctx.lineTo(f.r*0.28, f.r*0.1);
+      ctx.lineTo(-f.r*0.28, f.r*0.1);
+      ctx.closePath();
+      ctx.fillStyle = '#e8833d';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-f.r*0.28, f.r*0.1);
+      ctx.lineTo(f.r*0.28, f.r*0.1);
+      ctx.lineTo(f.r*0.12,-f.r*0.5);
+      ctx.lineTo(-f.r*0.12,-f.r*0.5);
+      ctx.closePath();
+      ctx.fillStyle = '#f7e6a3';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-f.r*0.12,-f.r*0.5);
+      ctx.lineTo(f.r*0.12,-f.r*0.5);
+      ctx.lineTo(0,-f.r*0.95);
+      ctx.closePath();
+      ctx.fillStyle = '#fff8ea';
+      ctx.fill();
+      ctx.restore();
     } else {
       // energy cell
       ctx.fillStyle = '#5fd6a8';
@@ -3196,11 +3634,43 @@
     ctx.globalAlpha=1;
   }
 
+  function drawSafeZones(){
+    for(const z of safeZones){
+      ctx.save();
+      const grad = ctx.createRadialGradient(z.x,z.y,0, z.x,z.y,z.r);
+      grad.addColorStop(0, 'rgba(120,220,150,0.30)');
+      grad.addColorStop(1, 'rgba(120,220,150,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(z.x,z.y,z.r,0,7); ctx.fill();
+      ctx.strokeStyle = 'rgba(140,230,165,0.55)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6,6]);
+      ctx.beginPath(); ctx.arc(z.x,z.y,z.r,0,7); ctx.stroke();
+      ctx.restore();
+    }
+  }
+  function drawWalls(){
+    for(const wl of walls){
+      const r = wallRect(wl);
+      ctx.save();
+      ctx.fillStyle = '#6b6458';
+      ctx.strokeStyle = '#39352c';
+      ctx.lineWidth = 2;
+      const rw = r.right-r.left, rh = r.bottom-r.top;
+      ctx.beginPath();
+      ctx.roundRect ? ctx.roundRect(r.left, r.top, rw, rh, 4) : ctx.rect(r.left, r.top, rw, rh);
+      ctx.fill();
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
   function draw(){
     drawBackground();
+    drawSafeZones();
     drawGoal();
     for(const f of foods) drawFood(f);
     for(const h of hunters) drawCone(h);
+    drawWalls();
     drawParticles();
     for(const h of hunters) drawHunter(h);
     drawPlayer();
@@ -3245,18 +3715,32 @@
 
   // ---------- Theme selection UI ----------
   const tabsEl = document.getElementById('themeTabs');
+  function isSeasonActive(seasonal){
+    const now = new Date();
+    const m = now.getMonth()+1, d = now.getDate();
+    const startVal = seasonal.startMonth*100+seasonal.startDay;
+    const endVal = seasonal.endMonth*100+seasonal.endDay;
+    const nowVal = m*100+d;
+    if(startVal <= endVal) return nowVal >= startVal && nowVal <= endVal;
+    return nowVal >= startVal || nowVal <= endVal;
+  }
   function renderTabs(){
     tabsEl.innerHTML='';
     THEMES.forEach((t,i)=>{
+      if(t.seasonal && !isSeasonActive(t.seasonal)) return;
       const el = document.createElement('div');
       const isLocked = t.locked && !progress.themesUnlocked.includes(t.id);
-      el.className = 'theme-tab' + (i===themeIndex?' active':'') + (isLocked?' locked':'');
+      el.className = 'theme-tab' + (i===themeIndex?' active':'') + (isLocked?' locked':'') + (t.seasonal?' seasonal':'');
       el.style.setProperty('--tab-color', t.color);
       if(isLocked){
         const costLabel = progress.stars>=THEME_UNLOCK_COST
           ? S().unlockThemeCost(THEME_UNLOCK_COST)
           : ('🔒 '+S().watchAdForStars(THEME_UNLOCK_AD_REWARD));
-        el.innerHTML = `<span class="glyph">${progress.stars>=THEME_UNLOCK_COST?'🔓':'🔒'}</span><span>${costLabel}</span>`;
+        if(t.seasonal){
+          el.innerHTML = `<span class="glyph">${t.glyph}</span><span style="color:var(--amber);font-weight:800;">${S().limitedTimeLabel}</span><span>${costLabel}</span>`;
+        } else {
+          el.innerHTML = `<span class="glyph">${progress.stars>=THEME_UNLOCK_COST?'🔓':'🔒'}</span><span>${costLabel}</span>`;
+        }
         el.addEventListener('click', ()=> handleLockedThemeClick(el, i));
       } else {
         el.innerHTML = `<span class="glyph">${t.glyph}</span><span>${tField(t,'preyName')}</span>`;
@@ -3391,6 +3875,7 @@
     const el = document.getElementById('shopTabs');
     el.innerHTML = '';
     THEMES.forEach((t,i)=>{
+      if(t.seasonal && !isSeasonActive(t.seasonal)) return;
       const b = document.createElement('div');
       b.className = 'theme-tab' + (i===shopThemeIndex?' active':'');
       b.style.setProperty('--tab-color', t.color);
@@ -3505,6 +3990,7 @@
     });
   }
   setupBackButton();
+  checkDailyStreak();
 
   initAdMob();
   document.getElementById('playBtn').addEventListener('click', ()=>{
@@ -3605,6 +4091,63 @@
   });
   document.getElementById('closeDqBtn').addEventListener('click', ()=>{
     document.getElementById('dailyQuestsOverlay').style.display='none';
+  });
+  document.getElementById('spinWheelCard').addEventListener('click', openSpinWheel);
+  document.getElementById('spinBtn').addEventListener('click', spinWheel);
+  document.getElementById('closeSpinBtn').addEventListener('click', ()=>{
+    document.getElementById('spinWheelOverlay').style.display='none';
+  });
+
+  function resetChallengeOverlay(){
+    document.getElementById('challengeMainButtons').style.display='block';
+    document.getElementById('challengeCodeView').style.display='none';
+    document.getElementById('challengeEnterView').style.display='none';
+    document.getElementById('challengeCodeInput').value='';
+    document.getElementById('challengeResultText').textContent='';
+  }
+  document.getElementById('challengeLink').addEventListener('click', ()=>{
+    resetChallengeOverlay();
+    document.getElementById('challengeOverlay').style.display='flex';
+  });
+  document.getElementById('genCodeBtn').addEventListener('click', ()=>{
+    const code = generateChallengeCode();
+    document.getElementById('challengeCodeDisplay').textContent = code;
+    document.getElementById('challengeCodeDesc').textContent = S().challengeCodeDesc(tField(theme,'preyName'), progress.bestLevelByTheme[theme.id]||1);
+    document.getElementById('challengeMainButtons').style.display='none';
+    document.getElementById('challengeCodeView').style.display='block';
+  });
+  document.getElementById('showEnterCodeBtn').addEventListener('click', ()=>{
+    document.getElementById('challengeMainButtons').style.display='none';
+    document.getElementById('challengeEnterView').style.display='block';
+    document.getElementById('challengeCodeInput').focus();
+  });
+  document.getElementById('copyCodeBtn').addEventListener('click', async ()=>{
+    const code = document.getElementById('challengeCodeDisplay').textContent;
+    try{
+      await navigator.clipboard.writeText(code);
+      const btn = document.getElementById('copyCodeBtn');
+      const original = btn.textContent;
+      btn.textContent = S().codeCopiedText;
+      setTimeout(()=> btn.textContent = original, 1500);
+    }catch(e){}
+  });
+  document.getElementById('submitCodeBtn').addEventListener('click', ()=>{
+    const input = document.getElementById('challengeCodeInput').value.trim();
+    const decoded = decodeChallengeCode(input);
+    const resultEl = document.getElementById('challengeResultText');
+    if(!decoded){
+      resultEl.textContent = S().invalidCodeText;
+      resultEl.style.color = '#d9736b';
+      return;
+    }
+    progress.challengeTarget = decoded;
+    saveProgress();
+    const targetTheme = THEMES[decoded.themeIdx];
+    resultEl.style.color = 'var(--muted)';
+    resultEl.textContent = S().challengeAcceptedText(tField(targetTheme,'preyName'), decoded.level);
+  });
+  document.getElementById('closeChallengeBtn').addEventListener('click', ()=>{
+    document.getElementById('challengeOverlay').style.display='none';
   });
 
   function renderSettingsControls(){
