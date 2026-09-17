@@ -19,9 +19,9 @@ if (manifest.includes('android:screenOrientation')) {
 } else {
   manifest = manifest.replace(
     /<activity\s/,
-    '<activity\n            android:screenOrientation="portrait"\n            '
+    '<activity\n            android:screenOrientation="portrait"\n            android:windowLayoutInDisplayCutoutMode="shortEdges"\n            '
   );
-  console.log('Locked Android app to portrait orientation.');
+  console.log('Locked Android app to portrait orientation and enabled display-cutout support.');
 }
 
 // Explicitly declare the AD_ID permission (needed for apps targeting
