@@ -27,7 +27,7 @@
   .hud{
     position:fixed; top:0; left:0; right:0;
     display:flex; flex-direction:column; gap:6px;
-    padding: max(14px, env(safe-area-inset-top)) 16px 0 16px;
+    padding: max(44px, env(safe-area-inset-top)) 16px 0 16px;
     pointer-events:none;
     z-index:5;
   }
@@ -116,7 +116,7 @@
     background:radial-gradient(ellipse at 50% 30%, rgba(19,24,38,1), rgba(6,7,11,1));
     z-index:20;
     padding:24px;
-    padding-top:max(24px, env(safe-area-inset-top));
+    padding-top:max(44px, env(safe-area-inset-top));
     padding-bottom:max(24px, env(safe-area-inset-bottom));
   }
   .panel{
@@ -244,7 +244,7 @@
     transition: top 0.4s cubic-bezier(.2,.9,.3,1.2);
     max-width:88vw;
   }
-  #achToast.show{ top:calc(max(14px, env(safe-area-inset-top)) + 6px); }
+  #achToast.show{ top:calc(max(44px, env(safe-area-inset-top)) + 6px); }
   #achToast .ico{ font-size:22px; }
   #achToast .txt{ text-align:left; }
   #achToast .t1{ color:var(--amber); font-size:11px; font-weight:800; letter-spacing:0.04em; text-transform:uppercase; }
@@ -260,6 +260,19 @@
   }
   #foodCountPopup.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
   #foodCountPopup.ready{ color:rgba(127,174,134,0.65); }
+
+  #starResultPopup{
+    position:fixed; top:32%; left:50%; transform:translate(-50%,-50%) scale(0.8);
+    pointer-events:none; z-index:36; text-align:center;
+    opacity:0; transition:opacity 0.3s ease, transform 0.3s ease;
+  }
+  #starResultPopup.show{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  #starResultPopup .stars-row{ font-size:44px; letter-spacing:6px; text-shadow:0 3px 16px rgba(0,0,0,0.6); }
+  #starResultPopup .stars-row .dim{ opacity:0.25; }
+  #starResultPopup .new-best{
+    margin-top:4px; color:var(--amber); font-weight:800; font-size:14px;
+    letter-spacing:0.08em; text-shadow:0 2px 8px rgba(0,0,0,0.6);
+  }
 
   .list-overlay .panel{ max-width:420px; }
   .scroll-list{ width:100%; max-height:52vh; overflow-y:auto; margin-bottom:16px; }
@@ -328,6 +341,7 @@
     </div>
   </div>
   <div id="foodCountPopup"></div>
+  <div id="starResultPopup"></div>
 <div id="wrap">
   <canvas id="game"></canvas>
 
@@ -751,7 +765,7 @@
       dailyQuestToastLabel:'Günlük Görev',
       dailyQuestCompleteTitle:'Günlük Görev Tamamlandı',
       dailyQuestRewardDesc:s=>'+'+s+' Yıldız kazandın',
-      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', challengeLinkText:'👥 Arkadaşını Davet Et', challengeEyebrow:'Çok Oyunculu', challengeTitle:'Arkadaşını Davet Et', challengeIntro:'Kodunu gönder, ya da arkadaşının kodunu gir.', genCodeBtnText:'Kodumu Al', showEnterCodeBtnText:'Kod Gir', copyCodeBtnText:'Kodu Kopyala', codeCopiedText:'Kopyalandı!', submitCodeBtnText:'Meydan Okumayı Kabul Et', closeChallengeBtnText:'Kapat', challengeCodeDesc:(name,lvl)=>'Arkadaşın bu kodu girince, senin '+name+' temandaki '+lvl+'. bölüm rekorunu görecek.', invalidCodeText:'Geçersiz kod, tekrar kontrol et.', challengeAcceptedText:(name,lvl)=>'Meydan okuma kabul edildi! '+name+' temasında '+lvl+'. bölümü geçmeye çalış.', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
+      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', challengeLinkText:'👥 Arkadaşını Davet Et', challengeEyebrow:'Çok Oyunculu', challengeTitle:'Arkadaşını Davet Et', challengeIntro:'Kodunu gönder, ya da arkadaşının kodunu gir.', genCodeBtnText:'Kodumu Al', showEnterCodeBtnText:'Kod Gir', copyCodeBtnText:'Kodu Kopyala', codeCopiedText:'Kopyalandı!', submitCodeBtnText:'Meydan Okumayı Kabul Et', closeChallengeBtnText:'Kapat', challengeCodeDesc:(name,lvl)=>'Arkadaşın bu kodu girince, senin '+name+' temandaki '+lvl+'. bölüm rekorunu görecek.', invalidCodeText:'Geçersiz kod, tekrar kontrol et.', challengeAcceptedText:(name,lvl)=>'Meydan okuma kabul edildi! '+name+' temasında '+lvl+'. bölümü geçmeye çalış.', newBestStarsText:'✨ YENİ REKOR!', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
       shareText:(t,lv)=>'Stay Unseen: Sneak Escape ('+t+") oyununda Bölüm "+lv+"'e ulaştım! 🎮",
       shareCopied:'Skor panoya kopyalandı!',
       skinSelected:'Seçili', skinSelect:'Seç',
@@ -806,7 +820,7 @@
       dailyQuestToastLabel:'Daily Quest',
       dailyQuestCompleteTitle:'Daily Quest Completed',
       dailyQuestRewardDesc:s=>'+'+s+' Stars earned',
-      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', challengeLinkText:'👥 Invite a Friend', challengeEyebrow:'Multiplayer', challengeTitle:'Challenge a Friend', challengeIntro:'Send your code, or enter theirs.', genCodeBtnText:'Get My Code', showEnterCodeBtnText:'Enter a Code', copyCodeBtnText:'Copy Code', codeCopiedText:'Copied!', submitCodeBtnText:'Accept Challenge', closeChallengeBtnText:'Close', challengeCodeDesc:(name,lvl)=>'When your friend enters this code, they\'ll see your level '+lvl+' record in '+name+'.', invalidCodeText:'Invalid code, check it again.', challengeAcceptedText:(name,lvl)=>'Challenge accepted! Try to beat level '+lvl+' in '+name+'.', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
+      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', challengeLinkText:'👥 Invite a Friend', challengeEyebrow:'Multiplayer', challengeTitle:'Challenge a Friend', challengeIntro:'Send your code, or enter theirs.', genCodeBtnText:'Get My Code', showEnterCodeBtnText:'Enter a Code', copyCodeBtnText:'Copy Code', codeCopiedText:'Copied!', submitCodeBtnText:'Accept Challenge', closeChallengeBtnText:'Close', challengeCodeDesc:(name,lvl)=>'When your friend enters this code, they\'ll see your level '+lvl+' record in '+name+'.', invalidCodeText:'Invalid code, check it again.', challengeAcceptedText:(name,lvl)=>'Challenge accepted! Try to beat level '+lvl+' in '+name+'.', newBestStarsText:'✨ NEW BEST!', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
       shareText:(t,lv)=>'I reached Level '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Score copied to clipboard!',
       skinSelected:'Selected', skinSelect:'Select',
@@ -861,7 +875,7 @@
       dailyQuestToastLabel:'Mission Quotidienne',
       dailyQuestCompleteTitle:'Mission Quotidienne Terminée',
       dailyQuestRewardDesc:s=>'+'+s+' étoiles gagnées',
-      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', challengeLinkText:'👥 Inviter un Ami', challengeEyebrow:'Multijoueur', challengeTitle:'Défier un Ami', challengeIntro:'Envoie ton code, ou entre le sien.', genCodeBtnText:'Obtenir Mon Code', showEnterCodeBtnText:'Entrer un Code', copyCodeBtnText:'Copier le Code', codeCopiedText:'Copié !', submitCodeBtnText:'Accepter le Défi', closeChallengeBtnText:'Fermer', challengeCodeDesc:(name,lvl)=>'Quand ton ami entre ce code, il verra ton record de niveau '+lvl+' en '+name+'.', invalidCodeText:'Code invalide, vérifie à nouveau.', challengeAcceptedText:(name,lvl)=>'Défi accepté ! Essaie de battre le niveau '+lvl+' en '+name+'.', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
+      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', challengeLinkText:'👥 Inviter un Ami', challengeEyebrow:'Multijoueur', challengeTitle:'Défier un Ami', challengeIntro:'Envoie ton code, ou entre le sien.', genCodeBtnText:'Obtenir Mon Code', showEnterCodeBtnText:'Entrer un Code', copyCodeBtnText:'Copier le Code', codeCopiedText:'Copié !', submitCodeBtnText:'Accepter le Défi', closeChallengeBtnText:'Fermer', challengeCodeDesc:(name,lvl)=>'Quand ton ami entre ce code, il verra ton record de niveau '+lvl+' en '+name+'.', invalidCodeText:'Code invalide, vérifie à nouveau.', challengeAcceptedText:(name,lvl)=>'Défi accepté ! Essaie de battre le niveau '+lvl+' en '+name+'.', newBestStarsText:'✨ NOUVEAU RECORD !', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
       shareText:(t,lv)=>'J\'ai atteint le Niveau '+lv+' dans Stay Unseen: Sneak Escape ('+t+') ! 🎮',
       shareCopied:'Score copié dans le presse-papiers !',
       skinSelected:'Sélectionné', skinSelect:'Choisir',
@@ -916,7 +930,7 @@
       dailyQuestToastLabel:'Misión Diaria',
       dailyQuestCompleteTitle:'Misión Diaria Completada',
       dailyQuestRewardDesc:s=>'+'+s+' estrellas ganadas',
-      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', challengeLinkText:'👥 Invitar a un Amigo', challengeEyebrow:'Multijugador', challengeTitle:'Desafiar a un Amigo', challengeIntro:'Envía tu código, o ingresa el suyo.', genCodeBtnText:'Obtener Mi Código', showEnterCodeBtnText:'Ingresar Código', copyCodeBtnText:'Copiar Código', codeCopiedText:'¡Copiado!', submitCodeBtnText:'Aceptar Desafío', closeChallengeBtnText:'Cerrar', challengeCodeDesc:(name,lvl)=>'Cuando tu amigo ingrese este código, verá tu récord de nivel '+lvl+' en '+name+'.', invalidCodeText:'Código inválido, revísalo de nuevo.', challengeAcceptedText:(name,lvl)=>'¡Desafío aceptado! Intenta superar el nivel '+lvl+' en '+name+'.', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
+      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', challengeLinkText:'👥 Invitar a un Amigo', challengeEyebrow:'Multijugador', challengeTitle:'Desafiar a un Amigo', challengeIntro:'Envía tu código, o ingresa el suyo.', genCodeBtnText:'Obtener Mi Código', showEnterCodeBtnText:'Ingresar Código', copyCodeBtnText:'Copiar Código', codeCopiedText:'¡Copiado!', submitCodeBtnText:'Aceptar Desafío', closeChallengeBtnText:'Cerrar', challengeCodeDesc:(name,lvl)=>'Cuando tu amigo ingrese este código, verá tu récord de nivel '+lvl+' en '+name+'.', invalidCodeText:'Código inválido, revísalo de nuevo.', challengeAcceptedText:(name,lvl)=>'¡Desafío aceptado! Intenta superar el nivel '+lvl+' en '+name+'.', newBestStarsText:'✨ ¡NUEVO RÉCORD!', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
       shareText:(t,lv)=>'¡Alcancé el Nivel '+lv+' en Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'¡Puntuación copiada al portapapeles!',
       skinSelected:'Seleccionado', skinSelect:'Elegir',
@@ -971,7 +985,7 @@
       dailyQuestToastLabel:'Missione Giornaliera',
       dailyQuestCompleteTitle:'Missione Giornaliera Completata',
       dailyQuestRewardDesc:s=>'+'+s+' stelle guadagnate',
-      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', challengeLinkText:'👥 Invita un Amico', challengeEyebrow:'Multigiocatore', challengeTitle:'Sfida un Amico', challengeIntro:'Invia il tuo codice, o inserisci il suo.', genCodeBtnText:'Ottieni il Mio Codice', showEnterCodeBtnText:'Inserisci Codice', copyCodeBtnText:'Copia Codice', codeCopiedText:'Copiato!', submitCodeBtnText:'Accetta Sfida', closeChallengeBtnText:'Chiudi', challengeCodeDesc:(name,lvl)=>'Quando il tuo amico inserisce questo codice, vedrà il tuo record di livello '+lvl+' in '+name+'.', invalidCodeText:'Codice non valido, controlla di nuovo.', challengeAcceptedText:(name,lvl)=>'Sfida accettata! Prova a battere il livello '+lvl+' in '+name+'.', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
+      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', challengeLinkText:'👥 Invita un Amico', challengeEyebrow:'Multigiocatore', challengeTitle:'Sfida un Amico', challengeIntro:'Invia il tuo codice, o inserisci il suo.', genCodeBtnText:'Ottieni il Mio Codice', showEnterCodeBtnText:'Inserisci Codice', copyCodeBtnText:'Copia Codice', codeCopiedText:'Copiato!', submitCodeBtnText:'Accetta Sfida', closeChallengeBtnText:'Chiudi', challengeCodeDesc:(name,lvl)=>'Quando il tuo amico inserisce questo codice, vedrà il tuo record di livello '+lvl+' in '+name+'.', invalidCodeText:'Codice non valido, controlla di nuovo.', challengeAcceptedText:(name,lvl)=>'Sfida accettata! Prova a battere il livello '+lvl+' in '+name+'.', newBestStarsText:'✨ NUOVO RECORD!', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
       shareText:(t,lv)=>'Ho raggiunto il Livello '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Punteggio copiato negli appunti!',
       skinSelected:'Selezionato', skinSelect:'Scegli',
@@ -1026,7 +1040,7 @@
       dailyQuestToastLabel:'Ежедневное Задание',
       dailyQuestCompleteTitle:'Ежедневное Задание Выполнено',
       dailyQuestRewardDesc:s=>'+'+s+' звёзд получено',
-      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', challengeLinkText:'👥 Пригласить Друга', challengeEyebrow:'Мультиплеер', challengeTitle:'Бросить Вызов Другу', challengeIntro:'Отправь свой код или введи код друга.', genCodeBtnText:'Получить Мой Код', showEnterCodeBtnText:'Ввести Код', copyCodeBtnText:'Копировать Код', codeCopiedText:'Скопировано!', submitCodeBtnText:'Принять Вызов', closeChallengeBtnText:'Закрыть', challengeCodeDesc:(name,lvl)=>'Когда друг введёт этот код, он увидит твой рекорд уровня '+lvl+' в '+name+'.', invalidCodeText:'Неверный код, проверь ещё раз.', challengeAcceptedText:(name,lvl)=>'Вызов принят! Попробуй пройти уровень '+lvl+' в '+name+'.', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
+      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', challengeLinkText:'👥 Пригласить Друга', challengeEyebrow:'Мультиплеер', challengeTitle:'Бросить Вызов Другу', challengeIntro:'Отправь свой код или введи код друга.', genCodeBtnText:'Получить Мой Код', showEnterCodeBtnText:'Ввести Код', copyCodeBtnText:'Копировать Код', codeCopiedText:'Скопировано!', submitCodeBtnText:'Принять Вызов', closeChallengeBtnText:'Закрыть', challengeCodeDesc:(name,lvl)=>'Когда друг введёт этот код, он увидит твой рекорд уровня '+lvl+' в '+name+'.', invalidCodeText:'Неверный код, проверь ещё раз.', challengeAcceptedText:(name,lvl)=>'Вызов принят! Попробуй пройти уровень '+lvl+' в '+name+'.', newBestStarsText:'✨ НОВЫЙ РЕКОРД!', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
       shareText:(t,lv)=>'Я достиг Уровня '+lv+' в Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Результат скопирован в буфер обмена!',
       skinSelected:'Выбрано', skinSelect:'Выбрать',
@@ -1079,7 +1093,7 @@
       lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
       seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null, seenThemeStory:{},
-      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, spinLastDate:null, challengeTarget:null,
+      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, spinLastDate:null, challengeTarget:null, levelStars:{},
       lives:MAX_LIVES, nextLifeAt:null,
       skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default', halloween:'default'},
       ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default'], halloween:['default']}
@@ -1128,6 +1142,7 @@
     if(typeof p.streakLastDate!=='string') p.streakLastDate = null;
     if(typeof p.spinLastDate!=='string') p.spinLastDate = null;
     if(p.challengeTarget && (typeof p.challengeTarget!=='object' || typeof p.challengeTarget.themeIdx!=='number' || typeof p.challengeTarget.level!=='number')) p.challengeTarget = null;
+    if(typeof p.levelStars!=='object' || p.levelStars===null) p.levelStars = {};
     p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
     return p;
@@ -1151,6 +1166,8 @@
   const LIFE_REGEN_MS = 20*60*1000;
   let progress = loadProgress();
   let runStreak = 0;
+  let levelWasHit = false;
+  let levelStartTime = 0;
   let catchSpeed = 0.5;
   const POWERUPS = { invis:{cost:50, duration:5000}, speed:{cost:30, duration:5000} };
   const POWERUP_AD_REWARD = 5;
@@ -1228,27 +1245,32 @@
     wolf: [
       {id:'default', name:'Klasik Kuzu', nameEn:'Classic Lamb', nameFr:'Agneau Classique', nameEs:'Cordero Clásico', nameIt:'Agnello Classico', nameRu:'Обычный Ягнёнок', cost:0, body:'#eee7d9', dark:'#d8cfba'},
       {id:'black', name:'Kara Kuzu', nameEn:'Black Lamb', nameFr:'Agneau Noir', nameEs:'Cordero Negro', nameIt:'Agnello Nero', nameRu:'Чёрный Ягнёнок', cost:20, body:'#3a3a3f', dark:'#242428'},
-      {id:'gold', name:'Altın Kuzu', nameEn:'Golden Lamb', nameFr:'Agneau Doré', nameEs:'Cordero Dorado', nameIt:'Agnello Dorato', nameRu:'Золотой Ягнёнок', cost:20, body:'#e8c14a', dark:'#c9a53a'}
+      {id:'gold', name:'Altın Kuzu', nameEn:'Golden Lamb', nameFr:'Agneau Doré', nameEs:'Cordero Dorado', nameIt:'Agnello Dorato', nameRu:'Золотой Ягнёнок', cost:20, body:'#e8c14a', dark:'#c9a53a'},
+      {id:'party', name:'Partili Kuzu', nameEn:'Party Lamb', nameFr:'Agneau de Fête', nameEs:'Cordero de Fiesta', nameIt:'Agnello Festivo', nameRu:'Праздничный Ягнёнок', cost:50, body:'#c9403a', dark:'#8f2c28', accessory:'partyhat'}
     ],
     cat: [
       {id:'default', name:'Klasik Fare', nameEn:'Classic Mouse', nameFr:'Souris Classique', nameEs:'Ratón Clásico', nameIt:'Topo Classico', nameRu:'Обычная Мышь', cost:0, body:'#a79c8f', dark:'#847a70'},
       {id:'white', name:'Beyaz Fare', nameEn:'White Mouse', nameFr:'Souris Blanche', nameEs:'Ratón Blanco', nameIt:'Topo Bianco', nameRu:'Белая Мышь', cost:20, body:'#f0ece4', dark:'#cfc8bd'},
-      {id:'brown', name:'Kahve Fare', nameEn:'Brown Mouse', nameFr:'Souris Brune', nameEs:'Ratón Marrón', nameIt:'Topo Marrone', nameRu:'Коричневая Мышь', cost:20, body:'#8a6a4a', dark:'#5f4530'}
+      {id:'brown', name:'Kahve Fare', nameEn:'Brown Mouse', nameFr:'Souris Brune', nameEs:'Ratón Marrón', nameIt:'Topo Marrone', nameRu:'Коричневая Мышь', cost:20, body:'#8a6a4a', dark:'#5f4530'},
+      {id:'bowtie', name:'Fiyonklu Fare', nameEn:'Bow Mouse', nameFr:'Souris à Nœud', nameEs:'Ratón con Moño', nameIt:'Topo con Fiocco', nameRu:'Мышь с Бантиком', cost:50, body:'#e89830', dark:'#a86a1a', accessory:'bow'}
     ],
     alien: [
       {id:'default', name:'Klasik İnsan', nameEn:'Classic Human', nameFr:'Humain Classique', nameEs:'Humano Clásico', nameIt:'Umano Classico', nameRu:'Обычный Человек', cost:0, body:'#e0b98f', dark:'#b8906a'},
       {id:'tan', name:'Bronz Ten', nameEn:'Tan Skin', nameFr:'Peau Bronzée', nameEs:'Piel Bronceada', nameIt:'Pelle Abbronzata', nameRu:'Смуглая Кожа', cost:20, body:'#c68a5a', dark:'#9a6640'},
-      {id:'pale', name:'Solgun Ten', nameEn:'Pale Skin', nameFr:'Peau Pâle', nameEs:'Piel Pálida', nameIt:'Pelle Pallida', nameRu:'Бледная Кожа', cost:20, body:'#f0d8c0', dark:'#d0b89a'}
+      {id:'pale', name:'Solgun Ten', nameEn:'Pale Skin', nameFr:'Peau Pâle', nameEs:'Piel Pálida', nameIt:'Pelle Pallida', nameRu:'Бледная Кожа', cost:20, body:'#f0d8c0', dark:'#d0b89a'},
+      {id:'explorer', name:'Kaşif', nameEn:'Explorer', nameFr:'Explorateur', nameEs:'Explorador', nameIt:'Esploratore', nameRu:'Исследователь', cost:50, body:'#3a9e5c', dark:'#256b3d', accessory:'helmet'}
     ],
     bear: [
       {id:'default', name:'Klasik Balık', nameEn:'Classic Fish', nameFr:'Poisson Classique', nameEs:'Pez Clásico', nameIt:'Pesce Classico', nameRu:'Обычная Рыба', cost:0, body:'#e8955a', dark:'#c9723a'},
       {id:'silver', name:'Gümüş Balık', nameEn:'Silver Fish', nameFr:'Poisson Argenté', nameEs:'Pez Plateado', nameIt:'Pesce Argentato', nameRu:'Серебряная Рыба', cost:20, body:'#c8d4dc', dark:'#9aabb5'},
-      {id:'gold', name:'Altın Balık', nameEn:'Golden Fish', nameFr:'Poisson Doré', nameEs:'Pez Dorado', nameIt:'Pesce Dorato', nameRu:'Золотая Рыба', cost:20, body:'#f0c94a', dark:'#d1a52f'}
+      {id:'gold', name:'Altın Balık', nameEn:'Golden Fish', nameFr:'Poisson Doré', nameEs:'Pez Dorado', nameIt:'Pesce Dorato', nameRu:'Золотая Рыба', cost:20, body:'#f0c94a', dark:'#d1a52f'},
+      {id:'royal', name:'Kraliyet Balığı', nameEn:'Royal Fish', nameFr:'Poisson Royal', nameEs:'Pez Real', nameIt:'Pesce Reale', nameRu:'Королевская Рыба', cost:50, body:'#2a4a9e', dark:'#1a3070', accessory:'crown'}
     ],
     school: [
       {id:'default', name:'Klasik Öğrenci', nameEn:'Classic Student', nameFr:'Élève Classique', nameEs:'Estudiante Clásico', nameIt:'Studente Classico', nameRu:'Обычный Ученик', cost:0, body:'#e8e4d8', dark:'#c4bfa8'},
       {id:'navy', name:'Lacivert Forma', nameEn:'Navy Uniform', nameFr:'Uniforme Marine', nameEs:'Uniforme Azul Marino', nameIt:'Uniforme Blu Navy', nameRu:'Тёмно-синяя Форма', cost:20, body:'#4a5a80', dark:'#2f3a54'},
-      {id:'red', name:'Kırmızı Forma', nameEn:'Red Uniform', nameFr:'Uniforme Rouge', nameEs:'Uniforme Rojo', nameIt:'Uniforme Rossa', nameRu:'Красная Форма', cost:20, body:'#c9584f', dark:'#8f3a33'}
+      {id:'red', name:'Kırmızı Forma', nameEn:'Red Uniform', nameFr:'Uniforme Rouge', nameEs:'Uniforme Rojo', nameIt:'Uniforme Rossa', nameRu:'Красная Форма', cost:20, body:'#c9584f', dark:'#8f3a33'},
+      {id:'graduate', name:'Mezun', nameEn:'Graduate', nameFr:'Diplômé', nameEs:'Graduado', nameIt:'Laureato', nameRu:'Выпускник', cost:50, body:'#2ea8a0', dark:'#1c7570', accessory:'gradcap'}
     ],
     halloween: [
       {id:'default', name:'Klasik Kostüm', nameEn:'Classic Costume', nameFr:'Costume Classique', nameEs:'Disfraz Clásico', nameIt:'Costume Classico', nameRu:'Обычный Костюм', cost:0, body:'#e8833d', dark:'#b8602a'},
@@ -1256,6 +1278,52 @@
       {id:'witchy', name:'Cadı Kostümü', nameEn:'Witchy Costume', nameFr:'Costume de Sorcière', nameEs:'Disfraz de Bruja', nameIt:'Costume da Strega', nameRu:'Костюм Ведьмы', cost:20, body:'#6a4a8a', dark:'#453060'}
     ]
   };
+  function drawAccessory(type, r){
+    if(!type) return;
+    ctx.save();
+    if(type==='partyhat'){
+      ctx.fillStyle = '#3a6fc9';
+      ctx.beginPath();
+      ctx.moveTo(r*0.15, -r*0.55); ctx.lineTo(r*0.65, -r*0.55); ctx.lineTo(r*0.4, -r*1.15);
+      ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#f0c94a';
+      ctx.beginPath(); ctx.arc(r*0.4, -r*1.15, r*0.1, 0, 7); ctx.fill();
+    } else if(type==='bow'){
+      ctx.fillStyle = '#7a3ac9';
+      ctx.beginPath();
+      ctx.moveTo(-r*0.05,-r*0.7); ctx.lineTo(-r*0.4,-r*0.95); ctx.lineTo(-r*0.4,-r*0.45); ctx.closePath(); ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(r*0.05,-r*0.7); ctx.lineTo(r*0.4,-r*0.95); ctx.lineTo(r*0.4,-r*0.45); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#4f2088';
+      ctx.beginPath(); ctx.arc(0,-r*0.7,r*0.13,0,7); ctx.fill();
+    } else if(type==='helmet'){
+      ctx.fillStyle = 'rgba(230,170,90,0.6)';
+      ctx.beginPath(); ctx.arc(0,0,r*0.95,Math.PI,0); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = '#a05a1a'; ctx.lineWidth = r*0.08;
+      ctx.beginPath(); ctx.arc(0,0,r*0.95,Math.PI,0); ctx.stroke();
+    } else if(type==='crown'){
+      ctx.fillStyle = '#f0c94a';
+      ctx.beginPath();
+      ctx.moveTo(-r*0.5,-r*0.5); ctx.lineTo(-r*0.5,-r*0.95); ctx.lineTo(-r*0.25,-r*0.65);
+      ctx.lineTo(0,-r*1.05); ctx.lineTo(r*0.25,-r*0.65); ctx.lineTo(r*0.5,-r*0.95);
+      ctx.lineTo(r*0.5,-r*0.5); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#c9366a';
+      ctx.beginPath(); ctx.arc(0,-r*0.7,r*0.09,0,7); ctx.fill();
+    } else if(type==='gradcap'){
+      ctx.fillStyle = '#2a2a30';
+      ctx.beginPath(); ctx.arc(0,-r*0.55,r*0.4,0,7); ctx.fill();
+      ctx.save();
+      ctx.translate(0,-r*0.55); ctx.rotate(Math.PI/4);
+      ctx.fillRect(-r*0.55,-r*0.55,r*1.1,r*1.1);
+      ctx.restore();
+      ctx.strokeStyle = '#f0c94a'; ctx.lineWidth = r*0.06;
+      ctx.beginPath(); ctx.moveTo(r*0.35,-r*0.55); ctx.lineTo(r*0.5,-r*0.15); ctx.stroke();
+      ctx.fillStyle = '#f0c94a';
+      ctx.beginPath(); ctx.arc(r*0.5,-r*0.1,r*0.09,0,7); ctx.fill();
+    }
+    ctx.restore();
+  }
+
   function getCurrentSkin(){
     const owned = progress.skins[theme.id] || 'default';
     const list = SKIN_DEFS[theme.id];
@@ -1776,6 +1844,8 @@
 
   function setupLevel(lv){
     levelJustStartedAt = performance.now();
+    levelStartTime = performance.now();
+    levelWasHit = false;
     pointer.active = false; // never let a stale drag-in-progress flag leak into a fresh level
     const pad = 60;
     let spawnC, goalC;
@@ -2121,6 +2191,7 @@
     syncLifeRegen();
     flashT = 0;
     runStreak = 0;
+    levelWasHit = true;
     updateHud();
     sfxHit();
     vibrate([80,40,80]);
@@ -2265,6 +2336,19 @@
   }
 
   let foodPopupTimer = null;
+  let starPopupTimer = null;
+  function showLevelStarResult(stars, isNewBest){
+    const el = document.getElementById('starResultPopup');
+    let starsHtml = '';
+    for(let i=0;i<3;i++){
+      starsHtml += i<stars ? '⭐' : '<span class="dim">⭐</span>';
+    }
+    el.innerHTML = `<div class="stars-row">${starsHtml}</div>` +
+      (isNewBest ? `<div class="new-best">${S().newBestStarsText}</div>` : '');
+    el.classList.add('show');
+    clearTimeout(starPopupTimer);
+    starPopupTimer = setTimeout(()=> el.classList.remove('show'), 1400);
+  }
   function showFoodCountPopup(remaining, itemLabel){
     const el = document.getElementById('foodCountPopup');
     if(remaining>0){
@@ -2658,6 +2742,18 @@
         progress.noHitStreakBest = Math.max(progress.noHitStreakBest, runStreak);
         updateDailyQuestProgress('reach_level', level, 'max');
         updateDailyQuestProgress('no_hit_streak', runStreak, 'max');
+
+        // 1-3 star performance rating: complete=1, hit-free=2, hit-free+fast=3
+        const elapsedSec = (performance.now()-levelStartTime)/1000;
+        const speedThreshold = 8 + completedLevel*0.15;
+        let earnedStars = 1;
+        if(!levelWasHit) earnedStars = 2;
+        if(!levelWasHit && elapsedSec < speedThreshold) earnedStars = 3;
+        const starKey = theme.id+'_'+completedLevel;
+        const prevBest = progress.levelStars[starKey] || 0;
+        if(earnedStars > prevBest) progress.levelStars[starKey] = earnedStars;
+        showLevelStarResult(earnedStars, earnedStars > prevBest);
+
         saveProgress();
         checkAchievements();
         updateHud();
@@ -3245,6 +3341,7 @@
     else if(theme.id==='bear') drawFishBody(m.r, bodyColor, skin.dark);
     else if(theme.id==='school') drawStudentBody(m.r, bodyColor, skin.dark);
     else drawHumanBody(m.r, bodyColor, skin.dark);
+    if(!isInvis) drawAccessory(skin.accessory, m.r*1.9);
     ctx.restore();
     ctx.globalAlpha = 1;
 
