@@ -57,6 +57,7 @@ workflows:
       vars:
         BUNDLE_ID: "com.gorulme.app"
         APP_STORE_APPLE_ID: 6810249133
+        MARKETING_VERSION: "1.1"
     scripts:
       - name: Install npm dependencies
         script: |
@@ -95,10 +96,11 @@ workflows:
         script: keychain add-certificates
       - name: Set up code signing settings on Xcode project
         script: xcode-project use-profiles
-      - name: Increment build number
+      - name: Increment build number and marketing version
         script: |
           NEW_BUILD=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $NEW_BUILD" ios/App/App/Info.plist
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $MARKETING_VERSION" ios/App/App/Info.plist
       - name: Build iOS app
         script: |
           xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
