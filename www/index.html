@@ -119,6 +119,7 @@
     padding-top:max(44px, env(safe-area-inset-top));
     padding-bottom:max(24px, env(safe-area-inset-bottom));
     overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
     align-items:safe center;
   }
   .panel{
@@ -202,8 +203,8 @@
     margin-top:22px; color:var(--muted); font-size:12px; opacity:0.7;
   }
 
-  .icon-row{ display:flex; gap:8px; width:100%; margin-bottom:6px; }
-  .lock-hint{ color:var(--muted); font-size:11.5px; margin:-10px 0 16px; text-align:center; width:100%; }
+  .icon-row{ display:flex; gap:8px; width:100%; margin-bottom:4px; }
+  .lock-hint{ color:var(--muted); font-size:11.5px; margin:2px 0 10px; text-align:center; width:100%; }
   .tut-dots{ display:flex; gap:7px; justify-content:center; margin-top:6px; }
 
   #tutDemoCanvas{
@@ -234,16 +235,16 @@
   .star-badge{
     display:inline-flex; align-items:center; gap:5px;
     color:var(--amber); font-weight:800; font-size:14px;
-    margin-bottom:8px;
+    margin-bottom:5px;
   }
   .lives-row{
     display:flex; align-items:center; justify-content:center;
-    color:var(--danger); margin-bottom:6px;
+    color:var(--danger); margin-bottom:4px;
   }
 
   .quest-card{
     flex:1; border:1.5px solid var(--line); border-radius:12px;
-    padding:8px 12px; text-align:left;
+    padding:6px 10px; text-align:left;
     background:rgba(255,255,255,0.02);
   }
   .quest-title{ color:var(--amber); font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; margin-bottom:3px; }
@@ -397,7 +398,7 @@
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
       <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
-      <div id="challengeLink" style="color:var(--muted); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer; margin:-4px 0 6px;">👥 Arkadaşını Davet Et</div>
+      <div id="challengeLink" style="color:var(--muted); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer; margin:-2px 0 4px;">👥 Arkadaşını Davet Et</div>
 
       <div class="lives-row">
         <span id="startLivesHearts" style="font-size:18px; letter-spacing:2px;">♥♥♥</span>
@@ -487,6 +488,7 @@
         <div class="stat-box"><div class="n" id="bestLabel2">4</div><div class="l" id="endBestLabelText">En İyi</div></div>
       </div>
       <button class="play-btn" id="energyContinueBtn" style="margin-top:22px; display:none;">Enerji Harcayarak Devam Et</button>
+      <button class="play-btn" id="starsContinueBtn" style="margin-top:12px; display:none;">Yıldız Harcayarak Devam Et</button>
       <button class="play-btn" id="adContinueBtn" style="margin-top:12px;">Reklam İzle, +1 Can Kazan</button>
       <button class="play-btn" id="shareBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Skoru Paylaş</button>
       <button class="play-btn" id="retryBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Baştan Başla</button>
@@ -770,7 +772,7 @@
       resumeBtn:'Devam Et', restartLevelBtn:'Bölüme Yeniden Başla', quitBtn:'Ana Menüye Dön',
       endEyebrow:'Görüldün', hudLevelLabel:'Bölüm', hudBestLabel:'En İyi',
       themeBestPrefix:'🏅 En İyi: ',
-      energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)', starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)',
       adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...', adLoadingText:'Reklam yükleniyor…', adNotAvailable:'Şu an reklam bulunamadı, birazdan tekrar dene',
       shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
@@ -825,7 +827,7 @@
       resumeBtn:'Resume', restartLevelBtn:'Restart Level', quitBtn:'Back to Menu',
       endEyebrow:'Spotted', hudLevelLabel:'Level', hudBestLabel:'Best',
       themeBestPrefix:'🏅 Best: ',
-      energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)', starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)',
       adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...', adLoadingText:'Loading ad…', adNotAvailable:'No ad available right now, try again shortly',
       shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
@@ -880,7 +882,7 @@
       resumeBtn:'Reprendre', restartLevelBtn:'Recommencer le Niveau', quitBtn:'Retour au Menu',
       endEyebrow:'Repéré', hudLevelLabel:'Niveau', hudBestLabel:'Meilleur',
       themeBestPrefix:'🏅 Meilleur : ',
-      energyContinuePrefix:'Continuer avec de l\'Énergie (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Continuer avec de l\'Énergie (-', energySuffix:'⚡)', starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)',
       adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...', adLoadingText:'Chargement de la pub…', adNotAvailable:'Aucune pub disponible pour le moment, réessayez bientôt',
       shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
@@ -935,7 +937,7 @@
       resumeBtn:'Reanudar', restartLevelBtn:'Reiniciar Nivel', quitBtn:'Volver al Menú',
       endEyebrow:'Detectado', hudLevelLabel:'Nivel', hudBestLabel:'Mejor',
       themeBestPrefix:'🏅 Mejor: ',
-      energyContinuePrefix:'Continuar con Energía (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Continuar con Energía (-', energySuffix:'⚡)', starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)',
       adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...', adLoadingText:'Cargando anuncio…', adNotAvailable:'No hay anuncios disponibles ahora, inténtalo en breve',
       shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
@@ -990,7 +992,7 @@
       resumeBtn:'Riprendi', restartLevelBtn:'Ricomincia Livello', quitBtn:'Torna al Menu',
       endEyebrow:'Avvistato', hudLevelLabel:'Livello', hudBestLabel:'Record',
       themeBestPrefix:'🏅 Record: ',
-      energyContinuePrefix:'Continua con Energia (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Continua con Energia (-', energySuffix:'⚡)', starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)',
       adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...', adLoadingText:'Caricamento annuncio…', adNotAvailable:'Nessun annuncio disponibile ora, riprova a breve',
       shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
@@ -1045,7 +1047,7 @@
       resumeBtn:'Продолжить', restartLevelBtn:'Начать Уровень Заново', quitBtn:'В Главное Меню',
       endEyebrow:'Обнаружен', hudLevelLabel:'Уровень', hudBestLabel:'Рекорд',
       themeBestPrefix:'🏅 Рекорд: ',
-      energyContinuePrefix:'Продолжить за Энергию (-', energySuffix:'⚡)',
+      energyContinuePrefix:'Продолжить за Энергию (-', energySuffix:'⚡)', starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)',
       adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...', adLoadingText:'Загрузка рекламы…', adNotAvailable:'Реклама сейчас недоступна, попробуйте позже',
       shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
@@ -1102,6 +1104,12 @@
   }
   window.addEventListener('resize', resize);
   resize();
+  // Some WebViews (especially right after a native app cold-launch) report
+  // transitional/incorrect dimensions on the very first call. Re-check a
+  // couple of times shortly after load to catch any late correction.
+  setTimeout(resize, 300);
+  setTimeout(resize, 1200);
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) resize(); });
 
   // ---------- Persistent progress (stars, achievements, cosmetics) ----------
   function defaultProgress(){
@@ -1721,6 +1729,7 @@
   let lives = 3;
   let energy = 0;
   const ENERGY_COST_PER_LIFE = 5;
+  const STARS_COST_PER_LIFE = 15;
   let hitMsgT = 0;
   let hunters = [];
   let foods = [];
@@ -2011,6 +2020,7 @@
   }
 
   function startGame(fromLevel){
+    resize(); // re-check real dimensions — some WebViews report stale/small sizes right after launch
     syncLifeRegen();
     if(progress.lives<=0) return; // guarded by UI, but double-check
     stopLivesTicker();
@@ -2203,26 +2213,28 @@
   // ---------- Life loss / continue flow ----------
   function loseHerdMember(idx){
     herd.splice(idx,1);
-    lives--;
-    progress.lives = Math.max(0, lives);
-    syncLifeRegen();
     flashT = 0;
     runStreak = 0;
     levelWasHit = true;
-    updateHud();
     sfxHit();
     vibrate([80,40,80]);
-    if(lives<=0){
-      gameOver();
-      return;
-    }
     if(herd.length===0){
+      // whole herd lost this level — costs exactly one life, no matter how many members you had
+      lives--;
+      progress.lives = Math.max(0, lives);
+      syncLifeRegen();
+      updateHud();
+      if(lives<=0){
+        gameOver();
+        return;
+      }
       // whole herd lost but lives remain — regroup with a fresh herd this level
       state = 'hit';
       hitMsgT = 0.9;
       setupLevel(level);
       setTimeout(()=>{ if(state==='hit'){ state='playing'; } }, 750);
     } else {
+      updateHud();
       if(pointer.active) syncLeaderTarget(); // avoid a snap if the leader that was caught gets replaced
     }
   }
@@ -2248,6 +2260,14 @@
     } else {
       energyBtn.style.display='none';
     }
+    const starsBtn = document.getElementById('starsContinueBtn');
+    if((progress.stars||0)>=STARS_COST_PER_LIFE){
+      starsBtn.style.display='block';
+      starsBtn.textContent = S().starsContinuePrefix+STARS_COST_PER_LIFE+S().starsSuffix;
+      starsBtn.disabled = false;
+    } else {
+      starsBtn.style.display='none';
+    }
     const adBtn = document.getElementById('adContinueBtn');
     adBtn.disabled = false;
     adBtn.textContent = S().adContinue;
@@ -2268,6 +2288,23 @@
     lives = 1;
     progress.lives = Math.max(progress.lives, 1);
     syncLifeRegen();
+    document.getElementById('endOverlay').style.display='none';
+    document.getElementById('hud').style.display='flex';
+    document.getElementById('meterWrap').style.display='block';
+    setupLevel(level);
+    updateHud();
+    state = 'playing';
+    lastT = performance.now();
+    requestAnimationFrame(loop);
+  }
+
+  function continueWithStars(){
+    if((progress.stars||0)<STARS_COST_PER_LIFE) return;
+    progress.stars -= STARS_COST_PER_LIFE;
+    lives = 1;
+    progress.lives = Math.max(progress.lives, 1);
+    syncLifeRegen();
+    saveProgress();
     document.getElementById('endOverlay').style.display='none';
     document.getElementById('hud').style.display='flex';
     document.getElementById('meterWrap').style.display='block';
@@ -4303,6 +4340,7 @@
   document.getElementById('restartLevelBtn').addEventListener('click', restartLevel);
   document.getElementById('quitBtn').addEventListener('click', quitToMenu);
   document.getElementById('energyContinueBtn').addEventListener('click', continueWithEnergy);
+  document.getElementById('starsContinueBtn').addEventListener('click', continueWithStars);
   document.getElementById('adContinueBtn').addEventListener('click', continueWithAd);
   document.getElementById('shareBtn').addEventListener('click', shareScore);
   document.getElementById('milestoneShareBtn').addEventListener('click', shareScore);
