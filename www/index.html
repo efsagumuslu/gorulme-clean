@@ -341,7 +341,7 @@
   .skin-row .swatch{ width:26px; height:26px; border-radius:50%; border:2px solid var(--line); flex-shrink:0; }
   .skin-row .name{ color:var(--moon); font-size:13.5px; font-weight:700; flex:1; text-align:left; margin-left:10px; }
   .skin-btn{
-    padding:7px 14px; border-radius:10px; font-size:12px; font-weight:700;
+    padding:6px 14px; border-radius:10px; font-size:12px; font-weight:700;
     border:none; cursor:pointer; touch-action:manipulation;
     background:var(--amber); color:#241a08;
   }
@@ -404,7 +404,8 @@
         <span id="startLivesHearts" style="font-size:18px; letter-spacing:2px;">♥♥♥</span>
         <span id="lifeTimerText" style="display:none; color:var(--muted); font-size:12.5px; margin-left:8px;"></span>
       </div>
-      <button class="skin-btn" id="watchAdLifeBtn" style="display:none; margin-bottom:14px;">📺 İzle, Anında Can Kazan</button>
+      <button class="skin-btn" id="watchAdLifeBtn" style="display:none; margin-bottom:6px;">📺 İzle, Anında Can Kazan</button>
+      <button class="skin-btn" id="starLifeBtn" style="display:none; margin-bottom:8px;">⭐ Yıldızla Can Al (15⭐)</button>
 
       <div style="display:flex; gap:8px; width:100%; margin-bottom:6px;">
         <div class="quest-card" id="questSummaryCard" style="cursor:pointer;">
@@ -795,7 +796,7 @@
       themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
       powerUpIntroTitle:'Güçlendirmeler Açıldı!', powerUpIntroDesc:'Görünmezlik ve Hız güçlendirmelerini yıldızla ya da reklam izleyerek kullanabilirsin.',
       wallIntroTitle:'Hareketli Duvar!', wallIntroDesc:'Duvarlar hem yolunu keser hem avcının görüşünü engeller — arkasına saklanabilirsin.', safeZoneIntroTitle:'Güvenli Bölge!', safeZoneIntroDesc:'Parlayan yeşil alanın içindeyken hiçbir avcı seni göremez.', foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.', foodRemainingPopup:(n,item)=>n+' '+item+' kaldı', foodReadyPopup:'Artık eve gidebilirsin!',
-      nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan',
+      nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan', buyLifeWithStars:n=>'⭐ Yıldızla Can Al ('+n+'⭐)',
       hintDrag:'👆 Sürükle', hintAvoid:'👁️ Bakış konisinden kaç!', hintGoal:'🏠 Buraya ulaş',
       shopPricingIntroTitle:'Mağaza Bilgisi', shopPricingIntroDesc:n=>'Her görünüm 20 yıldız. Yeterli yıldızın yoksa reklam izleyerek +'+n+' yıldız kazanabilirsin.',
       milestoneEyebrow:'Tebrikler', milestoneTitle:lv=>'Bölüm '+lv+"'u Tamamladın!", milestoneSub:'Harika gidiyorsun, böyle devam et! Bu başarını arkadaşlarınla paylaş.', milestoneContinueBtn:'Devam Et',
@@ -850,7 +851,7 @@
       themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
       powerUpIntroTitle:'Power-Ups Unlocked!', powerUpIntroDesc:'Use Invisibility and Speed power-ups with stars or by watching an ad.',
       wallIntroTitle:'Moving Wall!', wallIntroDesc:'Walls block your path AND the hunter\'s sight — hide behind one.', safeZoneIntroTitle:'Safe Zone!', safeZoneIntroDesc:'While inside the glowing green patch, no hunter can spot you.', foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.', foodRemainingPopup:(n,item)=>n+' '+item+' left', foodReadyPopup:'You can go home now!',
-      nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life',
+      nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life', buyLifeWithStars:n=>'⭐ Buy Life with Stars ('+n+'⭐)',
       hintDrag:'👆 Drag me', hintAvoid:'👁️ Avoid the vision cone!', hintGoal:'🏠 Reach here',
       shopPricingIntroTitle:'Shop Info', shopPricingIntroDesc:n=>'Each look costs 20 stars. If you don\'t have enough, watch an ad to earn +'+n+' stars.',
       milestoneEyebrow:'Congratulations', milestoneTitle:lv=>'Level '+lv+' Complete!', milestoneSub:'You\'re doing great, keep it up! Share this achievement with your friends.', milestoneContinueBtn:'Continue',
@@ -905,7 +906,7 @@
       themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
       powerUpIntroTitle:'Bonus Débloqués !', powerUpIntroDesc:'Utilise les bonus Invisible et Vitesse avec des étoiles ou en regardant une pub.',
       wallIntroTitle:'Mur Mobile !', wallIntroDesc:'Les murs bloquent votre chemin ET la vue du chasseur — cachez-vous derrière.', safeZoneIntroTitle:'Zone Sûre !', safeZoneIntroDesc:'À l\'intérieur de la zone verte lumineuse, aucun chasseur ne peut vous repérer.', foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.', foodRemainingPopup:(n,item)=>n+' '+item+' restant(s)', foodReadyPopup:'Tu peux rentrer maintenant !',
-      nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate',
+      nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate', buyLifeWithStars:n=>'⭐ Acheter une Vie ('+n+'⭐)',
       hintDrag:'👆 Fais-moi glisser', hintAvoid:'👁️ Évite le cône de vision !', hintGoal:'🏠 Arrive ici',
       shopPricingIntroTitle:'Info Boutique', shopPricingIntroDesc:n=>'Chaque apparence coûte 20 étoiles. Si tu n\'en as pas assez, regarde une pub pour gagner +'+n+' étoiles.',
       milestoneEyebrow:'Félicitations', milestoneTitle:lv=>'Niveau '+lv+' Terminé !', milestoneSub:'Tu te débrouilles très bien, continue comme ça ! Partage cette réussite avec tes amis.', milestoneContinueBtn:'Continuer',
@@ -960,7 +961,7 @@
       themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
       powerUpIntroTitle:'¡Potenciadores Desbloqueados!', powerUpIntroDesc:'Usa los potenciadores Invisible y Velocidad con estrellas o viendo un anuncio.',
       wallIntroTitle:'¡Muro Móvil!', wallIntroDesc:'Los muros bloquean tu camino Y la vista del cazador — escóndete detrás.', safeZoneIntroTitle:'¡Zona Segura!', safeZoneIntroDesc:'Dentro del área verde brillante, ningún cazador puede verte.', foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.', foodRemainingPopup:(n,item)=>n+' '+item+' restante(s)', foodReadyPopup:'¡Ya puedes ir a casa!',
-      nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea',
+      nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea', buyLifeWithStars:n=>'⭐ Comprar Vida ('+n+'⭐)',
       hintDrag:'👆 Arrástrame', hintAvoid:'👁️ ¡Esquiva el cono de visión!', hintGoal:'🏠 Llega aquí',
       shopPricingIntroTitle:'Info de la Tienda', shopPricingIntroDesc:n=>'Cada apariencia cuesta 20 estrellas. Si no tienes suficientes, mira un anuncio para ganar +'+n+' estrellas.',
       milestoneEyebrow:'Felicidades', milestoneTitle:lv=>'¡Nivel '+lv+' Completado!', milestoneSub:'¡Lo estás haciendo genial, sigue así! Comparte este logro con tus amigos.', milestoneContinueBtn:'Continuar',
@@ -1015,7 +1016,7 @@
       themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
       powerUpIntroTitle:'Potenziamenti Sbloccati!', powerUpIntroDesc:'Usa i potenziamenti Invisibile e Velocità con le stelle o guardando una pubblicità.',
       wallIntroTitle:'Muro Mobile!', wallIntroDesc:'I muri bloccano il tuo cammino E la vista del cacciatore — nasconditi dietro.', safeZoneIntroTitle:'Zona Sicura!', safeZoneIntroDesc:'Dentro l\'area verde luminosa, nessun cacciatore può vederti.', foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.', foodRemainingPopup:(n,item)=>n+' '+item+' rimasti', foodReadyPopup:'Ora puoi tornare a casa!',
-      nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea',
+      nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea', buyLifeWithStars:n=>'⭐ Compra Vita ('+n+'⭐)',
       hintDrag:'👆 Trascinami', hintAvoid:'👁️ Evita il cono visivo!', hintGoal:'🏠 Arriva qui',
       shopPricingIntroTitle:'Info Negozio', shopPricingIntroDesc:n=>'Ogni aspetto costa 20 stelle. Se non ne hai abbastanza, guarda una pubblicità per guadagnare +'+n+' stelle.',
       milestoneEyebrow:'Complimenti', milestoneTitle:lv=>'Livello '+lv+' Completato!', milestoneSub:'Stai andando alla grande, continua così! Condividi questo traguardo con i tuoi amici.', milestoneContinueBtn:'Continua',
@@ -1070,7 +1071,7 @@
       themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
       powerUpIntroTitle:'Усиления Открыты!', powerUpIntroDesc:'Используй усиления Невидимка и Скорость за звёзды или посмотрев рекламу.',
       wallIntroTitle:'Подвижная Стена!', wallIntroDesc:'Стены блокируют путь И обзор охотника — спрячься за ней.', safeZoneIntroTitle:'Безопасная Зона!', safeZoneIntroDesc:'Внутри светящегося зелёного пятна охотники тебя не видят.', foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.', foodRemainingPopup:(n,item)=>'Осталось '+n+' '+item, foodReadyPopup:'Теперь можно домой!',
-      nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу',
+      nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу', buyLifeWithStars:n=>'⭐ Купить Жизнь ('+n+'⭐)',
       hintDrag:'👆 Тяни меня', hintAvoid:'👁️ Избегай конуса зрения!', hintGoal:'🏠 Доберись сюда',
       shopPricingIntroTitle:'Информация о Магазине', shopPricingIntroDesc:n=>'Каждый образ стоит 20 звёзд. Если звёзд не хватает, посмотри рекламу и получи +'+n+' звёзд.',
       milestoneEyebrow:'Поздравляем', milestoneTitle:lv=>'Уровень '+lv+' Пройден!', milestoneSub:'Ты отлично справляешься, продолжай в том же духе! Поделись этим достижением с друзьями.', milestoneContinueBtn:'Продолжить',
@@ -2169,15 +2170,32 @@
   }
 
   let livesTickerInterval = null;
+  function buyLifeWithStars(){
+    if((progress.stars||0)<STARS_COST_PER_LIFE || progress.lives>=MAX_LIVES) return;
+    progress.stars -= STARS_COST_PER_LIFE;
+    progress.lives = Math.min(MAX_LIVES, progress.lives+1);
+    syncLifeRegen();
+    saveProgress();
+    updateStartText();
+    renderLivesUI();
+  }
   function renderLivesUI(){
     syncLifeRegen();
     const heartsEl = document.getElementById('startLivesHearts');
     const timerEl = document.getElementById('lifeTimerText');
     const adBtn = document.getElementById('watchAdLifeBtn');
+    const starBtn = document.getElementById('starLifeBtn');
     const playBtn = document.getElementById('playBtn');
     const continueBtn = document.getElementById('continueBtn');
     if(!heartsEl) return;
     heartsEl.textContent = '♥'.repeat(progress.lives) + '♡'.repeat(MAX_LIVES-progress.lives);
+    if((progress.stars||0)>=STARS_COST_PER_LIFE && progress.lives<MAX_LIVES){
+      starBtn.style.display='block';
+      starBtn.disabled = false;
+      starBtn.textContent = S().buyLifeWithStars(STARS_COST_PER_LIFE);
+    } else {
+      starBtn.style.display='none';
+    }
     if(progress.lives<=0){
       const remain = progress.nextLifeAt ? progress.nextLifeAt - Date.now() : LIFE_REGEN_MS;
       timerEl.style.display='inline';
@@ -4174,6 +4192,7 @@
     if(AdMob){ showRealRewardedAd().then(grant); }
     else { setTimeout(()=> grant(true), 1600); }
   });
+  document.getElementById('starLifeBtn').addEventListener('click', buyLifeWithStars);
 
   // ---------- Power-ups ----------
   function renderPowerupBar(){
