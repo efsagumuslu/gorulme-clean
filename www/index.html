@@ -294,6 +294,15 @@
 
   .list-overlay .panel{ max-width:420px; }
   .scroll-list{ width:100%; max-height:52vh; overflow-y:auto; margin-bottom:16px; }
+  .level-map-btn{
+    aspect-ratio:1; border-radius:12px; border:1.5px solid var(--line);
+    background:rgba(255,255,255,0.02); color:var(--moon);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    font-weight:800; font-size:14px; cursor:pointer; touch-action:manipulation;
+    gap:2px;
+  }
+  .level-map-btn.current{ border-color:var(--amber); box-shadow:0 0 10px -2px var(--amber); }
+  .level-map-btn .stars{ font-size:8px; letter-spacing:-1px; color:var(--amber); }
   .ach-row{
     display:flex; align-items:center; gap:12px; padding:12px 4px;
     border-bottom:1px solid var(--line); text-align:left;
@@ -378,7 +387,6 @@
     <div class="hud-second-row">
       <div class="hud-pill" id="hudLifeTimerPill" style="display:none;"><span id="hudLifeTimerText"></span></div>
       <div class="hud-pill" id="foodPill" style="display:none;"><span id="foodLabelText">Yem</span><span id="foodLabel">0/1</span></div>
-      <div class="hud-pill" id="energyPill" style="display:none;"><span>⚡</span><span id="energyLabel">0</span></div>
     </div>
     <div class="meter-wrap" id="meterWrap" style="display:none;">
       <div class="meter-fill" id="meterFill"></div>
@@ -398,7 +406,9 @@
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
       <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
-      <div id="challengeLink" style="color:var(--muted); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer; margin:-2px 0 4px;">👥 Arkadaşını Davet Et</div>
+      <div style="display:flex; gap:14px; justify-content:center; margin:-2px 0 4px;">
+        <div id="levelMapLink" style="color:var(--muted); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer;">🗺️ Bölüm Haritası</div>
+      </div>
 
       <div class="lives-row">
         <span id="startLivesHearts" style="font-size:18px; letter-spacing:2px;">♥♥♥</span>
@@ -488,8 +498,7 @@
         <div class="stat-box"><div class="n" id="reachedLabel">3</div><div class="l" id="reachedLabelText">Ulaşılan</div></div>
         <div class="stat-box"><div class="n" id="bestLabel2">4</div><div class="l" id="endBestLabelText">En İyi</div></div>
       </div>
-      <button class="play-btn" id="energyContinueBtn" style="margin-top:22px; display:none;">Enerji Harcayarak Devam Et</button>
-      <button class="play-btn" id="starsContinueBtn" style="margin-top:12px; display:none;">Yıldız Harcayarak Devam Et</button>
+      <button class="play-btn" id="starsContinueBtn" style="margin-top:22px; display:none;">Yıldız Harcayarak Devam Et</button>
       <button class="play-btn" id="adContinueBtn" style="margin-top:12px;">Reklam İzle, +1 Can Kazan</button>
       <button class="play-btn" id="shareBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Skoru Paylaş</button>
       <button class="play-btn" id="retryBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Baştan Başla</button>
@@ -520,31 +529,12 @@
     </div>
   </div>
 
-  <div class="overlay" id="challengeOverlay" style="display:none;">
+  <div class="overlay list-overlay" id="levelMapOverlay" style="display:none;">
     <div class="panel">
-      <div class="eyebrow" id="challengeEyebrowText">Multiplayer</div>
-      <h1 style="font-size:24px;" id="challengeTitleText">Challenge a Friend</h1>
-      <p class="sub" id="challengeIntroText" style="font-size:14px; margin-bottom:16px;">Send your code, or enter theirs.</p>
-
-      <div id="challengeMainButtons">
-        <button class="play-btn" id="genCodeBtn">Get My Code</button>
-        <button class="play-btn" id="showEnterCodeBtn" style="margin-top:12px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Enter a Code</button>
-      </div>
-
-      <div id="challengeCodeView" style="display:none;">
-        <p class="sub" id="challengeCodeDesc" style="font-size:14px;">—</p>
-        <div id="challengeCodeDisplay" style="font-size:36px; font-weight:900; letter-spacing:0.08em; color:var(--amber); margin:16px 0; font-variant-numeric:tabular-nums;">00000</div>
-        <button class="play-btn" id="copyCodeBtn">Copy Code</button>
-      </div>
-
-      <div id="challengeEnterView" style="display:none;">
-        <input id="challengeCodeInput" type="tel" inputmode="numeric" maxlength="5" placeholder="00000"
-          style="width:100%; font-size:32px; font-weight:900; text-align:center; letter-spacing:0.1em; padding:14px; border-radius:14px; border:1.5px solid var(--line); background:rgba(255,255,255,0.03); color:var(--moon); margin-bottom:14px; font-variant-numeric:tabular-nums;">
-        <button class="play-btn" id="submitCodeBtn">Accept Challenge</button>
-        <p class="sub" id="challengeResultText" style="font-size:14px; margin-top:14px; min-height:20px;"></p>
-      </div>
-
-      <button class="play-btn" id="closeChallengeBtn" style="margin-top:16px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Close</button>
+      <div class="eyebrow" id="levelMapEyebrowText">Bölüm Haritası</div>
+      <h1 style="font-size:24px;" id="levelMapTitleText">Bir Bölüm Seç</h1>
+      <div class="scroll-list" id="levelMapGrid" style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-height:48vh;"></div>
+      <button class="play-btn" id="closeLevelMapBtn" style="margin-top:14px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Kapat</button>
     </div>
   </div>
 
@@ -773,7 +763,7 @@
       resumeBtn:'Devam Et', restartLevelBtn:'Bölüme Yeniden Başla', quitBtn:'Ana Menüye Dön',
       endEyebrow:'Görüldün', hudLevelLabel:'Bölüm', hudBestLabel:'En İyi',
       themeBestPrefix:'🏅 En İyi: ',
-      energyContinuePrefix:'Enerji Harcayarak Devam Et (-', energySuffix:'⚡)', starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)', waterLabel:'Su', riverIntroTitle:'Yeni Bir Avcı Geldi!', riverIntroDesc:'Derede timsahlar var, dikkatli ol — onlar da seni görebilir!', piranhaIntroTitle:'Piranha Sürüsü!', piranhaIntroDesc:'Küçük ama hızlılar — değdiklerinde anında yakalanırsın. Kaplumbağanın üstü güvenli!', mousetrapIntroTitle:'Fare Kapanı!', mousetrapIntroDesc:'Yere gizlenmiş kapanlara basma — anında yakalanırsın!', cameraIntroTitle:'Güvenlik Kamerası!', cameraIntroDesc:'Sabit bir kamera etrafı tarıyor, ışığından uzak dur!', netIntroTitle:'Balık Ağı!', netIntroDesc:'Sallanan ağa yakalanma, hareketini iyi zamanla!', windIntroTitle:'Rüzgarlı Bölge!', windIntroDesc:'Bu bölgede rüzgar seni yana doğru itiyor, kontrolü zor olabilir!', birdIntroTitle:'Kurtlar Gitti, Kuşlar Geldi!', birdIntroDesc:'Gökten ateş topları geliyor, onlardan kaç! Timsahlar hâlâ derede.', levelMapLinkText:'🗺️ Bölüm Haritası', levelMapEyebrow:'Bölüm Haritası', levelMapTitle:'Bir Bölüm Seç', closeLevelMapBtnText:'Kapat', adPrefsNotAvailable:'Reklam tercihleri şu an senin bölgen için geçerli değil (bu ayar yalnızca AB/İngiltere/İsviçre kullanıcıları için gösteriliyor).',
       adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...', adLoadingText:'Reklam yükleniyor…', adNotAvailable:'Şu an reklam bulunamadı, birazdan tekrar dene',
       shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
@@ -785,7 +775,7 @@
       dailyQuestToastLabel:'Günlük Görev',
       dailyQuestCompleteTitle:'Günlük Görev Tamamlandı',
       dailyQuestRewardDesc:s=>'+'+s+' Yıldız kazandın',
-      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', challengeLinkText:'👥 Arkadaşını Davet Et', challengeEyebrow:'Çok Oyunculu', challengeTitle:'Arkadaşını Davet Et', challengeIntro:'Kodunu gönder, ya da arkadaşının kodunu gir.', genCodeBtnText:'Kodumu Al', showEnterCodeBtnText:'Kod Gir', copyCodeBtnText:'Kodu Kopyala', codeCopiedText:'Kopyalandı!', submitCodeBtnText:'Meydan Okumayı Kabul Et', closeChallengeBtnText:'Kapat', challengeCodeDesc:(name,lvl)=>'Arkadaşın bu kodu girince, senin '+name+' temandaki '+lvl+'. bölüm rekorunu görecek.', invalidCodeText:'Geçersiz kod, tekrar kontrol et.', challengeAcceptedText:(name,lvl)=>'Meydan okuma kabul edildi! '+name+' temasında '+lvl+'. bölümü geçmeye çalış.', newBestStarsText:'✨ YENİ REKOR!', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
+      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', newBestStarsText:'✨ YENİ REKOR!', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
       shareText:(t,lv)=>'Stay Unseen: Sneak Escape ('+t+") oyununda Bölüm "+lv+"'e ulaştım! 🎮",
       shareCopied:'Skor panoya kopyalandı!',
       skinSelected:'Seçili', skinSelect:'Seç',
@@ -828,7 +818,7 @@
       resumeBtn:'Resume', restartLevelBtn:'Restart Level', quitBtn:'Back to Menu',
       endEyebrow:'Spotted', hudLevelLabel:'Level', hudBestLabel:'Best',
       themeBestPrefix:'🏅 Best: ',
-      energyContinuePrefix:'Continue with Energy (-', energySuffix:'⚡)', starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)', waterLabel:'Water', riverIntroTitle:'A New Predator Arrived!', riverIntroDesc:'Crocodiles are in the river now, be careful — they can spot you too!', piranhaIntroTitle:'Piranha School!', piranhaIntroDesc:'Small but fast — touching one means instant capture. The turtle is a safe spot!', mousetrapIntroTitle:'Mousetrap!', mousetrapIntroDesc:'Hidden traps on the ground — step on one and you\'re caught instantly!', cameraIntroTitle:'Security Camera!', cameraIntroDesc:'A fixed camera scans the area, stay out of its light!', netIntroTitle:'Fishing Net!', netIntroDesc:'Don\'t get caught in the swinging net — time your move!', windIntroTitle:'Windy Zone!', windIntroDesc:'The wind pushes you sideways here, control can get tricky!', birdIntroTitle:'Wolves Are Gone, Birds Arrived!', birdIntroDesc:'Fireballs are raining from the sky, dodge them! Crocodiles are still in the river.', levelMapLinkText:'🗺️ Level Map', levelMapEyebrow:'Level Map', levelMapTitle:'Choose a Level', closeLevelMapBtnText:'Close', adPrefsNotAvailable:'Ad preferences aren\'t applicable for your region right now (this setting only appears for EEA/UK/Switzerland users).',
       adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...', adLoadingText:'Loading ad…', adNotAvailable:'No ad available right now, try again shortly',
       shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
@@ -840,7 +830,7 @@
       dailyQuestToastLabel:'Daily Quest',
       dailyQuestCompleteTitle:'Daily Quest Completed',
       dailyQuestRewardDesc:s=>'+'+s+' Stars earned',
-      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', challengeLinkText:'👥 Invite a Friend', challengeEyebrow:'Multiplayer', challengeTitle:'Challenge a Friend', challengeIntro:'Send your code, or enter theirs.', genCodeBtnText:'Get My Code', showEnterCodeBtnText:'Enter a Code', copyCodeBtnText:'Copy Code', codeCopiedText:'Copied!', submitCodeBtnText:'Accept Challenge', closeChallengeBtnText:'Close', challengeCodeDesc:(name,lvl)=>'When your friend enters this code, they\'ll see your level '+lvl+' record in '+name+'.', invalidCodeText:'Invalid code, check it again.', challengeAcceptedText:(name,lvl)=>'Challenge accepted! Try to beat level '+lvl+' in '+name+'.', newBestStarsText:'✨ NEW BEST!', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
+      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', newBestStarsText:'✨ NEW BEST!', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
       shareText:(t,lv)=>'I reached Level '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Score copied to clipboard!',
       skinSelected:'Selected', skinSelect:'Select',
@@ -883,7 +873,7 @@
       resumeBtn:'Reprendre', restartLevelBtn:'Recommencer le Niveau', quitBtn:'Retour au Menu',
       endEyebrow:'Repéré', hudLevelLabel:'Niveau', hudBestLabel:'Meilleur',
       themeBestPrefix:'🏅 Meilleur : ',
-      energyContinuePrefix:'Continuer avec de l\'Énergie (-', energySuffix:'⚡)', starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)', waterLabel:'Eau', riverIntroTitle:'Un Nouveau Prédateur !', riverIntroDesc:'Des crocodiles sont dans la rivière, prudence — ils peuvent aussi te repérer !', piranhaIntroTitle:'Banc de Piranhas !', piranhaIntroDesc:'Petits mais rapides — les toucher signifie une capture instantanée. La tortue est un endroit sûr !', mousetrapIntroTitle:'Piège à Souris !', mousetrapIntroDesc:'Des pièges cachés au sol — marcher dessus signifie une capture instantanée !', cameraIntroTitle:'Caméra de Sécurité !', cameraIntroDesc:'Une caméra fixe balaie la zone, reste hors de sa lumière !', netIntroTitle:'Filet de Pêche !', netIntroDesc:'Ne te fais pas prendre dans le filet qui balance — calcule bien ton mouvement !', windIntroTitle:'Zone Venteuse !', windIntroDesc:'Le vent te pousse sur le côté ici, le contrôle peut devenir difficile !', birdIntroTitle:'Les Loups Sont Partis, les Oiseaux Arrivent !', birdIntroDesc:'Des boules de feu pleuvent du ciel, esquive-les ! Les crocodiles sont toujours dans la rivière.', levelMapLinkText:'🗺️ Carte des Niveaux', levelMapEyebrow:'Carte des Niveaux', levelMapTitle:'Choisis un Niveau', closeLevelMapBtnText:'Fermer', adPrefsNotAvailable:'Les préférences publicitaires ne sont pas applicables dans ta région pour le moment (visible uniquement pour les utilisateurs EEE/UK/Suisse).',
       adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...', adLoadingText:'Chargement de la pub…', adNotAvailable:'Aucune pub disponible pour le moment, réessayez bientôt',
       shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
@@ -895,7 +885,7 @@
       dailyQuestToastLabel:'Mission Quotidienne',
       dailyQuestCompleteTitle:'Mission Quotidienne Terminée',
       dailyQuestRewardDesc:s=>'+'+s+' étoiles gagnées',
-      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', challengeLinkText:'👥 Inviter un Ami', challengeEyebrow:'Multijoueur', challengeTitle:'Défier un Ami', challengeIntro:'Envoie ton code, ou entre le sien.', genCodeBtnText:'Obtenir Mon Code', showEnterCodeBtnText:'Entrer un Code', copyCodeBtnText:'Copier le Code', codeCopiedText:'Copié !', submitCodeBtnText:'Accepter le Défi', closeChallengeBtnText:'Fermer', challengeCodeDesc:(name,lvl)=>'Quand ton ami entre ce code, il verra ton record de niveau '+lvl+' en '+name+'.', invalidCodeText:'Code invalide, vérifie à nouveau.', challengeAcceptedText:(name,lvl)=>'Défi accepté ! Essaie de battre le niveau '+lvl+' en '+name+'.', newBestStarsText:'✨ NOUVEAU RECORD !', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
+      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', newBestStarsText:'✨ NOUVEAU RECORD !', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
       shareText:(t,lv)=>'J\'ai atteint le Niveau '+lv+' dans Stay Unseen: Sneak Escape ('+t+') ! 🎮',
       shareCopied:'Score copié dans le presse-papiers !',
       skinSelected:'Sélectionné', skinSelect:'Choisir',
@@ -938,7 +928,7 @@
       resumeBtn:'Reanudar', restartLevelBtn:'Reiniciar Nivel', quitBtn:'Volver al Menú',
       endEyebrow:'Detectado', hudLevelLabel:'Nivel', hudBestLabel:'Mejor',
       themeBestPrefix:'🏅 Mejor: ',
-      energyContinuePrefix:'Continuar con Energía (-', energySuffix:'⚡)', starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)', waterLabel:'Agua', riverIntroTitle:'¡Llegó un Nuevo Depredador!', riverIntroDesc:'Hay cocodrilos en el río, ten cuidado — ¡ellos también pueden verte!', piranhaIntroTitle:'¡Banco de Pirañas!', piranhaIntroDesc:'Pequeñas pero rápidas — tocarlas significa captura instantánea. ¡La tortuga es un lugar seguro!', mousetrapIntroTitle:'¡Ratonera!', mousetrapIntroDesc:'Trampas ocultas en el suelo — ¡pisar una significa captura instantánea!', cameraIntroTitle:'¡Cámara de Seguridad!', cameraIntroDesc:'Una cámara fija escanea el área, ¡mantente fuera de su luz!', netIntroTitle:'¡Red de Pesca!', netIntroDesc:'No te dejes atrapar por la red oscilante — ¡calcula bien tu movimiento!', windIntroTitle:'¡Zona con Viento!', windIntroDesc:'El viento te empuja hacia un lado aquí, ¡el control puede ser difícil!', birdIntroTitle:'¡Los Lobos se Fueron, Llegaron los Pájaros!', birdIntroDesc:'¡Bolas de fuego caen del cielo, esquívalas! Los cocodrilos siguen en el río.', levelMapLinkText:'🗺️ Mapa de Niveles', levelMapEyebrow:'Mapa de Niveles', levelMapTitle:'Elige un Nivel', closeLevelMapBtnText:'Cerrar', adPrefsNotAvailable:'Las preferencias de anuncios no aplican en tu región por ahora (solo visible para usuarios del EEE/Reino Unido/Suiza).',
       adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...', adLoadingText:'Cargando anuncio…', adNotAvailable:'No hay anuncios disponibles ahora, inténtalo en breve',
       shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
@@ -950,7 +940,7 @@
       dailyQuestToastLabel:'Misión Diaria',
       dailyQuestCompleteTitle:'Misión Diaria Completada',
       dailyQuestRewardDesc:s=>'+'+s+' estrellas ganadas',
-      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', challengeLinkText:'👥 Invitar a un Amigo', challengeEyebrow:'Multijugador', challengeTitle:'Desafiar a un Amigo', challengeIntro:'Envía tu código, o ingresa el suyo.', genCodeBtnText:'Obtener Mi Código', showEnterCodeBtnText:'Ingresar Código', copyCodeBtnText:'Copiar Código', codeCopiedText:'¡Copiado!', submitCodeBtnText:'Aceptar Desafío', closeChallengeBtnText:'Cerrar', challengeCodeDesc:(name,lvl)=>'Cuando tu amigo ingrese este código, verá tu récord de nivel '+lvl+' en '+name+'.', invalidCodeText:'Código inválido, revísalo de nuevo.', challengeAcceptedText:(name,lvl)=>'¡Desafío aceptado! Intenta superar el nivel '+lvl+' en '+name+'.', newBestStarsText:'✨ ¡NUEVO RÉCORD!', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
+      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', newBestStarsText:'✨ ¡NUEVO RÉCORD!', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
       shareText:(t,lv)=>'¡Alcancé el Nivel '+lv+' en Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'¡Puntuación copiada al portapapeles!',
       skinSelected:'Seleccionado', skinSelect:'Elegir',
@@ -993,7 +983,7 @@
       resumeBtn:'Riprendi', restartLevelBtn:'Ricomincia Livello', quitBtn:'Torna al Menu',
       endEyebrow:'Avvistato', hudLevelLabel:'Livello', hudBestLabel:'Record',
       themeBestPrefix:'🏅 Record: ',
-      energyContinuePrefix:'Continua con Energia (-', energySuffix:'⚡)', starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)', waterLabel:'Acqua', riverIntroTitle:'È Arrivato un Nuovo Predatore!', riverIntroDesc:'Ci sono coccodrilli nel fiume, attento — possono vederti anche loro!', piranhaIntroTitle:'Banco di Piranha!', piranhaIntroDesc:'Piccoli ma veloci — toccarli significa cattura istantanea. La tartaruga è un posto sicuro!', mousetrapIntroTitle:'Trappola per Topi!', mousetrapIntroDesc:'Trappole nascoste a terra — calpestarne una significa cattura istantanea!', cameraIntroTitle:'Telecamera di Sicurezza!', cameraIntroDesc:'Una telecamera fissa scansiona l\'area, stai lontano dalla sua luce!', netIntroTitle:'Rete da Pesca!', netIntroDesc:'Non farti prendere dalla rete oscillante — calcola bene la tua mossa!', windIntroTitle:'Zona Ventosa!', windIntroDesc:'Il vento ti spinge di lato qui, il controllo può diventare difficile!', birdIntroTitle:'I Lupi Se Ne Sono Andati, Sono Arrivati gli Uccelli!', birdIntroDesc:'Palle di fuoco cadono dal cielo, schivale! I coccodrilli sono ancora nel fiume.', levelMapLinkText:'🗺️ Mappa dei Livelli', levelMapEyebrow:'Mappa dei Livelli', levelMapTitle:'Scegli un Livello', closeLevelMapBtnText:'Chiudi', adPrefsNotAvailable:'Le preferenze pubblicitarie non sono disponibili nella tua regione al momento (visibile solo per utenti SEE/UK/Svizzera).',
       adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...', adLoadingText:'Caricamento annuncio…', adNotAvailable:'Nessun annuncio disponibile ora, riprova a breve',
       shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
@@ -1005,7 +995,7 @@
       dailyQuestToastLabel:'Missione Giornaliera',
       dailyQuestCompleteTitle:'Missione Giornaliera Completata',
       dailyQuestRewardDesc:s=>'+'+s+' stelle guadagnate',
-      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', challengeLinkText:'👥 Invita un Amico', challengeEyebrow:'Multigiocatore', challengeTitle:'Sfida un Amico', challengeIntro:'Invia il tuo codice, o inserisci il suo.', genCodeBtnText:'Ottieni il Mio Codice', showEnterCodeBtnText:'Inserisci Codice', copyCodeBtnText:'Copia Codice', codeCopiedText:'Copiato!', submitCodeBtnText:'Accetta Sfida', closeChallengeBtnText:'Chiudi', challengeCodeDesc:(name,lvl)=>'Quando il tuo amico inserisce questo codice, vedrà il tuo record di livello '+lvl+' in '+name+'.', invalidCodeText:'Codice non valido, controlla di nuovo.', challengeAcceptedText:(name,lvl)=>'Sfida accettata! Prova a battere il livello '+lvl+' in '+name+'.', newBestStarsText:'✨ NUOVO RECORD!', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
+      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', newBestStarsText:'✨ NUOVO RECORD!', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
       shareText:(t,lv)=>'Ho raggiunto il Livello '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Punteggio copiato negli appunti!',
       skinSelected:'Selezionato', skinSelect:'Scegli',
@@ -1048,7 +1038,7 @@
       resumeBtn:'Продолжить', restartLevelBtn:'Начать Уровень Заново', quitBtn:'В Главное Меню',
       endEyebrow:'Обнаружен', hudLevelLabel:'Уровень', hudBestLabel:'Рекорд',
       themeBestPrefix:'🏅 Рекорд: ',
-      energyContinuePrefix:'Продолжить за Энергию (-', energySuffix:'⚡)', starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)',
+      starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)', waterLabel:'Вода', riverIntroTitle:'Появился Новый Хищник!', riverIntroDesc:'В реке теперь крокодилы, будь осторожен — они тоже могут тебя заметить!', piranhaIntroTitle:'Стая Пираний!', piranhaIntroDesc:'Маленькие, но быстрые — прикосновение означает мгновенную поимку. Черепаха — безопасное место!', mousetrapIntroTitle:'Мышеловка!', mousetrapIntroDesc:'Скрытые ловушки на земле — наступишь и тебя мгновенно поймают!', cameraIntroTitle:'Камера Наблюдения!', cameraIntroDesc:'Неподвижная камера сканирует местность, держись подальше от её света!', netIntroTitle:'Рыболовная Сеть!', netIntroDesc:'Не попадись в качающуюся сеть — рассчитай момент!', windIntroTitle:'Ветреная Зона!', windIntroDesc:'Здесь ветер толкает тебя вбок, управлять сложнее!', birdIntroTitle:'Волки Ушли, Прилетели Птицы!', birdIntroDesc:'С неба падают огненные шары, уклоняйся! Крокодилы всё ещё в реке.', levelMapLinkText:'🗺️ Карта Уровней', levelMapEyebrow:'Карта Уровней', levelMapTitle:'Выбери Уровень', closeLevelMapBtnText:'Закрыть', adPrefsNotAvailable:'Настройки рекламы сейчас недоступны для твоего региона (видны только пользователям ЕЭЗ/Великобритании/Швейцарии).',
       adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...', adLoadingText:'Загрузка рекламы…', adNotAvailable:'Реклама сейчас недоступна, попробуйте позже',
       shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
@@ -1060,7 +1050,7 @@
       dailyQuestToastLabel:'Ежедневное Задание',
       dailyQuestCompleteTitle:'Ежедневное Задание Выполнено',
       dailyQuestRewardDesc:s=>'+'+s+' звёзд получено',
-      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', challengeLinkText:'👥 Пригласить Друга', challengeEyebrow:'Мультиплеер', challengeTitle:'Бросить Вызов Другу', challengeIntro:'Отправь свой код или введи код друга.', genCodeBtnText:'Получить Мой Код', showEnterCodeBtnText:'Ввести Код', copyCodeBtnText:'Копировать Код', codeCopiedText:'Скопировано!', submitCodeBtnText:'Принять Вызов', closeChallengeBtnText:'Закрыть', challengeCodeDesc:(name,lvl)=>'Когда друг введёт этот код, он увидит твой рекорд уровня '+lvl+' в '+name+'.', invalidCodeText:'Неверный код, проверь ещё раз.', challengeAcceptedText:(name,lvl)=>'Вызов принят! Попробуй пройти уровень '+lvl+' в '+name+'.', newBestStarsText:'✨ НОВЫЙ РЕКОРД!', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
+      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', newBestStarsText:'✨ НОВЫЙ РЕКОРД!', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
       shareText:(t,lv)=>'Я достиг Уровня '+lv+' в Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Результат скопирован в буфер обмена!',
       skinSelected:'Выбрано', skinSelect:'Выбрать',
@@ -1119,7 +1109,7 @@
       lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
       seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null, seenThemeStory:{},
-      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, spinLastDate:null, challengeTarget:null, levelStars:{},
+      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, seenRiverIntro:false, seenPiranhaIntro:false, seenMousetrapIntro:false, seenCameraIntro:false, seenNetIntro:false, seenWindIntro:false, seenBirdIntro:false, spinLastDate:null, levelStars:{},
       lives:MAX_LIVES, nextLifeAt:null,
       skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default', halloween:'default'},
       ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default'], halloween:['default']}
@@ -1167,7 +1157,6 @@
     if(typeof p.streakCount!=='number' || p.streakCount<0) p.streakCount = 0;
     if(typeof p.streakLastDate!=='string') p.streakLastDate = null;
     if(typeof p.spinLastDate!=='string') p.spinLastDate = null;
-    if(p.challengeTarget && (typeof p.challengeTarget!=='object' || typeof p.challengeTarget.themeIdx!=='number' || typeof p.challengeTarget.level!=='number')) p.challengeTarget = null;
     if(typeof p.levelStars!=='object' || p.levelStars===null) p.levelStars = {};
     p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
@@ -1445,29 +1434,6 @@
   const SPIN_COLORS = ['#e8a33d','#c9584f','#7fae86','#4a90c9','#e8a33d','#c9584f','#7fae86','#e0b84f'];
   let spinInProgress = false;
   let spinCurrentRotation = 0;
-  // ---------- Challenge a friend (offline numeric code) ----------
-  function generateChallengeCode(){
-    const tIdx = THEMES.findIndex(t=>t.id===theme.id);
-    const lvl = Math.min(999, Math.max(1, progress.bestLevelByTheme[theme.id] || 1));
-    const lvlStr = String(lvl).padStart(3,'0');
-    const base = String(tIdx) + lvlStr;
-    let sum = 0;
-    for(const ch of base) sum += parseInt(ch,10);
-    const checksum = sum % 10;
-    return base + checksum;
-  }
-  function decodeChallengeCode(code){
-    if(!/^\d{5}$/.test(code)) return null;
-    const base = code.slice(0,4);
-    const checksum = parseInt(code[4],10);
-    let sum = 0;
-    for(const ch of base) sum += parseInt(ch,10);
-    if(sum % 10 !== checksum) return null;
-    const tIdx = parseInt(code[0],10);
-    const lvl = parseInt(code.slice(1,4),10);
-    if(tIdx<0 || tIdx>=THEMES.length || lvl<1) return null;
-    return {themeIdx: tIdx, level: lvl};
-  }
 
   function canSpinToday(){
     return progress.spinLastDate !== dateStrOffset(0);
@@ -1665,15 +1631,10 @@
     document.getElementById('spinEyebrowText').textContent = S().spinEyebrow;
     document.getElementById('spinTitleText').textContent = S().spinTitle;
     document.getElementById('closeSpinBtn').textContent = S().spinCloseBtn;
-    document.getElementById('challengeLink').textContent = S().challengeLinkText;
-    document.getElementById('challengeEyebrowText').textContent = S().challengeEyebrow;
-    document.getElementById('challengeTitleText').textContent = S().challengeTitle;
-    document.getElementById('challengeIntroText').textContent = S().challengeIntro;
-    document.getElementById('genCodeBtn').textContent = S().genCodeBtnText;
-    document.getElementById('showEnterCodeBtn').textContent = S().showEnterCodeBtnText;
-    document.getElementById('copyCodeBtn').textContent = S().copyCodeBtnText;
-    document.getElementById('submitCodeBtn').textContent = S().submitCodeBtnText;
-    document.getElementById('closeChallengeBtn').textContent = S().closeChallengeBtnText;
+    document.getElementById('levelMapLink').textContent = S().levelMapLinkText;
+    document.getElementById('levelMapEyebrowText').textContent = S().levelMapEyebrow;
+    document.getElementById('levelMapTitleText').textContent = S().levelMapTitle;
+    document.getElementById('closeLevelMapBtn').textContent = S().closeLevelMapBtnText;
     updateSpinCardStatus();
     document.getElementById('questSummaryStatus').textContent = S().dqSummary(done, FREE_DAILY_QUESTS);
   }
@@ -1726,16 +1687,27 @@
 
   // ---------- Game state ----------
   let state = 'start'; // start | playing | levelup | hit | paused | gameover
+  let countdownActive = false;
+  let countdownRemaining = 0;
   let level = 1;
   let lives = 3;
-  let energy = 0;
-  const ENERGY_COST_PER_LIFE = 5;
-  const STARS_COST_PER_LIFE = 15;
+  const STARS_COST_PER_LIFE = 25;
   let hitMsgT = 0;
   let hunters = [];
   let foods = [];
   let walls = [];
   let safeZones = [];
+  let river = null;
+  let crocodiles = [];
+  let piranhas = [];
+  let turtle = null;
+  let mousetraps = [];
+  let cameras = [];
+  let nets = [];
+  let windZones = [];
+  let birds = [];
+  let fireballs = [];
+  let drankWater = false;
   let goalUnlocked = true;
   let herd = [];
   let leaderTrail = [];
@@ -1886,7 +1858,7 @@
     // difficulty ramp: steps up every 5 levels — cone reaches much further
     // and stays wide for longer, so distance no longer feels "safe" as early
     const tier = Math.floor((lv-1)/5);
-    const nHunters = lv<5 ? 1 : (lv<10 ? 2 : (lv<20 ? 3 : 4));
+    const nHunters = (theme.id==='wolf' && lv>=60) ? 0 : (lv<5 ? 1 : (lv<10 ? 2 : (lv<20 ? 3 : (lv<40 ? 4 : 3))));
     const coneHalf = clamp(0.55 - tier*0.012, 0.30, 0.55);
     const coneRange = clamp(220 + tier*35, 220, 550);
     const rotSpeed = clamp(0.5 + tier*0.10, 0.5, 2.0);
@@ -1954,7 +1926,7 @@
       } while(!ok && tries<40);
       foods.push({x:fx, y:fy, r:13, collected:false});
     }
-    goalUnlocked = foodsNeeded===0;
+    goalUnlocked = foodsNeeded===0 && lv<40;
     if(foodsNeeded>0 && !progress.seenFoodIntro){
       progress.seenFoodIntro = true;
       saveProgress();
@@ -1962,7 +1934,7 @@
     }
 
     // moving walls: block movement AND hunter sightlines. Unlocks at level 15+.
-    const nWalls = lv<15 ? 0 : (lv<30 ? 1 : 2);
+    const nWalls = 0; // walls removed from the game entirely
     walls = [];
     for(let i=0;i<nWalls;i++){
       let wx,wy,tries=0,ok=false, axis, w,h;
@@ -2007,6 +1979,211 @@
       setTimeout(()=> showElementHints([{x:z.x, y:z.y-z.r-30, text:'🌿 '+S().safeZoneIntroTitle+' '+S().safeZoneIntroDesc}], 5500), nWalls>0 ? 2200 : 400);
     }
 
+    // river + crocodiles: unlocks at level 40+. A water point inside the
+    // river must be reached (drunk from) before the goal unlocks, and 1-2
+    // crocodiles patrol back and forth inside the river's bounds.
+    river = null;
+    crocodiles = [];
+    piranhas = [];
+    turtle = null;
+    drankWater = false;
+    if(lv>=40 && theme.id==='wolf'){
+      const bandH = 110;
+      let riverY;
+      do{ riverY = rand(H*0.32, H*0.68); }
+      while(Math.abs(riverY-sp.y)<140 || Math.abs(riverY-gp.y)<140);
+      river = {y:riverY-bandH/2, h:bandH};
+      const nCrocs = lv<70 ? 1 : 2;
+      for(let i=0;i<nCrocs;i++){
+        const x1 = rand(W*0.15, W*0.35);
+        const x2 = rand(W*0.65, W*0.85);
+        const cy = river.y + rand(bandH*0.25, bandH*0.75);
+        crocodiles.push({
+          x:(x1+x2)/2, y:cy, x1, x2,
+          dir: Math.random()<0.5?1:-1,
+          speed: rand(35,55),
+          angle: 0,
+          coneHalf: clamp(coneHalf*0.9, 0.24, 0.55),
+          coneRange: clamp(coneRange*0.85, 160, 480),
+          r:17
+        });
+      }
+      // piranhas: small, fast, erratic — appear at higher levels for extra river danger
+      if(lv>=55){
+        const nPiranhas = lv<85 ? 2 : 3;
+        for(let i=0;i<nPiranhas;i++){
+          const px = rand(W*0.2, W*0.8);
+          const py = river.y + rand(bandH*0.2, bandH*0.8);
+          piranhas.push({x:px, y:py, tx:px, ty:py, speed:rand(70,100), r:8, retargetT:0});
+        }
+      }
+      let wx,wy,tries2=0,ok2=false;
+      do{
+        wx = rand(W*0.3, W*0.7);
+        wy = river.y + bandH/2;
+        tries2++;
+        ok2 = crocodiles.every(c=>dist(wx,wy,c.x,c.y)>90);
+      } while(!ok2 && tries2<30);
+      river.waterX = wx; river.waterY = wy;
+      // turtle: a friendly safe stepping-stone somewhere else in the river
+      let tx,ty,tries3=0,ok3=false;
+      do{
+        tx = rand(W*0.15, W*0.85);
+        ty = river.y + rand(bandH*0.2, bandH*0.8);
+        tries3++;
+        ok3 = dist(tx,ty,wx,wy)>70 && crocodiles.every(c=>dist(tx,ty,c.x,c.y)>80);
+      } while(!ok3 && tries3<30);
+      turtle = {x:tx, y:ty, r:20};
+      if(!progress.seenRiverIntro){
+        progress.seenRiverIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🐊 '+S().riverIntroTitle+' '+S().riverIntroDesc}], 5500), safeZones.length>0 ? 3200 : 500);
+      }
+      if(piranhas.length>0 && !progress.seenPiranhaIntro){
+        progress.seenPiranhaIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🐟 '+S().piranhaIntroTitle+' '+S().piranhaIntroDesc}], 5500), 3600);
+      }
+    }
+
+    // birds: Wolf & Lamb theme only, level 60+ — wolves are gone, birds shoot fireballs instead
+    birds = [];
+    fireballs = [];
+    if(lv>=60 && theme.id==='wolf'){
+      const nBirds = lv<90 ? 2 : 3;
+      for(let i=0;i<nBirds;i++){
+        let bx,by,tries=0,ok=false;
+        do{
+          bx = rand(W*0.15, W*0.85);
+          by = rand(H*0.08, H*0.26);
+          tries++;
+          ok = dist(bx,by,sp.x,sp.y)>140 && birds.every(b2=>dist(bx,by,b2.x,b2.y)>110);
+        } while(!ok && tries<30);
+        birds.push({
+          x:bx, y:by, baseX:bx,
+          driftPhase: rand(0,10),
+          fireCooldown: rand(1.2, 2.2),
+          fireInterval: lv<90 ? rand(2.0,2.8) : rand(1.5,2.2),
+          r:16
+        });
+      }
+      if(!progress.seenBirdIntro){
+        progress.seenBirdIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🦅 '+S().birdIntroTitle+' '+S().birdIntroDesc}], 5500), 500);
+      }
+    }
+
+    // mousetraps: Cat & Mouse theme only, static instant-catch hazards
+    mousetraps = [];
+    if(lv>=40 && theme.id==='cat'){
+      const nTraps = lv<70 ? 2 : 3;
+      for(let i=0;i<nTraps;i++){
+        let tx,ty,tries=0,ok=false;
+        do{
+          tx = rand(W*0.15, W*0.85);
+          ty = rand(H*0.25, H*0.8);
+          tries++;
+          ok = dist(tx,ty,sp.x,sp.y)>150 && dist(tx,ty,gp.x,gp.y)>150 &&
+               hunters.every(hh=>dist(tx,ty,hh.x,hh.y)>90) &&
+               mousetraps.every(mt=>dist(tx,ty,mt.x,mt.y)>90);
+        } while(!ok && tries<40);
+        mousetraps.push({x:tx, y:ty, r:16});
+      }
+      if(!progress.seenMousetrapIntro){
+        progress.seenMousetrapIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🪤 '+S().mousetrapIntroTitle+' '+S().mousetrapIntroDesc}], 5500), 500);
+      }
+    }
+
+    // security cameras: Alien & Human theme only, stationary sweeping cone hazards
+    cameras = [];
+    if(lv>=40 && theme.id==='alien'){
+      const nCams = lv<70 ? 1 : 2;
+      for(let i=0;i<nCams;i++){
+        let cx,cy,tries=0,ok=false;
+        do{
+          cx = rand(W*0.2, W*0.8);
+          cy = rand(H*0.25, H*0.8);
+          tries++;
+          ok = dist(cx,cy,sp.x,sp.y)>170 && dist(cx,cy,gp.x,gp.y)>170 &&
+               hunters.every(hh=>dist(cx,cy,hh.x,hh.y)>120) &&
+               cameras.every(c2=>dist(cx,cy,c2.x,c2.y)>150);
+        } while(!ok && tries<40);
+        cameras.push({
+          x:cx, y:cy,
+          baseAngle: rand(0, Math.PI*2),
+          swing: rand(0.6, 1.0),
+          speed: rand(0.5, 0.8),
+          phase: rand(0, 10),
+          angle: 0,
+          coneHalf: clamp(coneHalf*0.85, 0.22, 0.5),
+          coneRange: clamp(coneRange*0.9, 180, 500),
+          r:15
+        });
+      }
+      if(!progress.seenCameraIntro){
+        progress.seenCameraIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'📷 '+S().cameraIntroTitle+' '+S().cameraIntroDesc}], 5500), 500);
+      }
+    }
+
+    // fishing nets: Bear & Fish theme only, swinging-arc hazards
+    nets = [];
+    if(lv>=40 && theme.id==='bear'){
+      const nNets = lv<70 ? 1 : 2;
+      for(let i=0;i<nNets;i++){
+        let px,py,tries=0,ok=false;
+        do{
+          px = rand(W*0.25, W*0.75);
+          py = rand(H*0.3, H*0.75);
+          tries++;
+          ok = dist(px,py,sp.x,sp.y)>170 && dist(px,py,gp.x,gp.y)>170 &&
+               hunters.every(hh=>dist(px,py,hh.x,hh.y)>120) &&
+               nets.every(n2=>dist(px,py,n2.x,n2.y)>160);
+        } while(!ok && tries<40);
+        nets.push({
+          px, py, armLen: rand(70,95),
+          baseAngle: rand(0, Math.PI*2),
+          swing: rand(0.9, 1.3),
+          speed: rand(0.7, 1.0),
+          phase: rand(0, 10),
+          x:px, y:py, r:19
+        });
+      }
+      if(!progress.seenNetIntro){
+        progress.seenNetIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🕸️ '+S().netIntroTitle+' '+S().netIntroDesc}], 5500), 500);
+      }
+    }
+
+    // wind zones: universal (any theme), push your movement sideways while inside
+    windZones = [];
+    if(lv>=35){
+      const nWind = lv<65 ? 1 : 2;
+      for(let i=0;i<nWind;i++){
+        let wx,wy,tries=0,ok=false;
+        do{
+          wx = rand(W*0.2, W*0.8);
+          wy = rand(H*0.25, H*0.8);
+          tries++;
+          ok = dist(wx,wy,sp.x,sp.y)>150 && dist(wx,wy,gp.x,gp.y)>150 &&
+               windZones.every(wz=>dist(wx,wy,wz.x,wz.y)>200) &&
+               (!river || wy<river.y-60 || wy>river.y+river.h+60);
+        } while(!ok && tries<40);
+        const windAngle = rand(0, Math.PI*2);
+        windZones.push({x:wx, y:wy, r:100, angle:windAngle, force:rand(45,70)});
+      }
+      if(!progress.seenWindIntro){
+        progress.seenWindIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'💨 '+S().windIntroTitle+' '+S().windIntroDesc}], 5500), 500);
+      }
+    }
+
 
     // herd: how many lambs/mice/humans the player is guiding this level
     const herdSize = lv<5 ? 1 : (lv<15 ? 2 : 3);
@@ -2027,7 +2204,6 @@
     stopLivesTicker();
     level = fromLevel || 1;
     lives = progress.lives;
-    energy = 0;
     runStreak = 0;
     activePowerUp = null;
     if(!progress.themesPlayed.includes(theme.id)){
@@ -2037,6 +2213,7 @@
     checkAchievements();
     setupLevel(level);
     state = 'playing';
+    countdownActive = true; countdownRemaining = 3;
     document.getElementById('startOverlay').style.display='none';
     document.getElementById('endOverlay').style.display='none';
     document.getElementById('hud').style.display='flex';
@@ -2102,13 +2279,6 @@
       document.getElementById('foodLabel').textContent = collected+'/'+foods.length;
     } else {
       foodPill.style.display='none';
-    }
-    const energyPill = document.getElementById('energyPill');
-    if(energy>0){
-      energyPill.style.display='inline-block';
-      document.getElementById('energyLabel').textContent = energy;
-    } else {
-      energyPill.style.display='none';
     }
     renderPowerupBar();
   }
@@ -2270,14 +2440,6 @@
     document.getElementById('bestLabel2').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
     document.getElementById('caughtIcon').innerHTML = HAPPY_FACE_SVG[theme.id] || HAPPY_FACE_SVG.wolf;
 
-    const energyBtn = document.getElementById('energyContinueBtn');
-    if(energy>=ENERGY_COST_PER_LIFE){
-      energyBtn.style.display='block';
-      energyBtn.textContent = S().energyContinuePrefix+ENERGY_COST_PER_LIFE+S().energySuffix;
-      energyBtn.disabled = false;
-    } else {
-      energyBtn.style.display='none';
-    }
     const starsBtn = document.getElementById('starsContinueBtn');
     if((progress.stars||0)>=STARS_COST_PER_LIFE){
       starsBtn.style.display='block';
@@ -2300,22 +2462,6 @@
     document.getElementById('meterWrap').style.display='none';
   }
 
-  function continueWithEnergy(){
-    if(energy<ENERGY_COST_PER_LIFE) return;
-    energy -= ENERGY_COST_PER_LIFE;
-    lives = 1;
-    progress.lives = Math.max(progress.lives, 1);
-    syncLifeRegen();
-    document.getElementById('endOverlay').style.display='none';
-    document.getElementById('hud').style.display='flex';
-    document.getElementById('meterWrap').style.display='block';
-    setupLevel(level);
-    updateHud();
-    state = 'playing';
-    lastT = performance.now();
-    requestAnimationFrame(loop);
-  }
-
   function continueWithStars(){
     if((progress.stars||0)<STARS_COST_PER_LIFE) return;
     progress.stars -= STARS_COST_PER_LIFE;
@@ -2329,6 +2475,7 @@
     setupLevel(level);
     updateHud();
     state = 'playing';
+    countdownActive = true; countdownRemaining = 3;
     lastT = performance.now();
     requestAnimationFrame(loop);
   }
@@ -2373,7 +2520,23 @@
   async function openAdPreferences(){
     const AdMob = getAdMob();
     if(!AdMob || typeof AdMob.showConsentForm!=='function') return;
-    try{ await AdMob.showConsentForm(); }catch(e){}
+    try{
+      // Re-fetch consent info first — showing the form without this can
+      // silently fail if the SDK's cached info is stale or was never set
+      // in this session.
+      if(typeof AdMob.requestConsentInfo==='function'){
+        const consentInfo = await AdMob.requestConsentInfo();
+        if(!consentInfo || !consentInfo.isConsentFormAvailable){
+          // No form available for this user/region (e.g. outside EEA/UK/Switzerland) —
+          // this is expected, not an error. Let the user know instead of doing nothing.
+          alert(S().adPrefsNotAvailable);
+          return;
+        }
+      }
+      await AdMob.showConsentForm();
+    }catch(e){
+      alert(S().adPrefsNotAvailable);
+    }
   }
 
   async function initAdMob(){
@@ -2529,7 +2692,7 @@
       state = 'levelup';
       levelUpT = 0.9;
       requestAnimationFrame(loop); // the loop stops scheduling itself during 'milestone' — restart it
-      setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; } }, 750);
+      setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; countdownActive=true; countdownRemaining=3; } }, 750);
     };
   }
 
@@ -2551,6 +2714,7 @@
       setupLevel(level);
       updateHud();
       state = 'playing';
+      countdownActive = true; countdownRemaining = 3;
       lastT = performance.now();
       requestAnimationFrame(loop);
     };
@@ -2589,6 +2753,7 @@
     document.getElementById('pauseOverlay').style.display='none';
     setupLevel(level);
     state = 'playing';
+    countdownActive = true; countdownRemaining = 3;
     lastT = performance.now();
     requestAnimationFrame(loop);
   }
@@ -2623,10 +2788,12 @@
     // button (sitting on top of the canvas) disappears mid-click, which would
     // otherwise yank the character toward a bogus (0,0)-ish target instantly.
     if(performance.now() - levelJustStartedAt < 200) return;
+    if(countdownActive) return;
     setPointer(e.clientX, e.clientY);
   });
   canvas.addEventListener('pointermove', e=>{
     if(performance.now() - levelJustStartedAt < 200) return;
+    if(countdownActive) return;
     if(pointer.active) setPointer(e.clientX, e.clientY);
   });
   window.addEventListener('pointerup', ()=>{ pointer.active=false; });
@@ -2637,6 +2804,14 @@
   function update(dt){
     if(state!=='playing') return;
     if(herd.length===0) return;
+
+    if(countdownActive){
+      countdownRemaining -= dt;
+      if(countdownRemaining<=0){
+        countdownActive = false;
+      }
+      return; // freeze all movement/detection/timers until the countdown finishes
+    }
 
     hudTimerAccum += dt;
     if(hudTimerAccum>=1){
@@ -2661,6 +2836,22 @@
       leader.x += dx/d*step;
       leader.y += dy/d*step;
       leader.angle = Math.atan2(dy,dx);
+    }
+    leader.x = clamp(leader.x, leader.r+2, W-leader.r-2);
+    leader.y = clamp(leader.y, leader.r+2, H-leader.r-2);
+
+    // wind zones push the leader sideways while inside them
+    for(const wz of windZones){
+      if(dist(leader.x,leader.y,wz.x,wz.y) < wz.r){
+        const wdx = Math.cos(wz.angle) * wz.force * dt;
+        const wdy = Math.sin(wz.angle) * wz.force * dt;
+        leader.x += wdx;
+        leader.y += wdy;
+        // also nudge the drag target so next frame's follow-logic doesn't
+        // immediately snap back and cancel the wind out
+        leader.tx += wdx;
+        leader.ty += wdy;
+      }
     }
     leader.x = clamp(leader.x, leader.r+2, W-leader.r-2);
     leader.y = clamp(leader.y, leader.r+2, H-leader.r-2);
@@ -2703,6 +2894,60 @@
       h.angle = h.baseAngle + Math.sin((performance.now()/1000 + h.phase)*h.speed*0.6)*h.swing;
     });
 
+    // crocodiles patrol back and forth inside the river, facing their swim direction
+    crocodiles.forEach(c=>{
+      c.x += c.dir * c.speed * dt;
+      if(c.x > c.x2){ c.x = c.x2; c.dir = -1; }
+      if(c.x < c.x1){ c.x = c.x1; c.dir = 1; }
+      c.angle = c.dir>0 ? 0 : Math.PI;
+    });
+
+    // piranhas dart erratically inside the river, picking a new nearby target periodically
+    piranhas.forEach(p=>{
+      p.retargetT -= dt;
+      if(p.retargetT<=0 || dist(p.x,p.y,p.tx,p.ty)<6){
+        p.tx = clamp(p.x + rand(-70,70), 20, W-20);
+        p.ty = river ? clamp(p.y + rand(-30,30), river.y+10, river.y+river.h-10) : p.y;
+        p.retargetT = rand(0.4, 1.1);
+      }
+      const ang = Math.atan2(p.ty-p.y, p.tx-p.x);
+      p.x += Math.cos(ang) * p.speed * dt;
+      p.y += Math.sin(ang) * p.speed * dt;
+      p.angle = ang;
+    });
+
+    // security cameras sweep in place, same style as hunters
+    cameras.forEach(c=>{
+      c.angle = c.baseAngle + Math.sin((performance.now()/1000 + c.phase)*c.speed*0.6)*c.swing;
+    });
+
+    // fishing nets swing on an arm, the hazard is the net-end position
+    nets.forEach(n=>{
+      const a = n.baseAngle + Math.sin((performance.now()/1000 + n.phase)*n.speed)*n.swing;
+      n.x = n.px + Math.cos(a) * n.armLen;
+      n.y = n.py + Math.sin(a) * n.armLen;
+    });
+
+    // birds drift gently and periodically fire a fireball aimed at the leader
+    if(herd.length>0){
+      const leaderForAim = herd[0];
+      birds.forEach(b=>{
+        b.x = b.baseX + Math.sin(performance.now()/1000 + b.driftPhase) * 25;
+        b.fireCooldown -= dt;
+        if(b.fireCooldown<=0){
+          b.fireCooldown = b.fireInterval;
+          const ang = Math.atan2(leaderForAim.y-b.y, leaderForAim.x-b.x);
+          fireballs.push({x:b.x, y:b.y, vx:Math.cos(ang)*180, vy:Math.sin(ang)*180, r:9, angle:ang});
+        }
+      });
+    }
+    // fireballs travel in a straight line until off-screen
+    fireballs = fireballs.filter(fb=>{
+      fb.x += fb.vx*dt;
+      fb.y += fb.vy*dt;
+      return fb.x>-30 && fb.x<W+30 && fb.y>-30 && fb.y<H+30;
+    });
+
     // per-herd-member danger: each body can independently be spotted
     let anySeen = false;
     let caughtIdx = -1;
@@ -2710,7 +2955,8 @@
       const m = herd[i];
       let seenThis = false;
       let bumpedThis = false;
-      const inSafeZone = safeZones.some(z => dist(m.x,m.y,z.x,z.y) < z.r);
+      const onTurtle = turtle && dist(m.x,m.y,turtle.x,turtle.y) < turtle.r;
+      const inSafeZone = onTurtle || safeZones.some(z => dist(m.x,m.y,z.x,z.y) < z.r);
       if(activePowerUp!=='invis' && !inSafeZone){
         for(const h of hunters){
           const toM = Math.atan2(m.y-h.y, m.x-h.x);
@@ -2724,6 +2970,46 @@
           }
           if(bump){ bumpedThis = true; break; }
           if(inCone){ seenThis = true; }
+        }
+        if(!bumpedThis){
+          for(const c of crocodiles){
+            const toM = Math.atan2(m.y-c.y, m.x-c.x);
+            const dd = dist(c.x,c.y,m.x,m.y);
+            const inCone = dd < c.coneRange && angDiff(c.angle, toM) < c.coneHalf/2;
+            const bump = dd < (c.r+m.r+4);
+            if(bump){ bumpedThis = true; break; }
+            if(inCone){ seenThis = true; }
+          }
+        }
+        if(!bumpedThis){
+          for(const p of piranhas){
+            if(dist(p.x,p.y,m.x,m.y) < (p.r+m.r+3)){ bumpedThis = true; break; }
+          }
+        }
+        if(!bumpedThis){
+          for(const mt of mousetraps){
+            if(dist(mt.x,mt.y,m.x,m.y) < (mt.r+m.r+2)){ bumpedThis = true; break; }
+          }
+        }
+        if(!bumpedThis){
+          for(const c2 of cameras){
+            const toM = Math.atan2(m.y-c2.y, m.x-c2.x);
+            const dd = dist(c2.x,c2.y,m.x,m.y);
+            const inCone = dd < c2.coneRange && angDiff(c2.angle, toM) < c2.coneHalf/2;
+            const bump = dd < (c2.r+m.r+4);
+            if(bump){ bumpedThis = true; break; }
+            if(inCone){ seenThis = true; }
+          }
+        }
+        if(!bumpedThis){
+          for(const n of nets){
+            if(dist(n.x,n.y,m.x,m.y) < (n.r+m.r+3)){ bumpedThis = true; break; }
+          }
+        }
+        if(!bumpedThis){
+          for(const fb of fireballs){
+            if(dist(fb.x,fb.y,m.x,m.y) < (fb.r+m.r+2)){ bumpedThis = true; break; }
+          }
         }
       }
       if(bumpedThis){
@@ -2765,7 +3051,6 @@
         if(!f.collected && dist(leader.x,leader.y,f.x,f.y) < f.r+leader.r){
           f.collected = true;
           changed = true;
-          energy++;
           progress.totalFoodsEver++;
           updateDailyQuestProgress('collect_food', 1, 'add');
           sfxCollect();
@@ -2775,10 +3060,25 @@
           }
         }
       }
+      let drankJustNow = false;
+      if(river && !drankWater && dist(leader.x,leader.y,river.waterX,river.waterY) < 26+leader.r){
+        drankWater = true;
+        drankJustNow = true;
+        changed = true;
+        sfxCollect();
+        vibrate(15);
+        for(let i=0;i<10;i++){
+          particles.push({x:river.waterX,y:river.waterY,r:3,a:0.8,vx:rand(-60,60),vy:rand(-60,60)});
+        }
+        updateDailyQuestProgress('collect_food', 1, 'add');
+      }
       if(changed){
-        const remaining = foods.filter(f=>!f.collected).length;
-        showFoodCountPopup(remaining, foodLabelFor(theme.id));
-        if(remaining===0) goalUnlocked = true;
+        const foodsRemaining = foods.filter(f=>!f.collected).length;
+        const waterDone = !river || drankWater;
+        const totalRemaining = foodsRemaining + (waterDone?0:1);
+        const label = drankJustNow && foodsRemaining>0 ? foodLabelFor(theme.id) : (foodsRemaining>0 ? foodLabelFor(theme.id) : S().waterLabel);
+        showFoodCountPopup(totalRemaining, label);
+        if(foodsRemaining===0 && waterDone) goalUnlocked = true;
         saveProgress();
         checkAchievements();
         updateHud();
@@ -2837,7 +3137,7 @@
         }
         state='levelup';
         levelUpT = 0.9;
-        setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; } }, 750);
+        setTimeout(()=>{ if(state==='levelup'){ setupLevel(level); state='playing'; countdownActive=true; countdownRemaining=3; } }, 750);
         return;
       }
     }
@@ -3833,16 +4133,377 @@
       ctx.restore();
     }
   }
+  function drawRiver(){
+    if(!river) return;
+    ctx.save();
+    const grad = ctx.createLinearGradient(0, river.y, 0, river.y+river.h);
+    grad.addColorStop(0, 'rgba(58,111,173,0.55)');
+    grad.addColorStop(0.5, 'rgba(74,144,201,0.65)');
+    grad.addColorStop(1, 'rgba(58,111,173,0.55)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, river.y, W, river.h);
+    // gentle wave lines for texture
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 2;
+    const t = performance.now()/1000;
+    for(let row=0; row<3; row++){
+      const wy = river.y + river.h*(0.2+row*0.3);
+      ctx.beginPath();
+      for(let x=0; x<=W; x+=20){
+        const yy = wy + Math.sin(x*0.05 + t*1.5 + row)*4;
+        if(x===0) ctx.moveTo(x,yy); else ctx.lineTo(x,yy);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+    // water-drinking point
+    if(!drankWater){
+      ctx.save();
+      ctx.translate(river.waterX, river.waterY);
+      const pulse = 1+Math.sin(t*3)*0.08;
+      ctx.scale(pulse,pulse);
+
+      // soft ambient glow
+      const glow = ctx.createRadialGradient(0,0,0, 0,0,26);
+      glow.addColorStop(0, 'rgba(255,255,255,0.5)');
+      glow.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath(); ctx.arc(0,0,26,0,7); ctx.fill();
+
+      // main droplet shape with a rich gradient
+      ctx.beginPath();
+      ctx.moveTo(0,-15);
+      ctx.bezierCurveTo(9.5,-1, 10,8, 0,15);
+      ctx.bezierCurveTo(-10,8, -9.5,-1, 0,-15);
+      ctx.closePath();
+      const grad = ctx.createLinearGradient(0,-15,0,15);
+      grad.addColorStop(0, '#8fd4f0');
+      grad.addColorStop(0.55, '#4a90c9');
+      grad.addColorStop(1, '#2d6ba8');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // glossy highlight + sparkle
+      ctx.beginPath();
+      ctx.ellipse(-3.2, -4, 2.4, 4, -0.4, 0, 7);
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(3, 3, 1.1, 0, 7);
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fill();
+
+      ctx.restore();
+    }
+  }
+  function drawCrocodileBody(c){
+    const r = c.r;
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.angle);
+
+    // tail
+    ctx.fillStyle = '#4a7a3a';
+    ctx.beginPath();
+    ctx.moveTo(-r*1.3, 0);
+    ctx.quadraticCurveTo(-r*2.1, r*0.15, -r*2.5, -r*0.1);
+    ctx.quadraticCurveTo(-r*2.0, -r*0.35, -r*1.3, -r*0.15);
+    ctx.closePath();
+    ctx.fill();
+
+    // legs
+    ctx.fillStyle = '#3d6530';
+    [[-r*0.5,r*0.55],[r*0.3,r*0.6]].forEach(([lx,ly])=>{
+      ctx.beginPath();
+      ctx.ellipse(lx, ly, r*0.28, r*0.16, 0.3, 0, 7);
+      ctx.fill();
+    });
+
+    // main body
+    const bodyGrad = ctx.createLinearGradient(0,-r*0.8,0,r*0.8);
+    bodyGrad.addColorStop(0, '#5a9048');
+    bodyGrad.addColorStop(1, '#3d6530');
+    ctx.fillStyle = bodyGrad;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r*1.55, r*0.72, 0, 0, 7);
+    ctx.fill();
+
+    // snout
+    ctx.fillStyle = '#5a9048';
+    ctx.beginPath();
+    ctx.moveTo(r*0.9, -r*0.42);
+    ctx.quadraticCurveTo(r*2.15, -r*0.28, r*2.35, 0);
+    ctx.quadraticCurveTo(r*2.15, r*0.28, r*0.9, r*0.42);
+    ctx.closePath();
+    ctx.fill();
+
+    // jaw line
+    ctx.strokeStyle = '#2a4520';
+    ctx.lineWidth = r*0.06;
+    ctx.beginPath();
+    ctx.moveTo(r*1.0, r*0.05);
+    ctx.quadraticCurveTo(r*1.9, r*0.12, r*2.25, r*0.02);
+    ctx.stroke();
+
+    // teeth
+    ctx.fillStyle = '#fff';
+    for(let i=0;i<4;i++){
+      const tx = r*1.15 + i*r*0.28;
+      ctx.beginPath();
+      ctx.moveTo(tx, r*0.06);
+      ctx.lineTo(tx+r*0.08, r*0.06);
+      ctx.lineTo(tx+r*0.04, r*0.2);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // nostril bumps
+    ctx.fillStyle = '#3d6530';
+    ctx.beginPath(); ctx.arc(r*2.15, -r*0.12, r*0.09, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(r*2.25, -r*0.02, r*0.07, 0, 7); ctx.fill();
+
+    // back ridges
+    ctx.fillStyle = '#3d6530';
+    for(let i=0;i<5;i++){
+      const rx = -r*0.9 + i*r*0.42;
+      ctx.beginPath();
+      ctx.moveTo(rx, -r*0.6);
+      ctx.lineTo(rx+r*0.16, -r*0.82);
+      ctx.lineTo(rx+r*0.32, -r*0.6);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    // eye bumps + eyes
+    ctx.fillStyle = '#5a9048';
+    ctx.beginPath(); ctx.ellipse(r*0.55, -r*0.55, r*0.22, r*0.22, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(r*1.05, -r*0.58, r*0.22, r*0.22, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8d84a';
+    ctx.beginPath(); ctx.arc(r*0.55, -r*0.55, r*0.14, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(r*1.05, -r*0.58, r*0.14, 0, 7); ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.ellipse(r*0.55, -r*0.55, r*0.045, r*0.11, 0, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(r*1.05, -r*0.58, r*0.045, r*0.11, 0, 0, 7); ctx.fill();
+
+    ctx.restore();
+  }
+
+  function drawPiranha(p){
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.angle);
+    ctx.fillStyle = '#c9403a';
+    ctx.beginPath();
+    ctx.moveTo(-p.r*1.3, 0);
+    ctx.lineTo(-p.r*2.1, -p.r*0.7);
+    ctx.lineTo(-p.r*2.1, p.r*0.7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#e0554a';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, p.r*1.3, p.r*0.8, 0, 0, 7);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(p.r*0.9, -p.r*0.15);
+    ctx.lineTo(p.r*1.15, 0);
+    ctx.lineTo(p.r*0.9, p.r*0.15);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.arc(p.r*0.35, -p.r*0.25, p.r*0.16, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawTurtle(t){
+    if(!t) return;
+    ctx.save();
+    ctx.translate(t.x, t.y);
+    const pulse = 1+Math.sin(performance.now()/500)*0.04;
+    ctx.scale(pulse,pulse);
+    ctx.fillStyle = 'rgba(127,174,134,0.25)';
+    ctx.beginPath(); ctx.arc(0,0,t.r*1.5,0,7); ctx.fill();
+    ctx.fillStyle = '#4a7a3a';
+    ctx.beginPath(); ctx.ellipse(0,0, t.r, t.r*0.8, 0, 0, 7); ctx.fill();
+    ctx.strokeStyle = '#2a4520'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(-t.r*0.5,-t.r*0.4); ctx.lineTo(t.r*0.5,-t.r*0.4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-t.r*0.5,t.r*0.4); ctx.lineTo(t.r*0.5,t.r*0.4); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0,-t.r*0.6); ctx.lineTo(0,t.r*0.6); ctx.stroke();
+    ctx.fillStyle = '#5a9048';
+    ctx.beginPath(); ctx.arc(t.r*0.95, 0, t.r*0.32, 0, 7); ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.arc(t.r*1.1, -t.r*0.08, t.r*0.06, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawMousetrap(mt){
+    ctx.save();
+    ctx.translate(mt.x, mt.y);
+    // wooden base
+    ctx.fillStyle = '#a8763f';
+    ctx.beginPath();
+    ctx.roundRect(-mt.r, -mt.r*0.55, mt.r*2, mt.r*1.1, 3);
+    ctx.fill();
+    // metal snap bar (diagonal, looks "armed")
+    ctx.strokeStyle = '#8a8f96'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(-mt.r*0.8, mt.r*0.5);
+    ctx.lineTo(mt.r*0.6, -mt.r*0.65);
+    ctx.stroke();
+    ctx.fillStyle = '#c9403a';
+    ctx.beginPath(); ctx.arc(mt.r*0.15, -mt.r*0.05, mt.r*0.22, 0, 7); ctx.fill(); // cheese bait
+    ctx.restore();
+  }
+
+  function drawCamera(c){
+    ctx.save();
+    ctx.translate(c.x, c.y);
+    ctx.fillStyle = '#5a5f6b';
+    ctx.beginPath(); ctx.arc(0,0, c.r*0.7, 0, 7); ctx.fill();
+    ctx.save();
+    ctx.rotate(c.angle);
+    ctx.fillStyle = '#3a3d45';
+    ctx.beginPath();
+    ctx.roundRect(-c.r*0.3, -c.r*0.42, c.r*1.3, c.r*0.84, 4);
+    ctx.fill();
+    ctx.fillStyle = '#7fc4e0';
+    ctx.beginPath(); ctx.arc(c.r*0.9, 0, c.r*0.28, 0, 7); ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.arc(c.r*0.9, 0, c.r*0.14, 0, 7); ctx.fill();
+    ctx.restore();
+    // blinking red status light
+    if(Math.sin(performance.now()/300) > 0){
+      ctx.fillStyle = '#e0554a';
+      ctx.beginPath(); ctx.arc(-c.r*0.35, -c.r*0.35, c.r*0.13, 0, 7); ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawNet(n){
+    ctx.save();
+    // rope from pivot to net
+    ctx.strokeStyle = 'rgba(220,210,190,0.5)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(n.px, n.py); ctx.lineTo(n.x, n.y); ctx.stroke();
+    ctx.translate(n.x, n.y);
+    ctx.fillStyle = 'rgba(210,190,150,0.28)';
+    ctx.beginPath(); ctx.arc(0,0,n.r,0,7); ctx.fill();
+    ctx.strokeStyle = 'rgba(160,140,100,0.85)'; ctx.lineWidth = 1.3;
+    for(let i=0;i<5;i++){
+      const a = (Math.PI*2/5)*i;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(a)*n.r, Math.sin(a)*n.r); ctx.stroke();
+    }
+    for(let ring=1; ring<=2; ring++){
+      ctx.beginPath(); ctx.arc(0,0, n.r*ring/2, 0, 7); ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawWindZone(wz){
+    ctx.save();
+    ctx.beginPath(); ctx.arc(wz.x,wz.y,wz.r,0,7); ctx.clip();
+    ctx.strokeStyle = 'rgba(180,220,230,0.4)'; ctx.lineWidth = 2;
+    const t = performance.now()/1000;
+    for(let i=0;i<6;i++){
+      const offset = ((t*90 + i*40) % (wz.r*2.6)) - wz.r*1.3;
+      const perp = wz.angle + Math.PI/2;
+      const cx = wz.x + Math.cos(wz.angle)*offset;
+      const cy = wz.y + Math.sin(wz.angle)*offset;
+      ctx.beginPath();
+      ctx.moveTo(cx - Math.cos(perp)*wz.r, cy - Math.sin(perp)*wz.r);
+      ctx.lineTo(cx + Math.cos(perp)*wz.r, cy + Math.sin(perp)*wz.r);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawBird(b){
+    ctx.save();
+    ctx.translate(b.x, b.y);
+    const flap = Math.sin(performance.now()/120 + b.driftPhase)*0.5;
+    // wings
+    ctx.fillStyle = '#4a3428';
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.quadraticCurveTo(-b.r*1.4, -b.r*0.3 - flap*b.r*0.8, -b.r*1.9, flap*b.r*0.3);
+    ctx.quadraticCurveTo(-b.r*0.9, b.r*0.15, 0,0);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.quadraticCurveTo(b.r*1.4, -b.r*0.3 - flap*b.r*0.8, b.r*1.9, flap*b.r*0.3);
+    ctx.quadraticCurveTo(b.r*0.9, b.r*0.15, 0,0);
+    ctx.fill();
+    // body
+    ctx.fillStyle = '#6b4a35';
+    ctx.beginPath(); ctx.ellipse(0,0, b.r*0.65, b.r*0.85, 0, 0, 7); ctx.fill();
+    // head + beak
+    ctx.fillStyle = '#7a5540';
+    ctx.beginPath(); ctx.arc(0,-b.r*0.75, b.r*0.42, 0, 7); ctx.fill();
+    ctx.fillStyle = '#e8a33d';
+    ctx.beginPath();
+    ctx.moveTo(-b.r*0.15,-b.r*0.85); ctx.lineTo(b.r*0.15,-b.r*0.85); ctx.lineTo(0,-b.r*1.25);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#1a1a1a';
+    ctx.beginPath(); ctx.arc(-b.r*0.12,-b.r*0.8, b.r*0.09, 0, 7); ctx.fill();
+    ctx.beginPath(); ctx.arc(b.r*0.12,-b.r*0.8, b.r*0.09, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawFireball(fb){
+    ctx.save();
+    ctx.translate(fb.x, fb.y);
+    // trailing flame streak behind the fireball
+    ctx.rotate(fb.angle);
+    const trailGrad = ctx.createLinearGradient(-26,0, -fb.r,0);
+    trailGrad.addColorStop(0, 'rgba(232,163,61,0)');
+    trailGrad.addColorStop(1, 'rgba(232,163,61,0.55)');
+    ctx.fillStyle = trailGrad;
+    ctx.beginPath();
+    ctx.moveTo(-26, -fb.r*0.5);
+    ctx.lineTo(-fb.r, -fb.r*0.6);
+    ctx.lineTo(-fb.r, fb.r*0.6);
+    ctx.lineTo(-26, fb.r*0.5);
+    ctx.closePath();
+    ctx.fill();
+    ctx.rotate(-fb.angle);
+    // glowing core
+    const grad = ctx.createRadialGradient(0,0,0, 0,0,fb.r*1.6);
+    grad.addColorStop(0, 'rgba(255,235,180,0.9)');
+    grad.addColorStop(0.5, 'rgba(232,163,61,0.6)');
+    grad.addColorStop(1, 'rgba(232,163,61,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.arc(0,0,fb.r*1.6,0,7); ctx.fill();
+    ctx.fillStyle = '#f0dcae';
+    ctx.beginPath(); ctx.arc(0,0,fb.r*0.65,0,7); ctx.fill();
+    ctx.fillStyle = '#e0554a';
+    ctx.beginPath(); ctx.arc(0,0,fb.r*0.35,0,7); ctx.fill();
+    ctx.restore();
+  }
+
   function draw(){
     drawBackground();
+    drawRiver();
+    drawTurtle(turtle);
     drawSafeZones();
+    for(const wz of windZones) drawWindZone(wz);
+    for(const mt of mousetraps) drawMousetrap(mt);
+    for(const n of nets) drawNet(n);
     drawGoal();
     for(const f of foods) drawFood(f);
     for(const h of hunters) drawCone(h);
+    for(const c of crocodiles) drawCone(c);
+    for(const c2 of cameras) drawCone(c2);
     drawWalls();
     drawParticles();
     for(const h of hunters) drawHunter(h);
+    for(const c of crocodiles) drawCrocodileBody(c);
+    for(const p of piranhas) drawPiranha(p);
+    for(const c2 of cameras) drawCamera(c2);
+    for(const b of birds) drawBird(b);
     drawPlayer();
+    for(const fb of fireballs) drawFireball(fb);
 
     if(flashT>0.02){
       ctx.save();
@@ -3870,6 +4531,27 @@
       ctx.font = '600 15px Segoe UI, sans-serif';
       ctx.fillStyle = '#eae6d8';
       ctx.fillText(lives + S().hitSuffix, W/2, H/2+14);
+      ctx.restore();
+    }
+    if(countdownActive){
+      ctx.save();
+      ctx.fillStyle = 'rgba(6,7,11,0.35)';
+      ctx.fillRect(0,0,W,H);
+      const num = Math.ceil(countdownRemaining);
+      const frac = countdownRemaining - Math.floor(countdownRemaining); // 1→0 within each second
+      // pop-in scale: starts big (1.4x) right as the number changes, settles to 1x
+      const scale = 1 + Math.max(0, frac-0.75)*1.6;
+      const alpha = clamp(frac*3, 0.35, 1);
+      ctx.globalAlpha = alpha;
+      ctx.translate(W/2, H/2);
+      ctx.scale(scale, scale);
+      ctx.fillStyle = '#f0dcae';
+      ctx.font = '900 96px Segoe UI, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = 'rgba(232,163,61,0.6)';
+      ctx.shadowBlur = 24;
+      ctx.fillText(String(Math.max(1,num)), 0, 0);
       ctx.restore();
     }
   }
@@ -4268,57 +4950,8 @@
     document.getElementById('spinWheelOverlay').style.display='none';
   });
 
-  function resetChallengeOverlay(){
-    document.getElementById('challengeMainButtons').style.display='block';
-    document.getElementById('challengeCodeView').style.display='none';
-    document.getElementById('challengeEnterView').style.display='none';
-    document.getElementById('challengeCodeInput').value='';
-    document.getElementById('challengeResultText').textContent='';
-  }
-  document.getElementById('challengeLink').addEventListener('click', ()=>{
-    resetChallengeOverlay();
-    document.getElementById('challengeOverlay').style.display='flex';
-  });
-  document.getElementById('genCodeBtn').addEventListener('click', ()=>{
-    const code = generateChallengeCode();
-    document.getElementById('challengeCodeDisplay').textContent = code;
-    document.getElementById('challengeCodeDesc').textContent = S().challengeCodeDesc(tField(theme,'preyName'), progress.bestLevelByTheme[theme.id]||1);
-    document.getElementById('challengeMainButtons').style.display='none';
-    document.getElementById('challengeCodeView').style.display='block';
-  });
-  document.getElementById('showEnterCodeBtn').addEventListener('click', ()=>{
-    document.getElementById('challengeMainButtons').style.display='none';
-    document.getElementById('challengeEnterView').style.display='block';
-    document.getElementById('challengeCodeInput').focus();
-  });
-  document.getElementById('copyCodeBtn').addEventListener('click', async ()=>{
-    const code = document.getElementById('challengeCodeDisplay').textContent;
-    try{
-      await navigator.clipboard.writeText(code);
-      const btn = document.getElementById('copyCodeBtn');
-      const original = btn.textContent;
-      btn.textContent = S().codeCopiedText;
-      setTimeout(()=> btn.textContent = original, 1500);
-    }catch(e){}
-  });
-  document.getElementById('submitCodeBtn').addEventListener('click', ()=>{
-    const input = document.getElementById('challengeCodeInput').value.trim();
-    const decoded = decodeChallengeCode(input);
-    const resultEl = document.getElementById('challengeResultText');
-    if(!decoded){
-      resultEl.textContent = S().invalidCodeText;
-      resultEl.style.color = '#d9736b';
-      return;
-    }
-    progress.challengeTarget = decoded;
-    saveProgress();
-    const targetTheme = THEMES[decoded.themeIdx];
-    resultEl.style.color = 'var(--muted)';
-    resultEl.textContent = S().challengeAcceptedText(tField(targetTheme,'preyName'), decoded.level);
-  });
-  document.getElementById('closeChallengeBtn').addEventListener('click', ()=>{
-    document.getElementById('challengeOverlay').style.display='none';
-  });
+  document.getElementById('levelMapLink').addEventListener('click', openLevelMap);
+  document.getElementById('closeLevelMapBtn').addEventListener('click', closeLevelMap);
 
   function renderSettingsControls(){
     document.getElementById('settingsSoundBtn').textContent = soundOn ? S().soundOn : S().soundOff;
@@ -4358,7 +4991,6 @@
   document.getElementById('resumeBtn').addEventListener('click', resumeGame);
   document.getElementById('restartLevelBtn').addEventListener('click', restartLevel);
   document.getElementById('quitBtn').addEventListener('click', quitToMenu);
-  document.getElementById('energyContinueBtn').addEventListener('click', continueWithEnergy);
   document.getElementById('starsContinueBtn').addEventListener('click', continueWithStars);
   document.getElementById('adContinueBtn').addEventListener('click', continueWithAd);
   document.getElementById('shareBtn').addEventListener('click', shareScore);
@@ -4502,6 +5134,33 @@
   }
   function stopTutDemo(){
     if(tutDemoRAF){ cancelAnimationFrame(tutDemoRAF); tutDemoRAF = null; }
+  }
+
+  // ---------- Level map (jump to any previously-reached level) ----------
+  function renderLevelMap(){
+    const grid = document.getElementById('levelMapGrid');
+    grid.innerHTML = '';
+    const best = Math.max(1, progress.bestLevelByTheme[theme.id]||1);
+    const checkpoint = progress.lastLevelByTheme[theme.id]||1;
+    for(let lv=1; lv<=best; lv++){
+      const btn = document.createElement('div');
+      btn.className = 'level-map-btn' + (lv===checkpoint ? ' current' : '');
+      const starKey = theme.id+'_'+lv;
+      const stars = progress.levelStars[starKey] || 0;
+      btn.innerHTML = `<span>${lv}</span>` + (stars>0 ? `<span class="stars">${'⭐'.repeat(stars)}</span>` : '');
+      btn.addEventListener('click', ()=>{
+        closeLevelMap();
+        startGame(lv);
+      });
+      grid.appendChild(btn);
+    }
+  }
+  function openLevelMap(){
+    renderLevelMap();
+    document.getElementById('levelMapOverlay').style.display = 'flex';
+  }
+  function closeLevelMap(){
+    document.getElementById('levelMapOverlay').style.display = 'none';
   }
 
   function openTutorial(){
