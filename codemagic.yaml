@@ -32,7 +32,8 @@ workflows:
         script: node scripts/configure-signing.js
       - name: Set unique version code
         script: |
-          sed -i.bak "s/versionCode [0-9]*/versionCode $BUILD_NUMBER/" android/app/build.gradle
+          SAFE_VERSION_CODE=$((BUILD_NUMBER + 20))
+          sed -i.bak "s/versionCode [0-9]*/versionCode $SAFE_VERSION_CODE/" android/app/build.gradle
           cat android/app/build.gradle | grep versionCode
       - name: Build signed Android App Bundle
         script: |
