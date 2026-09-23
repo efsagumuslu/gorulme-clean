@@ -15,7 +15,7 @@
     --amber:#d9a441;
     --muted:#8890a4;
   }
-  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none; -webkit-user-drag:none;}
   html,body{
     margin:0; padding:0; height:100%; overflow:hidden;
     background:var(--bg-0);
@@ -497,6 +497,7 @@
       <div class="stat-row">
         <div class="stat-box"><div class="n" id="reachedLabel">3</div><div class="l" id="reachedLabelText">Ulaşılan</div></div>
         <div class="stat-box"><div class="n" id="bestLabel2">4</div><div class="l" id="endBestLabelText">En İyi</div></div>
+        <div class="stat-box"><div class="n" id="endStarsLabel">⭐ 0</div><div class="l" id="endStarsLabelText">Yıldız</div></div>
       </div>
       <button class="play-btn" id="starsContinueBtn" style="margin-top:22px; display:none;">Yıldız Harcayarak Devam Et</button>
       <button class="play-btn" id="adContinueBtn" style="margin-top:12px;">Reklam İzle, +1 Can Kazan</button>
@@ -765,9 +766,9 @@
       themeBestPrefix:'🏅 En İyi: ',
       starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)', waterLabel:'Su', riverIntroTitle:'Yeni Bir Avcı Geldi!', riverIntroDesc:'Derede timsahlar var, dikkatli ol — onlar da seni görebilir!', piranhaIntroTitle:'Piranha Sürüsü!', piranhaIntroDesc:'Küçük ama hızlılar — değdiklerinde anında yakalanırsın. Kaplumbağanın üstü güvenli!', mousetrapIntroTitle:'Fare Kapanı!', mousetrapIntroDesc:'Yere gizlenmiş kapanlara basma — anında yakalanırsın!', cameraIntroTitle:'Güvenlik Kamerası!', cameraIntroDesc:'Sabit bir kamera etrafı tarıyor, ışığından uzak dur!', netIntroTitle:'Balık Ağı!', netIntroDesc:'Sallanan ağa yakalanma, hareketini iyi zamanla!', windIntroTitle:'Rüzgarlı Bölge!', windIntroDesc:'Bu bölgede rüzgar seni yana doğru itiyor, kontrolü zor olabilir!', birdIntroTitle:'Kurtlar Gitti, Kuşlar Geldi!', birdIntroDesc:'Gökten ateş topları geliyor, onlardan kaç! Timsahlar hâlâ derede.', levelMapLinkText:'🗺️ Bölüm Haritası', levelMapEyebrow:'Bölüm Haritası', levelMapTitle:'Bir Bölüm Seç', closeLevelMapBtnText:'Kapat', adPrefsNotAvailable:'Reklam tercihleri şu an senin bölgen için geçerli değil (bu ayar yalnızca AB/İngiltere/İsviçre kullanıcıları için gösteriliyor).',
       adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...', adLoadingText:'Reklam yükleniyor…', adNotAvailable:'Şu an reklam bulunamadı, birazdan tekrar dene',
-      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
+      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', endStarsCaption:'Yıldız', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
-      caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.",
+      caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.", crocodileName:'Timsah', piranhaName:'Piranha', mousetrapName:'Fare Kapanı', cameraName:'Güvenlik Kamerası', netName:'Balık Ağı', birdName:'Kuş',
       levelUpLabel:lv=>'Bölüm '+lv,
       dailyQuestTitle:'📅 Günlük Görevler', bonusQuestTitle:'🎁 Ekstra Görev', bonusQuestLockedDesc:'Reklam izleyerek ekstra bir görev aç',
       dqSummary:(d,t)=>d+'/'+t+' Tamamlandı',
@@ -820,9 +821,9 @@
       themeBestPrefix:'🏅 Best: ',
       starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)', waterLabel:'Water', riverIntroTitle:'A New Predator Arrived!', riverIntroDesc:'Crocodiles are in the river now, be careful — they can spot you too!', piranhaIntroTitle:'Piranha School!', piranhaIntroDesc:'Small but fast — touching one means instant capture. The turtle is a safe spot!', mousetrapIntroTitle:'Mousetrap!', mousetrapIntroDesc:'Hidden traps on the ground — step on one and you\'re caught instantly!', cameraIntroTitle:'Security Camera!', cameraIntroDesc:'A fixed camera scans the area, stay out of its light!', netIntroTitle:'Fishing Net!', netIntroDesc:'Don\'t get caught in the swinging net — time your move!', windIntroTitle:'Windy Zone!', windIntroDesc:'The wind pushes you sideways here, control can get tricky!', birdIntroTitle:'Wolves Are Gone, Birds Arrived!', birdIntroDesc:'Fireballs are raining from the sky, dodge them! Crocodiles are still in the river.', levelMapLinkText:'🗺️ Level Map', levelMapEyebrow:'Level Map', levelMapTitle:'Choose a Level', closeLevelMapBtnText:'Close', adPrefsNotAvailable:'Ad preferences aren\'t applicable for your region right now (this setting only appears for EEA/UK/Switzerland users).',
       adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...', adLoadingText:'Loading ad…', adNotAvailable:'No ad available right now, try again shortly',
-      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
+      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', endStarsCaption:'Stars', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
-      caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.',
+      caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.', crocodileName:'The Crocodile', piranhaName:'A Piranha', mousetrapName:'A Mousetrap', cameraName:'The Security Camera', netName:'The Fishing Net', birdName:'A Bird',
       levelUpLabel:lv=>'Level '+lv,
       dailyQuestTitle:'📅 Daily Quests', bonusQuestTitle:'🎁 Bonus Quest', bonusQuestLockedDesc:'Watch an ad to unlock an extra quest',
       dqSummary:(d,t)=>d+'/'+t+' Completed',
@@ -875,9 +876,9 @@
       themeBestPrefix:'🏅 Meilleur : ',
       starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)', waterLabel:'Eau', riverIntroTitle:'Un Nouveau Prédateur !', riverIntroDesc:'Des crocodiles sont dans la rivière, prudence — ils peuvent aussi te repérer !', piranhaIntroTitle:'Banc de Piranhas !', piranhaIntroDesc:'Petits mais rapides — les toucher signifie une capture instantanée. La tortue est un endroit sûr !', mousetrapIntroTitle:'Piège à Souris !', mousetrapIntroDesc:'Des pièges cachés au sol — marcher dessus signifie une capture instantanée !', cameraIntroTitle:'Caméra de Sécurité !', cameraIntroDesc:'Une caméra fixe balaie la zone, reste hors de sa lumière !', netIntroTitle:'Filet de Pêche !', netIntroDesc:'Ne te fais pas prendre dans le filet qui balance — calcule bien ton mouvement !', windIntroTitle:'Zone Venteuse !', windIntroDesc:'Le vent te pousse sur le côté ici, le contrôle peut devenir difficile !', birdIntroTitle:'Les Loups Sont Partis, les Oiseaux Arrivent !', birdIntroDesc:'Des boules de feu pleuvent du ciel, esquive-les ! Les crocodiles sont toujours dans la rivière.', levelMapLinkText:'🗺️ Carte des Niveaux', levelMapEyebrow:'Carte des Niveaux', levelMapTitle:'Choisis un Niveau', closeLevelMapBtnText:'Fermer', adPrefsNotAvailable:'Les préférences publicitaires ne sont pas applicables dans ta région pour le moment (visible uniquement pour les utilisateurs EEE/UK/Suisse).',
       adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...', adLoadingText:'Chargement de la pub…', adNotAvailable:'Aucune pub disponible pour le moment, réessayez bientôt',
-      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
+      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', endStarsCaption:'Étoiles', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
-      caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.',
+      caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.', crocodileName:'Le Crocodile', piranhaName:'Un Piranha', mousetrapName:'Un Piège à Souris', cameraName:'La Caméra de Sécurité', netName:'Le Filet de Pêche', birdName:'Un Oiseau',
       levelUpLabel:lv=>'Niveau '+lv,
       dailyQuestTitle:'📅 Missions Quotidiennes', bonusQuestTitle:'🎁 Mission Bonus', bonusQuestLockedDesc:'Regarde une pub pour débloquer une mission supplémentaire',
       dqSummary:(d,t)=>d+'/'+t+' Terminées',
@@ -930,9 +931,9 @@
       themeBestPrefix:'🏅 Mejor: ',
       starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)', waterLabel:'Agua', riverIntroTitle:'¡Llegó un Nuevo Depredador!', riverIntroDesc:'Hay cocodrilos en el río, ten cuidado — ¡ellos también pueden verte!', piranhaIntroTitle:'¡Banco de Pirañas!', piranhaIntroDesc:'Pequeñas pero rápidas — tocarlas significa captura instantánea. ¡La tortuga es un lugar seguro!', mousetrapIntroTitle:'¡Ratonera!', mousetrapIntroDesc:'Trampas ocultas en el suelo — ¡pisar una significa captura instantánea!', cameraIntroTitle:'¡Cámara de Seguridad!', cameraIntroDesc:'Una cámara fija escanea el área, ¡mantente fuera de su luz!', netIntroTitle:'¡Red de Pesca!', netIntroDesc:'No te dejes atrapar por la red oscilante — ¡calcula bien tu movimiento!', windIntroTitle:'¡Zona con Viento!', windIntroDesc:'El viento te empuja hacia un lado aquí, ¡el control puede ser difícil!', birdIntroTitle:'¡Los Lobos se Fueron, Llegaron los Pájaros!', birdIntroDesc:'¡Bolas de fuego caen del cielo, esquívalas! Los cocodrilos siguen en el río.', levelMapLinkText:'🗺️ Mapa de Niveles', levelMapEyebrow:'Mapa de Niveles', levelMapTitle:'Elige un Nivel', closeLevelMapBtnText:'Cerrar', adPrefsNotAvailable:'Las preferencias de anuncios no aplican en tu región por ahora (solo visible para usuarios del EEE/Reino Unido/Suiza).',
       adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...', adLoadingText:'Cargando anuncio…', adNotAvailable:'No hay anuncios disponibles ahora, inténtalo en breve',
-      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
+      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', endStarsCaption:'Estrellas', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
-      caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.',
+      caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.', crocodileName:'El Cocodrilo', piranhaName:'Una Piraña', mousetrapName:'Una Ratonera', cameraName:'La Cámara de Seguridad', netName:'La Red de Pesca', birdName:'Un Pájaro',
       levelUpLabel:lv=>'Nivel '+lv,
       dailyQuestTitle:'📅 Misiones Diarias', bonusQuestTitle:'🎁 Misión Extra', bonusQuestLockedDesc:'Mira un anuncio para desbloquear una misión extra',
       dqSummary:(d,t)=>d+'/'+t+' Completadas',
@@ -985,9 +986,9 @@
       themeBestPrefix:'🏅 Record: ',
       starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)', waterLabel:'Acqua', riverIntroTitle:'È Arrivato un Nuovo Predatore!', riverIntroDesc:'Ci sono coccodrilli nel fiume, attento — possono vederti anche loro!', piranhaIntroTitle:'Banco di Piranha!', piranhaIntroDesc:'Piccoli ma veloci — toccarli significa cattura istantanea. La tartaruga è un posto sicuro!', mousetrapIntroTitle:'Trappola per Topi!', mousetrapIntroDesc:'Trappole nascoste a terra — calpestarne una significa cattura istantanea!', cameraIntroTitle:'Telecamera di Sicurezza!', cameraIntroDesc:'Una telecamera fissa scansiona l\'area, stai lontano dalla sua luce!', netIntroTitle:'Rete da Pesca!', netIntroDesc:'Non farti prendere dalla rete oscillante — calcola bene la tua mossa!', windIntroTitle:'Zona Ventosa!', windIntroDesc:'Il vento ti spinge di lato qui, il controllo può diventare difficile!', birdIntroTitle:'I Lupi Se Ne Sono Andati, Sono Arrivati gli Uccelli!', birdIntroDesc:'Palle di fuoco cadono dal cielo, schivale! I coccodrilli sono ancora nel fiume.', levelMapLinkText:'🗺️ Mappa dei Livelli', levelMapEyebrow:'Mappa dei Livelli', levelMapTitle:'Scegli un Livello', closeLevelMapBtnText:'Chiudi', adPrefsNotAvailable:'Le preferenze pubblicitarie non sono disponibili nella tua regione al momento (visibile solo per utenti SEE/UK/Svizzera).',
       adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...', adLoadingText:'Caricamento annuncio…', adNotAvailable:'Nessun annuncio disponibile ora, riprova a breve',
-      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
+      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', endStarsCaption:'Stelle', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
-      caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.',
+      caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.', crocodileName:'Il Coccodrillo', piranhaName:'Un Piranha', mousetrapName:'Una Trappola per Topi', cameraName:'La Telecamera di Sicurezza', netName:'La Rete da Pesca', birdName:'Un Uccello',
       levelUpLabel:lv=>'Livello '+lv,
       dailyQuestTitle:'📅 Missioni Giornaliere', bonusQuestTitle:'🎁 Missione Bonus', bonusQuestLockedDesc:'Guarda una pubblicità per sbloccare una missione extra',
       dqSummary:(d,t)=>d+'/'+t+' Completate',
@@ -1040,9 +1041,9 @@
       themeBestPrefix:'🏅 Рекорд: ',
       starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)', waterLabel:'Вода', riverIntroTitle:'Появился Новый Хищник!', riverIntroDesc:'В реке теперь крокодилы, будь осторожен — они тоже могут тебя заметить!', piranhaIntroTitle:'Стая Пираний!', piranhaIntroDesc:'Маленькие, но быстрые — прикосновение означает мгновенную поимку. Черепаха — безопасное место!', mousetrapIntroTitle:'Мышеловка!', mousetrapIntroDesc:'Скрытые ловушки на земле — наступишь и тебя мгновенно поймают!', cameraIntroTitle:'Камера Наблюдения!', cameraIntroDesc:'Неподвижная камера сканирует местность, держись подальше от её света!', netIntroTitle:'Рыболовная Сеть!', netIntroDesc:'Не попадись в качающуюся сеть — рассчитай момент!', windIntroTitle:'Ветреная Зона!', windIntroDesc:'Здесь ветер толкает тебя вбок, управлять сложнее!', birdIntroTitle:'Волки Ушли, Прилетели Птицы!', birdIntroDesc:'С неба падают огненные шары, уклоняйся! Крокодилы всё ещё в реке.', levelMapLinkText:'🗺️ Карта Уровней', levelMapEyebrow:'Карта Уровней', levelMapTitle:'Выбери Уровень', closeLevelMapBtnText:'Закрыть', adPrefsNotAvailable:'Настройки рекламы сейчас недоступны для твоего региона (видны только пользователям ЕЭЗ/Великобритании/Швейцарии).',
       adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...', adLoadingText:'Загрузка рекламы…', adNotAvailable:'Реклама сейчас недоступна, попробуйте позже',
-      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
+      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', endStarsCaption:'Звёзды', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
-      caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.',
+      caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.', crocodileName:'Крокодил', piranhaName:'Пиранья', mousetrapName:'Мышеловка', cameraName:'Камера Наблюдения', netName:'Рыболовная Сеть', birdName:'Птица',
       levelUpLabel:lv=>'Уровень '+lv,
       dailyQuestTitle:'📅 Ежедневные Задания', bonusQuestTitle:'🎁 Бонусное Задание', bonusQuestLockedDesc:'Посмотри рекламу, чтобы открыть дополнительное задание',
       dqSummary:(d,t)=>d+'/'+t+' Выполнено',
@@ -1687,8 +1688,10 @@
 
   // ---------- Game state ----------
   let state = 'start'; // start | playing | levelup | hit | paused | gameover
+  let lastCaughtCategory = null;
   let countdownActive = false;
   let countdownRemaining = 0;
+  let playStartTime = 0; // timestamp when the countdown finished and sweeping actually began
   let level = 1;
   let lives = 3;
   const STARS_COST_PER_LIFE = 25;
@@ -1886,7 +1889,7 @@
       // The hunter's actual first-frame angle is baseAngle + a swing offset
       // driven by `phase`, so we must solve for baseAngle accounting for
       // that offset — checking baseAngle alone isn't enough.
-      const initialOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
+      const initialOffset = Math.sin(phase*speed*0.6)*swing; // assumes t=0 at play start, matching playStartTime
       const angleToSpawn = Math.atan2(sp.y-hy, sp.x-hx);
       let baseAngle = rand(0,Math.PI*2);
       if(angDiff(baseAngle + initialOffset, angleToSpawn) < hunterConeHalf/2 + 0.5){
@@ -1894,7 +1897,7 @@
       }
       // Defensive re-check: recompute the offset (timing may have drifted a
       // hair between the calculation above and now) and nudge further if needed.
-      const recheckOffset = Math.sin((performance.now()/1000 + phase)*speed*0.6)*swing;
+      const recheckOffset = initialOffset; // no re-check needed now that sweep time is elapsed-since-play, not wall-clock
       if(angDiff(baseAngle + recheckOffset, angleToSpawn) < hunterConeHalf/2 + 0.15){
         baseAngle = angleToSpawn + Math.PI - recheckOffset;
       }
@@ -1998,11 +2001,16 @@
         const x1 = rand(W*0.15, W*0.35);
         const x2 = rand(W*0.65, W*0.85);
         const cy = river.y + rand(bandH*0.25, bandH*0.75);
+        const cx = (x1+x2)/2;
+        // start swimming away from the spawn side, so the crocodile's cone
+        // (which always faces its swim direction) doesn't open up right on
+        // the lamb the instant the level begins
+        const dir = (sp.x < cx) ? 1 : -1;
         crocodiles.push({
-          x:(x1+x2)/2, y:cy, x1, x2,
-          dir: Math.random()<0.5?1:-1,
+          x:cx, y:cy, x1, x2,
+          dir,
           speed: rand(35,55),
-          angle: 0,
+          angle: dir>0 ? 0 : Math.PI,
           coneHalf: clamp(coneHalf*0.9, 0.24, 0.55),
           coneRange: clamp(coneRange*0.85, 160, 480),
           r:17
@@ -2111,14 +2119,26 @@
                hunters.every(hh=>dist(cx,cy,hh.x,hh.y)>120) &&
                cameras.every(c2=>dist(cx,cy,c2.x,c2.y)>150);
         } while(!ok && tries<40);
+        const camSwing = rand(0.6, 1.0);
+        const camSpeed = rand(0.5, 0.8);
+        const camPhase = rand(0, 10);
+        const camConeHalf = clamp(coneHalf*0.85, 0.22, 0.5);
+        // Never let a camera start already scanning the lamb's spawn point —
+        // same protection hunters get.
+        const camInitialOffset = Math.sin(camPhase*camSpeed*0.6)*camSwing;
+        const camAngleToSpawn = Math.atan2(sp.y-cy, sp.x-cx);
+        let camBaseAngle = rand(0,Math.PI*2);
+        if(angDiff(camBaseAngle + camInitialOffset, camAngleToSpawn) < camConeHalf/2 + 0.5){
+          camBaseAngle = camAngleToSpawn + Math.PI - camInitialOffset;
+        }
         cameras.push({
           x:cx, y:cy,
-          baseAngle: rand(0, Math.PI*2),
-          swing: rand(0.6, 1.0),
-          speed: rand(0.5, 0.8),
-          phase: rand(0, 10),
+          baseAngle: camBaseAngle,
+          swing: camSwing,
+          speed: camSpeed,
+          phase: camPhase,
           angle: 0,
-          coneHalf: clamp(coneHalf*0.85, 0.22, 0.5),
+          coneHalf: camConeHalf,
           coneRange: clamp(coneRange*0.9, 180, 500),
           r:15
         });
@@ -2420,7 +2440,7 @@
       state = 'hit';
       hitMsgT = 0.9;
       setupLevel(level);
-      setTimeout(()=>{ if(state==='hit'){ state='playing'; } }, 750);
+      setTimeout(()=>{ if(state==='hit'){ state='playing'; countdownActive=true; countdownRemaining=3; } }, 750);
     } else {
       updateHud();
       if(pointer.active) syncLeaderTarget(); // avoid a snap if the leader that was caught gets replaced
@@ -2434,10 +2454,21 @@
     saveProgress();
     checkAchievements();
     sfxGameOver();
-    document.getElementById('endLevelText').textContent = S().caughtBy(tField(theme,'hunterName'));
+    const catchNameMap = {
+      hunter: tField(theme,'hunterName'),
+      crocodile: S().crocodileName,
+      piranha: S().piranhaName,
+      mousetrap: S().mousetrapName,
+      camera: S().cameraName,
+      net: S().netName,
+      bird: S().birdName
+    };
+    const caughtByName = catchNameMap[lastCaughtCategory] || tField(theme,'hunterName');
+    document.getElementById('endLevelText').textContent = S().caughtBy(caughtByName);
     document.getElementById('endSub').textContent = S().caughtSub(level);
     document.getElementById('reachedLabel').textContent = level;
     document.getElementById('bestLabel2').textContent = Math.max(1, progress.bestLevelByTheme[theme.id]||0);
+    document.getElementById('endStarsLabel').textContent = '⭐ ' + (progress.stars||0);
     document.getElementById('caughtIcon').innerHTML = HAPPY_FACE_SVG[theme.id] || HAPPY_FACE_SVG.wolf;
 
     const starsBtn = document.getElementById('starsContinueBtn');
@@ -2765,6 +2796,12 @@
     document.getElementById('hud').style.display='none';
     document.getElementById('meterWrap').style.display='none';
     document.getElementById('startOverlay').style.display='flex';
+    // Clear any achievement/streak toast or in-canvas hint box that might
+    // still be showing — these only auto-dismiss on their own timer or on
+    // a canvas tap, neither of which reliably fires once we've navigated
+    // away from gameplay, so they could otherwise linger on top of the menu.
+    document.getElementById('achToast').classList.remove('show');
+    document.querySelectorAll('.level1-hint').forEach(el => el.remove());
     updateStartText();
   }
 
@@ -2797,6 +2834,9 @@
     if(pointer.active) setPointer(e.clientX, e.clientY);
   });
   window.addEventListener('pointerup', ()=>{ pointer.active=false; });
+  // extra defense against long-press text selection / iOS callout menu on some WebView versions
+  document.addEventListener('contextmenu', e=> e.preventDefault());
+  document.addEventListener('selectstart', e=> e.preventDefault());
   canvas.addEventListener('touchmove', e=>{ e.preventDefault(); }, {passive:false});
 
   // ---------- Update ----------
@@ -2809,6 +2849,7 @@
       countdownRemaining -= dt;
       if(countdownRemaining<=0){
         countdownActive = false;
+        playStartTime = performance.now();
       }
       return; // freeze all movement/detection/timers until the countdown finishes
     }
@@ -2891,7 +2932,7 @@
 
     // hunters rotate (sentry sweep)
     hunters.forEach(h=>{
-      h.angle = h.baseAngle + Math.sin((performance.now()/1000 + h.phase)*h.speed*0.6)*h.swing;
+      h.angle = h.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + h.phase)*h.speed*0.6)*h.swing;
     });
 
     // crocodiles patrol back and forth inside the river, facing their swim direction
@@ -2918,12 +2959,12 @@
 
     // security cameras sweep in place, same style as hunters
     cameras.forEach(c=>{
-      c.angle = c.baseAngle + Math.sin((performance.now()/1000 + c.phase)*c.speed*0.6)*c.swing;
+      c.angle = c.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + c.phase)*c.speed*0.6)*c.swing;
     });
 
     // fishing nets swing on an arm, the hazard is the net-end position
     nets.forEach(n=>{
-      const a = n.baseAngle + Math.sin((performance.now()/1000 + n.phase)*n.speed)*n.swing;
+      const a = n.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + n.phase)*n.speed)*n.swing;
       n.x = n.px + Math.cos(a) * n.armLen;
       n.y = n.py + Math.sin(a) * n.armLen;
     });
@@ -2932,7 +2973,7 @@
     if(herd.length>0){
       const leaderForAim = herd[0];
       birds.forEach(b=>{
-        b.x = b.baseX + Math.sin(performance.now()/1000 + b.driftPhase) * 25;
+        b.x = b.baseX + Math.sin((performance.now()-playStartTime)/1000 + b.driftPhase) * 25;
         b.fireCooldown -= dt;
         if(b.fireCooldown<=0){
           b.fireCooldown = b.fireInterval;
@@ -2951,6 +2992,7 @@
     // per-herd-member danger: each body can independently be spotted
     let anySeen = false;
     let caughtIdx = -1;
+    let caughtByCategory = null;
     for(let i=0;i<herd.length;i++){
       const m = herd[i];
       let seenThis = false;
@@ -2968,8 +3010,8 @@
               if(segmentIntersectsRect(h.x,h.y,m.x,m.y, wallRect(wl))){ inCone = false; break; }
             }
           }
-          if(bump){ bumpedThis = true; break; }
-          if(inCone){ seenThis = true; }
+          if(bump){ bumpedThis = true; caughtByCategory = 'hunter'; break; }
+          if(inCone){ seenThis = true; caughtByCategory = 'hunter'; }
         }
         if(!bumpedThis){
           for(const c of crocodiles){
@@ -2977,18 +3019,18 @@
             const dd = dist(c.x,c.y,m.x,m.y);
             const inCone = dd < c.coneRange && angDiff(c.angle, toM) < c.coneHalf/2;
             const bump = dd < (c.r+m.r+4);
-            if(bump){ bumpedThis = true; break; }
-            if(inCone){ seenThis = true; }
+            if(bump){ bumpedThis = true; caughtByCategory = 'crocodile'; break; }
+            if(inCone){ seenThis = true; caughtByCategory = 'crocodile'; }
           }
         }
         if(!bumpedThis){
           for(const p of piranhas){
-            if(dist(p.x,p.y,m.x,m.y) < (p.r+m.r+3)){ bumpedThis = true; break; }
+            if(dist(p.x,p.y,m.x,m.y) < (p.r+m.r+3)){ bumpedThis = true; caughtByCategory = 'piranha'; break; }
           }
         }
         if(!bumpedThis){
           for(const mt of mousetraps){
-            if(dist(mt.x,mt.y,m.x,m.y) < (mt.r+m.r+2)){ bumpedThis = true; break; }
+            if(dist(mt.x,mt.y,m.x,m.y) < (mt.r+m.r+2)){ bumpedThis = true; caughtByCategory = 'mousetrap'; break; }
           }
         }
         if(!bumpedThis){
@@ -2997,18 +3039,18 @@
             const dd = dist(c2.x,c2.y,m.x,m.y);
             const inCone = dd < c2.coneRange && angDiff(c2.angle, toM) < c2.coneHalf/2;
             const bump = dd < (c2.r+m.r+4);
-            if(bump){ bumpedThis = true; break; }
-            if(inCone){ seenThis = true; }
+            if(bump){ bumpedThis = true; caughtByCategory = 'camera'; break; }
+            if(inCone){ seenThis = true; caughtByCategory = 'camera'; }
           }
         }
         if(!bumpedThis){
           for(const n of nets){
-            if(dist(n.x,n.y,m.x,m.y) < (n.r+m.r+3)){ bumpedThis = true; break; }
+            if(dist(n.x,n.y,m.x,m.y) < (n.r+m.r+3)){ bumpedThis = true; caughtByCategory = 'net'; break; }
           }
         }
         if(!bumpedThis){
           for(const fb of fireballs){
-            if(dist(fb.x,fb.y,m.x,m.y) < (fb.r+m.r+2)){ bumpedThis = true; break; }
+            if(dist(fb.x,fb.y,m.x,m.y) < (fb.r+m.r+2)){ bumpedThis = true; caughtByCategory = 'bird'; break; }
           }
         }
       }
@@ -3040,6 +3082,7 @@
     document.getElementById('meterFill').style.width = (worstDanger*100).toFixed(1)+'%';
 
     if(caughtIdx>=0){
+      lastCaughtCategory = caughtByCategory;
       loseHerdMember(caughtIdx);
       return;
     }
@@ -3098,12 +3141,13 @@
           anySaved = true;
         }
       }
-      // Only resync the target when the leader identity actually changed this
-      // frame (a member reached the goal) — calling this every single frame
-      // regardless would overwrite the leader's real target with the pointer's
-      // default (0,0) position before the player has touched the screen,
-      // making the character visibly "walk itself" toward a corner at level start.
-      if(anySaved && herd.length>0 && pointer.active) syncLeaderTarget();
+      // Resync the new leader's target whenever the leader identity changed
+      // this frame (a member reached the goal) — pointer.x/y retain their last
+      // known value even after release, so this is safe even for a single tap
+      // that's already been released (previously gated on pointer.active, which
+      // caused the new leader to keep stale/undefined tx/ty and wander instead
+      // of continuing toward the goal after a quick single click).
+      if(anySaved && herd.length>0) syncLeaderTarget();
       if(herd.length===0){
         const completedLevel = level;
         level++;
@@ -4594,7 +4638,7 @@
         }
         el.addEventListener('click', ()=> handleLockedThemeClick(el, i));
       } else {
-        el.innerHTML = `<span class="glyph">${t.glyph}</span><span>${tField(t,'preyName')}</span>`;
+        el.innerHTML = `<span class="glyph">${t.glyph}</span><span>vs ${tField(t,'preyName')}</span>`;
         el.addEventListener('click', ()=>{
           themeIndex = i;
           theme = THEMES[themeIndex];
@@ -4655,6 +4699,7 @@
     document.getElementById('closeShopBtn').textContent = S().closeLink;
     document.getElementById('endEyebrowText').textContent = S().endEyebrow;
     document.getElementById('reachedLabelText').textContent = S().reachedLabel;
+    document.getElementById('endStarsLabelText').textContent = S().endStarsCaption;
     document.getElementById('endBestLabelText').textContent = S().hudBestLabel;
     document.getElementById('shareBtn').textContent = S().shareBtn;
     document.getElementById('retryBtn').textContent = progress.lives<=0 ? S().backToMenuBtn : S().retryBtn;
