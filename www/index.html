@@ -2636,12 +2636,18 @@
     let rewardListener, dismissListener;
     showAdLoading();
     try{
+      let resolveDismissed;
+      const dismissed = new Promise(res=>{ resolveDismissed = res; });
       rewardListener = await AdMob.addListener('onRewardedVideoAdReward', ()=>{ admobRewardEarned = true; });
-      dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{});
+      dismissListener = await AdMob.addListener('onRewardedVideoAdDismissed', ()=>{ resolveDismissed(); });
       await withTimeout(AdMob.prepareRewardVideoAd({ adId: getRewardedUnitId() }), 6000);
       await withTimeout(AdMob.showRewardVideoAd(), 8000);
-      // give the dismiss/reward events a moment to fire before we check the flag
-      await new Promise(res=>setTimeout(res, 600));
+      // showRewardVideoAd() resolves as soon as the ad is DISPLAYED, not when
+      // the viewer finishes watching it — the actual reward event only fires
+      // near the end of playback. Wait for the real "dismissed" signal (with
+      // a generous timeout as a safety net) instead of a short fixed delay,
+      // or we'd check the reward flag long before it has a chance to be set.
+      await withTimeout(dismissed, 60000).catch(()=>{});
       return admobRewardEarned;
     }catch(e){
       showAdNotAvailableToast();
