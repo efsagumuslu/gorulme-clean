@@ -356,6 +356,162 @@
   }
   .skin-btn.selected{ background:transparent; border:1.5px solid #7fae86; color:#7fae86; }
   .skin-btn.locked{ background:transparent; border:1.5px solid var(--line); color:var(--muted); }
+
+  /* =====================================================================
+     Responsive polish — keeps every screen balanced and tidy from 320px
+     wide phones up to large ones, in every language
+     ===================================================================== */
+  :root{ --edge: clamp(14px, 5vw, 24px); }
+
+  /* shared overlay spacing + typography */
+  .overlay{
+    padding-left:var(--edge); padding-right:var(--edge);
+    padding-top:max(56px, calc(env(safe-area-inset-top, 0px) + 46px));
+  }
+  .eyebrow{ font-size:clamp(10.5px, 3.1vw, 12px); letter-spacing:clamp(0.1em, 0.5vw, 0.18em); margin-bottom:8px; }
+  h1{ font-size:clamp(24px, 7.6vw, 32px); margin:0 0 8px 0; text-wrap:balance; }
+  .sub{ font-size:clamp(12.5px, 3.6vw, 14px); margin:0 0 12px 0; text-wrap:balance; }
+  .star-badge{ font-size:clamp(13px, 3.8vw, 15px); margin-bottom:6px; }
+  .skin-btn{ white-space:normal; line-height:1.2; text-align:center; }
+  .ach-row .skin-btn{ max-width:44%; }
+  .play-btn{ font-size:clamp(15px, 4.4vw, 17px); padding:clamp(12px, 3.6vw, 15px); }
+  .footer-hint{ margin-top:18px; font-size:clamp(11px, 3.2vw, 12.5px); text-wrap:balance; }
+
+  /* settings gear lives in a fixed top-right corner, never on top of the title */
+  .corner-gear{
+    position:fixed; top:calc(env(safe-area-inset-top, 0px) + 10px); right:clamp(10px, 3.4vw, 16px);
+    width:38px; height:38px; padding:0; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px; background:rgba(19,24,38,0.72); z-index:30;
+  }
+
+  /* menu rows: equal columns, tidy rhythm */
+  .link-row{ display:flex; gap:14px; justify-content:center; margin:2px 0 8px; }
+  .lives-row{ margin-bottom:10px; }
+  .quest-row-wrap{
+    display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:clamp(6px,2vw,8px);
+    width:100%; margin-bottom:8px; align-items:stretch;
+  }
+  .quest-card{ min-width:0; padding:8px 10px; display:flex; flex-direction:column; justify-content:space-between; gap:4px; }
+  .quest-title{ font-size:clamp(9.5px, 2.8vw, 10.5px); line-height:1.25; margin-bottom:4px; overflow-wrap:anywhere; }
+  .quest-status{ font-size:clamp(12px, 3.5vw, 13px); line-height:1.25; overflow-wrap:anywhere; }
+  .icon-row{
+    display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:clamp(5px,1.8vw,8px);
+    width:100%; margin-bottom:14px;
+  }
+  .icon-row .icon-link-btn{
+    min-width:0; padding:8px 2px; font-size:clamp(10px, 2.65vw, 11px); line-height:1.15;
+    white-space:normal; text-align:center; justify-content:flex-start;
+    overflow-wrap:normal; word-break:normal; hyphens:none;   /* words are never split mid-word */
+  }
+  .icon-row .icon-link-btn .glyph{ font-size:clamp(15px, 4.6vw, 18px); }
+
+  /* narrower phones (<375px): 2x2 menu buttons keep labels at a readable size and unbroken */
+  @media (max-width:374px){
+    .icon-row{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+    .icon-row .icon-link-btn{ flex-direction:row; justify-content:center; align-items:center; gap:8px; font-size:11.5px; padding:9px 6px; }
+  }
+
+  /* in-game intro hints use their natural width (up to 88vw) instead of being squeezed into half the screen */
+  .level1-hint{ width:max-content; font-size:clamp(14px, 4.2vw, 17px); padding:clamp(9px,2.8vw,12px) clamp(14px,4.4vw,20px); }
+
+  /* in-game HUD: pause + settings are ALWAYS fully on screen */
+  .hud{ padding-left:clamp(10px, 3.4vw, 16px); padding-right:clamp(10px, 3.4vw, 16px); }
+  .hud-top-row{ gap:clamp(4px,1.6vw,8px); }
+  .hud-group{ gap:clamp(4px, 1.6vw, 8px); min-width:0; }
+  .hud-group:last-child{ flex-shrink:0; }
+  .hud-pill{ padding:clamp(5px,1.7vw,7px) clamp(8px,3vw,14px); font-size:clamp(11px, 3.3vw, 13px); white-space:nowrap; }
+  .hud-pill span{ margin-right:clamp(3px,1.2vw,5px); }
+  .hud-pill span:last-child{ margin-right:0; }
+  .pause-btn{ width:clamp(32px, 9.4vw, 38px); height:clamp(32px, 9.4vw, 38px); flex-shrink:0; }
+  .hud-second-row{ flex-wrap:wrap; gap:clamp(4px,1.6vw,8px); }
+  @media (max-width:440px){
+    #bestPill #hudBestLabel{ display:none; }
+    #bestPill::before{ content:'🏅'; margin-right:clamp(3px,1.2vw,5px); }
+  }
+
+  /* short phones (e.g. 568px / 640px tall): tighten vertical spacing so menus fit without scrolling */
+  @media (max-height:700px){
+    .overlay{ padding-top:max(50px, calc(env(safe-area-inset-top, 0px) + 42px)); padding-bottom:max(14px, env(safe-area-inset-bottom)); }
+    .eyebrow{ margin-bottom:5px; }
+    h1{ margin-bottom:6px; }
+    .sub{ margin-bottom:8px; }
+    .lives-row{ margin-bottom:6px; }
+    .quest-row-wrap{ margin-bottom:6px; }
+    .icon-row{ margin-bottom:10px; }
+    .footer-hint{ margin-top:12px; }
+    .stat-row{ margin-top:12px; }
+    #endOverlay .play-btn{ padding:11px; }
+  }
+
+  /* ===== Level map: a winding meadow path, the lamb stands on the level you are at ===== */
+  #levelMapOverlay{
+    padding:0; flex-direction:column; align-items:stretch; justify-content:flex-start;
+    overflow:hidden; background:#3f8a4a;
+  }
+  .map-header{
+    position:relative; z-index:3; flex-shrink:0;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:max(14px, calc(env(safe-area-inset-top, 0px) + 8px)) var(--edge) 12px;
+    background:linear-gradient(180deg, rgba(14,28,17,0.94), rgba(14,28,17,0.78) 70%, rgba(14,28,17,0));
+  }
+  .map-titles{ text-align:left; min-width:0; }
+  .map-titles .eyebrow{ margin-bottom:2px; }
+  .map-titles h1{ font-size:clamp(19px, 5.6vw, 24px); margin:0; text-align:left; }
+  .map-close{
+    flex-shrink:0; padding:9px 16px; border-radius:999px;
+    border:1.5px solid rgba(255,255,255,0.28); background:rgba(14,28,17,0.55);
+    color:var(--moon); font-size:13px; font-weight:700; cursor:pointer; touch-action:manipulation;
+  }
+  .map-scroll{
+    position:relative; flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch;
+    margin-top:-34px;
+    background-color:#4a9450;
+    background-image:repeating-linear-gradient(180deg, rgba(255,255,255,0.045) 0 80px, rgba(0,0,0,0.045) 80px 160px);
+    background-attachment:local;
+  }
+  .map-inner{ position:relative; width:100%; max-width:520px; margin:0 auto; }
+  .map-svg{ position:absolute; left:0; top:0; pointer-events:none; }
+  .map-node{
+    position:absolute; width:46px; height:46px; margin:-23px 0 0 -23px; padding:0;
+    border-radius:50%; border:3px solid #a8812f;
+    background:radial-gradient(circle at 35% 30%, #fff3bf, #f2cb52 55%, #dba83e);
+    color:#4a3410; font-size:16px; font-weight:800; line-height:1;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 3px 0 #7d5f1c, 0 7px 10px rgba(0,0,0,0.28);
+    cursor:pointer; touch-action:manipulation; z-index:2;
+  }
+  .map-node.big3{ font-size:13px; }
+  .map-node.current{
+    width:54px; height:54px; margin:-27px 0 0 -27px; font-size:19px;
+    background:radial-gradient(circle at 35% 30%, #ffffff, #ffe27a 55%, #f0b93a);
+    border-color:#e0554a; box-shadow:0 0 0 5px rgba(255,255,255,0.35), 0 3px 0 #7d5f1c, 0 8px 14px rgba(0,0,0,0.3);
+  }
+  .map-node.boss{ border-color:#c9584f; width:52px; height:52px; margin:-26px 0 0 -26px; }
+  .map-node.boss.current{ width:58px; height:58px; margin:-29px 0 0 -29px; }
+  .map-node.locked{
+    background:radial-gradient(circle at 35% 30%, #8fb089, #6d9168 60%, #5d8159);
+    border-color:#4f7249; color:rgba(255,255,255,0.8); box-shadow:0 3px 0 #3f5e3b; cursor:default; opacity:0.85;
+  }
+  .map-crown{ position:absolute; left:50%; top:-15px; transform:translateX(-50%); font-size:17px; line-height:1; pointer-events:none; }
+  .map-stars{
+    position:absolute; left:50%; top:100%; transform:translateX(-50%); margin-top:3px;
+    font-size:12px; letter-spacing:1px; line-height:1; white-space:nowrap; pointer-events:none;
+    color:#ffd25a; text-shadow:0 1px 2px rgba(0,0,0,0.55);
+  }
+  .map-stars .off{ color:rgba(255,255,255,0.4); }
+  .map-lamb{
+    position:absolute; z-index:2; pointer-events:none; width:64px; height:64px;
+    margin:-72px 0 0 -32px; animation:lambHop 1.1s ease-in-out infinite;
+  }
+  .map-lamb canvas{ display:block; }
+  @keyframes lambHop{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-7px); } }
+  .map-jump{
+    position:absolute; right:clamp(12px, 4vw, 20px); bottom:max(18px, calc(env(safe-area-inset-bottom, 0px) + 12px));
+    z-index:5; width:46px; height:46px; border-radius:50%; font-size:22px; line-height:1;
+    border:2px solid rgba(255,255,255,0.45); background:rgba(14,28,17,0.7); cursor:pointer; touch-action:manipulation;
+    display:flex; align-items:center; justify-content:center; padding:0;
+  }
 </style>
 </head>
 <body>
@@ -379,7 +535,7 @@
         <div class="hud-pill" id="livesPill"><span id="livesLabel">♥♥♥</span></div>
       </div>
       <div class="hud-group">
-        <div class="hud-pill"><span id="hudBestLabel">En İyi</span><span id="bestLabel">1</span></div>
+        <div class="hud-pill" id="bestPill"><span id="hudBestLabel">En İyi</span><span id="bestLabel">1</span></div>
         <button class="pause-btn" id="settingsBtnHud" aria-label="Ayarlar">⚙️</button>
         <button class="pause-btn" id="pauseBtn" aria-label="Duraklat">❚❚</button>
       </div>
@@ -400,13 +556,13 @@
 
   <div class="overlay" id="startOverlay">
     <div class="panel">
-      <button class="icon-link-btn" id="settingsBtn" style="position:absolute; top:14px; right:14px; width:auto; padding:8px 10px;">⚙️</button>
+      <button class="icon-link-btn corner-gear" id="settingsBtn" aria-label="Ayarlar">⚙️</button>
       <div class="eyebrow" id="eyebrowText">Gölgede Kal</div>
       <h1 id="titleText">Stay Unseen</h1>
       <p class="sub" id="subText">Bakışın dışında kal, karşıya geç. Işığa girersen ele verirsin.</p>
 
       <div class="star-badge">⭐ <span id="starCount">0</span><span style="color:var(--muted); font-weight:600; margin-left:10px;"><span id="themeBestLabel">🏅 En İyi: </span><span id="themeBestCount">1</span></span></div>
-      <div style="display:flex; gap:14px; justify-content:center; margin:-2px 0 4px;">
+      <div class="link-row">
         <div id="levelMapLink" style="color:var(--muted); font-size:11.5px; font-weight:700; text-decoration:underline; cursor:pointer;">🗺️ Bölüm Haritası</div>
       </div>
 
@@ -417,19 +573,17 @@
       <button class="skin-btn" id="watchAdLifeBtn" style="display:none; margin-bottom:6px;">📺 İzle, Anında Can Kazan</button>
       <button class="skin-btn" id="starLifeBtn" style="display:none; margin-bottom:8px;">⭐ Yıldızla Can Al (15⭐)</button>
 
-      <div style="display:flex; gap:8px; width:100%; margin-bottom:6px;">
+      <div class="quest-row-wrap">
         <div class="quest-card" id="questSummaryCard" style="cursor:pointer;">
           <div class="quest-title" id="questSummaryTitleText">📅 Günlük Görevler</div>
-          <div class="quest-status" id="questSummaryStatus" style="font-size:13px;">0/8 Tamamlandı</div>
+          <div class="quest-status" id="questSummaryStatus">0/8 Tamamlandı</div>
         </div>
         <div class="quest-card" id="spinWheelCard" style="cursor:pointer;">
           <div class="quest-title" id="spinCardTitleText">🎡 Şans Çarkı</div>
-          <div class="quest-status" id="spinCardStatus" style="font-size:13px;">Çevirmeye hazır!</div>
+          <div class="quest-status" id="spinCardStatus">Çevirmeye hazır!</div>
         </div>
       </div>
 
-      <div class="theme-tabs" id="themeTabs"></div>
-      <div class="lock-hint" id="lockHintText">🔒 Diğer temalar 100⭐ ile açılır</div>
 
       <div class="icon-row">
         <div class="icon-link-btn" id="openAchBtn"><span class="glyph">🏆</span><span id="openAchLabel">Başarımlar</span></div>
@@ -441,7 +595,6 @@
       <button class="play-btn" id="continueBtn" style="margin-bottom:10px; display:none; background:transparent; border:1.5px solid var(--amber); color:var(--amber); box-shadow:none;">Kaldığın Yerden Devam Et</button>
       <button class="play-btn" id="playBtn">Başla</button>
 
-      <div class="footer-hint" id="footerHintText">Parmağınla / fareyle sürükleyerek yönet</div>
     </div>
   </div>
 
@@ -531,12 +684,15 @@
   </div>
 
   <div class="overlay list-overlay" id="levelMapOverlay" style="display:none;">
-    <div class="panel">
-      <div class="eyebrow" id="levelMapEyebrowText">Bölüm Haritası</div>
-      <h1 style="font-size:24px;" id="levelMapTitleText">Bir Bölüm Seç</h1>
-      <div class="scroll-list" id="levelMapGrid" style="display:grid; grid-template-columns:repeat(5,1fr); gap:8px; max-height:48vh;"></div>
-      <button class="play-btn" id="closeLevelMapBtn" style="margin-top:14px; background:transparent; border:1.5px solid var(--line); color:var(--moon); box-shadow:none;">Kapat</button>
+    <div class="map-header">
+      <div class="map-titles">
+        <div class="eyebrow" id="levelMapEyebrowText">Bölüm Haritası</div>
+        <h1 id="levelMapTitleText">Bir Bölüm Seç</h1>
+      </div>
+      <button class="map-close" id="closeLevelMapBtn">Kapat</button>
     </div>
+    <div class="map-scroll" id="levelMapGrid"></div>
+    <button class="map-jump" id="mapJumpBtn" aria-label="Lamb">🐑</button>
   </div>
 
   <div class="overlay" id="pauseOverlay" style="display:none;">
@@ -620,106 +776,6 @@
       hunterBody:'#4c4b52', hunterDark:'#34333a',
       preyBody:'#eee7d9', preyDark:'#d8cfba',
       deco:'meadow'
-    },
-    {
-      id:'cat', glyph:'🐈', color:'#d9a441', accent:'#e0a83f', locked:true,
-      hunterName:'Kedi', preyName:'Fare',
-      title:'Kedi & Fare', sub:'Kedinin gözünden kaç, deliğe ulaş.',
-      hunterNameEn:'Cat', preyNameEn:'Mouse',
-      titleEn:'Cat & Mouse', subEn:'Dodge the cat\'s gaze, reach the hole.',
-      hunterNameFr:'Chat', preyNameFr:'Souris',
-      titleFr:'Chat & Souris', subFr:'Échappe au regard du chat, atteins le trou.',
-      hunterNameEs:'Gato', preyNameEs:'Ratón',
-      titleEs:'Gato & Ratón', subEs:'Esquiva la mirada del gato, llega al agujero.',
-      hunterNameIt:'Gatto', preyNameIt:'Topo',
-      titleIt:'Gatto & Topo', subIt:'Evita lo sguardo del gatto, raggiungi la tana.',
-      hunterNameRu:'Кот', preyNameRu:'Мышь',
-      titleRu:'Кот и Мышь', subRu:'Уклоняйся от взгляда кота, доберись до норки.',
-      bg0:'#12100c', bg1:'#1c1812', ground:'#201a12',
-      dayBg0:'#241d13', dayBg1:'#3a2c18',
-      hunterBody:'#c98a3f', hunterDark:'#8f5f26',
-      preyBody:'#a79c8f', preyDark:'#847a70',
-      deco:'boxes'
-    },
-    {
-      id:'alien', glyph:'👽', color:'#6fae8f', accent:'#5fd6a8', locked:true,
-      hunterName:'Uzaylı', preyName:'İnsan',
-      title:'Uzaylı & İnsan', sub:'Tarayıcı ışının dışında kal, kapsüle ulaş.',
-      hunterNameEn:'Alien', preyNameEn:'Human',
-      titleEn:'Alien & Human', subEn:'Stay outside the scanner beam, reach the escape pod.',
-      hunterNameFr:'Extraterrestre', preyNameFr:'Humain',
-      titleFr:'Extraterrestre & Humain', subFr:'Reste hors du faisceau du scanner, atteins la capsule.',
-      hunterNameEs:'Alienígena', preyNameEs:'Humano',
-      titleEs:'Alienígena & Humano', subEs:'Mantente fuera del haz del escáner, llega a la cápsula.',
-      hunterNameIt:'Alieno', preyNameIt:'Umano',
-      titleIt:'Alieno & Umano', subIt:'Resta fuori dal raggio dello scanner, raggiungi la capsula.',
-      hunterNameRu:'Пришелец', preyNameRu:'Человек',
-      titleRu:'Пришелец и Человек', subRu:'Держись подальше от луча сканера, доберись до капсулы.',
-      bg0:'#0a0e16', bg1:'#101728', ground:'#0d1420',
-      dayBg0:'#151f30', dayBg1:'#213048',
-      hunterBody:'#5fae7f', hunterDark:'#3d7a58',
-      preyBody:'#e0b98f', preyDark:'#b8906a',
-      deco:'stars'
-    },
-    {
-      id:'bear', glyph:'🐻', color:'#4a90c9', accent:'#4a90c9', locked:true,
-      hunterName:'Ayı', preyName:'Balık',
-      title:'Ayı & Balık', sub:'Ayının bakışından kaç, güvenli ine ulaş.',
-      hunterNameEn:'Bear', preyNameEn:'Fish',
-      titleEn:'Bear & Fish', subEn:'Dodge the bear\'s gaze, reach the safe den.',
-      hunterNameFr:'Ours', preyNameFr:'Poisson',
-      titleFr:'Ours & Poisson', subFr:'Échappe au regard de l\'ours, atteins la tanière sûre.',
-      hunterNameEs:'Oso', preyNameEs:'Pez',
-      titleEs:'Oso & Pez', subEs:'Esquiva la mirada del oso, llega a la guarida segura.',
-      hunterNameIt:'Orso', preyNameIt:'Pesce',
-      titleIt:'Orso & Pesce', subIt:'Evita lo sguardo dell\'orso, raggiungi la tana sicura.',
-      hunterNameRu:'Медведь', preyNameRu:'Рыба',
-      titleRu:'Медведь и Рыба', subRu:'Уклоняйся от взгляда медведя, доберись до safe-логова.',
-      bg0:'#0c1614', bg1:'#16241f', ground:'#1a2a24',
-      dayBg0:'#1e332c', dayBg1:'#2f4a3f',
-      hunterBody:'#6b4a35', hunterDark:'#4a3220',
-      preyBody:'#e8955a', preyDark:'#c9723a',
-      deco:'riverbank'
-    },
-    {
-      id:'school', glyph:'👩‍🏫', color:'#e8a33d', accent:'#e8a33d', locked:true,
-      hunterName:'Öğretmen', preyName:'Öğrenci',
-      title:'Öğretmen & Öğrenci', sub:'Öğretmenin bakışından kaç, kopya kağıdına ulaş.',
-      hunterNameEn:'Teacher', preyNameEn:'Student',
-      titleEn:'Teacher & Student', subEn:'Dodge the teacher\'s gaze, reach the cheat sheet.',
-      hunterNameFr:'Professeur', preyNameFr:'Élève',
-      titleFr:'Professeur & Élève', subFr:'Échappe au regard du professeur, atteins l\'antisèche.',
-      hunterNameEs:'Profesor', preyNameEs:'Estudiante',
-      titleEs:'Profesor & Estudiante', subEs:'Esquiva la mirada del profesor, llega a la chuleta.',
-      hunterNameIt:'Insegnante', preyNameIt:'Studente',
-      titleIt:'Insegnante & Studente', subIt:'Evita lo sguardo dell\'insegnante, raggiungi il bigliettino.',
-      hunterNameRu:'Учитель', preyNameRu:'Ученик',
-      titleRu:'Учитель и Ученик', subRu:'Уклоняйся от взгляда учителя, доберись до шпаргалки.',
-      bg0:'#1a140c', bg1:'#2a2015', ground:'#241c12',
-      dayBg0:'#3d3020', dayBg1:'#5a4530',
-      hunterBody:'#3a4a6b', hunterDark:'#242e42',
-      preyBody:'#e8e4d8', preyDark:'#c4bfa8',
-      deco:'classroom'
-    },
-    {
-      id:'halloween', glyph:'🎃', color:'#e8833d', accent:'#ff8c3d', locked:true, seasonal:{startMonth:10,startDay:20,endMonth:11,endDay:2}, shape:'wolf',
-      hunterName:'Hayalet', preyName:'Cadı Çırağı',
-      title:'Cadılar Bayramı Kaçışı', sub:'Hayaletin bakışından kaç, kabak fenerine ulaş.',
-      hunterNameEn:'Ghost', preyNameEn:'Trick-or-Treater',
-      titleEn:'Halloween Escape', subEn:'Stay out of the ghost\'s sight, reach the jack-o\'-lantern.',
-      hunterNameFr:'Fantôme', preyNameFr:'Enfant Déguisé',
-      titleFr:'Évasion d\'Halloween', subFr:'Reste hors de la vue du fantôme, atteins la citrouille.',
-      hunterNameEs:'Fantasma', preyNameEs:'Niño Disfrazado',
-      titleEs:'Escape de Halloween', subEs:'Mantente fuera de la vista del fantasma, llega a la calabaza.',
-      hunterNameIt:'Fantasma', preyNameIt:'Bambino in Costume',
-      titleIt:'Fuga di Halloween', subIt:'Resta fuori dalla vista del fantasma, raggiungi la zucca.',
-      hunterNameRu:'Призрак', preyNameRu:'Ребёнок в Костюме',
-      titleRu:'Побег на Хэллоуин', subRu:'Не попадайся на глаза призраку, доберись до тыквы.',
-      bg0:'#150a1a', bg1:'#241230', ground:'#1c0f24',
-      dayBg0:'#2e1838', dayBg1:'#452554',
-      hunterBody:'#d8d0e8', hunterDark:'#a89ac0',
-      preyBody:'#e8833d', preyDark:'#b8602a',
-      deco:'halloween'
     }
   ];
   let themeIndex = 0;
@@ -764,11 +820,10 @@
       resumeBtn:'Devam Et', restartLevelBtn:'Bölüme Yeniden Başla', quitBtn:'Ana Menüye Dön',
       endEyebrow:'Görüldün', hudLevelLabel:'Bölüm', hudBestLabel:'En İyi',
       themeBestPrefix:'🏅 En İyi: ',
-      starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)', waterLabel:'Su', riverIntroTitle:'Yeni Bir Avcı Geldi!', riverIntroDesc:'Derede timsahlar var, dikkatli ol — onlar da seni görebilir!', piranhaIntroTitle:'Piranha Sürüsü!', piranhaIntroDesc:'Küçük ama hızlılar — değdiklerinde anında yakalanırsın. Kaplumbağanın üstü güvenli!', mousetrapIntroTitle:'Fare Kapanı!', mousetrapIntroDesc:'Yere gizlenmiş kapanlara basma — anında yakalanırsın!', cameraIntroTitle:'Güvenlik Kamerası!', cameraIntroDesc:'Sabit bir kamera etrafı tarıyor, ışığından uzak dur!', netIntroTitle:'Balık Ağı!', netIntroDesc:'Sallanan ağa yakalanma, hareketini iyi zamanla!', windIntroTitle:'Rüzgarlı Bölge!', windIntroDesc:'Bu bölgede rüzgar seni yana doğru itiyor, kontrolü zor olabilir!', birdIntroTitle:'Kurtlar Gitti, Kuşlar Geldi!', birdIntroDesc:'Gökten ateş topları geliyor, onlardan kaç! Timsahlar hâlâ derede.', pitIntroTitle:'Çukurlara Dikkat!', pitIntroDesc:'Yerdeki çukurlara düşme, etraflarından dolaş!', pitName:'Çukur', levelMapLinkText:'🗺️ Bölüm Haritası', levelMapEyebrow:'Bölüm Haritası', levelMapTitle:'Bir Bölüm Seç', closeLevelMapBtnText:'Kapat', adPrefsNotAvailable:'Reklam tercihleri şu an senin bölgen için geçerli değil (bu ayar yalnızca AB/İngiltere/İsviçre kullanıcıları için gösteriliyor).',
+      starsContinuePrefix:'Yıldız Harcayarak Devam Et (-', starsSuffix:'⭐)', waterLabel:'Su', riverIntroTitle:'Yeni Bir Avcı Geldi!', riverIntroDesc:'Derede timsahlar var, dikkatli ol — onlar da seni görebilir!', piranhaIntroTitle:'Piranha Sürüsü!', piranhaIntroDesc:'Küçük ama hızlılar — değdiklerinde anında yakalanırsın. Kaplumbağanın üstü güvenli!', windIntroTitle:'Rüzgarlı Bölge!', windIntroDesc:'Bu bölgede rüzgar seni yana doğru itiyor, kontrolü zor olabilir!', birdIntroTitle:'Kurtlar Gitti, Kuşlar Geldi!', birdIntroDesc:'Gökten ateş topları geliyor, onlardan kaç! Timsahlar hâlâ derede.', pitIntroTitle:'Çukurlara Dikkat!', pitIntroDesc:'Yerdeki çukurlara düşme, etraflarından dolaş!', pitName:'Çukur', levelMapLinkText:'🗺️ Bölüm Haritası', levelMapEyebrow:'Bölüm Haritası', levelMapTitle:'Bir Bölüm Seç', closeLevelMapBtnText:'Kapat', adPrefsNotAvailable:'Reklam tercihleri şu an senin bölgen için geçerli değil (bu ayar yalnızca AB/İngiltere/İsviçre kullanıcıları için gösteriliyor).',
       adContinue:'Reklam İzle, +1 Can Kazan', adPlaying:'Reklam oynatılıyor...', adLoadingText:'Reklam yükleniyor…', adNotAvailable:'Şu an reklam bulunamadı, birazdan tekrar dene',
-      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', endStarsCaption:'Yıldız', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.', storyNarrator_cat:'Fare Anne', storyText_cat:'Kedi deliğimizin yakınında dolaşıyor! Yavrularımı güvenle eve ulaştır.', storyNarrator_alien:'Koloni Lideri', storyText_alien:'Uzaylılar halkımızı kaçırıyor! Onları güvenle gemiye ulaştır.', storyNarrator_bear:'Yaşlı Balıkçı', storyText_bear:'Aç bir ayı nehri bekliyor! Balıkları güvenle göle ulaştır.', storyNarrator_school:'Endişeli Veli', storyText_school:'Okuldan sonra kalma cezası kapıda! Öğrencileri öğretmenden gizlice eve ulaştır.',
-      hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
-      caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.", crocodileName:'Timsah', piranhaName:'Piranha', mousetrapName:'Fare Kapanı', cameraName:'Güvenlik Kamerası', netName:'Balık Ağı', birdName:'Kuş',
+      shareBtn:'Skoru Paylaş', retryBtn:'Baştan Başla', backToMenuBtn:'Ana Menüye Dön', reachedLabel:'Ulaşılan', endStarsCaption:'Yıldız', riskBonusLabel:'RİSK BONUSU', bonusStarsLabel:'BONUS', bonusToastDesc:'Risk ve bonus yıldızları', bossLabel:'PATRON BÖLÜM', bossIntroTitle:'Patron Bölüm!', bossIntroDesc:'Sahada büyük ve hızlı bir patron avcı var. Onu atlatırsan +5 ⭐ bonus kazanırsın!', storyBtn:'Hikaye', storyContinueBtn:'Hadi Gidelim!', storyNarrator_wolf:'Çoban', storyText_wolf:'Kurtlar çayırı bastı! Kuzularımı güvenle eve götür, onları koru.',       hitTitle:'Can Kaybettin!', hitSuffix:' can kaldı',
+      caughtBy:v=>v+' seni gördü', caughtSub:lv=>"Bölüm "+lv+"'de yakalandın.", crocodileName:'Timsah', piranhaName:'Piranha', birdName:'Kuş',
       levelUpLabel:lv=>'Bölüm '+lv,
       dailyQuestTitle:'📅 Günlük Görevler', bonusQuestTitle:'🎁 Ekstra Görev', bonusQuestLockedDesc:'Reklam izleyerek ekstra bir görev aç',
       dqSummary:(d,t)=>d+'/'+t+' Tamamlandı',
@@ -776,15 +831,14 @@
       dailyQuestToastLabel:'Günlük Görev',
       dailyQuestCompleteTitle:'Günlük Görev Tamamlandı',
       dailyQuestRewardDesc:s=>'+'+s+' Yıldız kazandın',
-      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', limitedTimeLabel:'🎃 SINIRLI SÜRE', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', newBestStarsText:'✨ YENİ REKOR!', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
+      achToastLabel:'Başarım Kazandın', streakToastLabel:'GÜNLÜK SERİ', streakToastTitle:d=>d+'. Gün!', streakToastDesc:s=>'Geri döndüğün için +'+s+' yıldız!', spinEyebrow:'Günlük Şans', spinTitle:'Çarkı Çevir!', spinBtnText:'Çevir!', spinCloseBtn:'Kapat', spinCardTitle:'🎡 Şans Çarkı', spinReadyStatus:'Çevirmeye hazır!', spinDoneStatus:t=>'Yarın tekrar gel: '+t, spinResultText:n=>'+'+n+' yıldız kazandın!', spinBtnDisabled:'Bugün çevirdin', newBestStarsText:'✨ YENİ REKOR!', notifLifeTitle:'Canın doldu! 🐺', notifLifeBody:'Yeni bir maceraya hazırsın, gel oyna!',
       shareText:(t,lv)=>'Stay Unseen: Sneak Escape ('+t+") oyununda Bölüm "+lv+"'e ulaştım! 🎮",
       shareCopied:'Skor panoya kopyalandı!',
       skinSelected:'Seçili', skinSelect:'Seç',
       dqReachLevel:t=>"Tek oyunda Bölüm "+t+"'a ulaş",
       dqCollectFood:t=>"Bugün "+t+" yem topla",
       dqNoHit:t=>"Can kaybetmeden "+t+" bölüm geç",
-      foodWolf:'Ot', foodCat:'Peynir', foodAlien:'Enerji', foodBear:'Yosun', foodSchool:'Kalem',
-      themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
+      foodWolf:'Ot',       themeLocked:'Kilitli', watchToUnlock:'Reklam İzle, Kilidi Aç', unlockingTheme:'Açılıyor...',
       powerUpIntroTitle:'Güçlendirmeler Açıldı!', powerUpIntroDesc:'Görünmezlik ve Hız güçlendirmelerini yıldızla ya da reklam izleyerek kullanabilirsin.',
       wallIntroTitle:'Hareketli Duvar!', wallIntroDesc:'Duvarlar hem yolunu keser hem avcının görüşünü engeller — arkasına saklanabilirsin.', safeZoneIntroTitle:'Güvenli Bölge!', safeZoneIntroDesc:'Parlayan yeşil alanın içindeyken hiçbir avcı seni göremez.', foodIntroTitle:'Yeni Kural!', foodIntroDesc:n=>'Bu bölümde önce '+n+' toplaman gerekiyor, hedef ancak o zaman açılır.', foodRemainingPopup:(n,item)=>n+' '+item+' kaldı', foodReadyPopup:'Artık eve gidebilirsin!',
       nextLifeIn:t=>'Sonraki can: '+t, watchAdInstantLife:'📺 İzle, Anında Can Kazan', buyLifeWithStars:n=>'⭐ Yıldızla Can Al ('+n+'⭐)',
@@ -792,8 +846,7 @@
       shopPricingIntroTitle:'Mağaza Bilgisi', shopPricingIntroDesc:n=>'Her görünüm 20 yıldız. Yeterli yıldızın yoksa reklam izleyerek +'+n+' yıldız kazanabilirsin.',
       milestoneEyebrow:'Tebrikler', milestoneTitle:lv=>'Bölüm '+lv+"'u Tamamladın!", milestoneSub:'Harika gidiyorsun, böyle devam et! Bu başarını arkadaşlarınla paylaş.', milestoneContinueBtn:'Devam Et',
       powerUpInvis:'Görünmez', powerUpSpeed:'Hız', watchAdForStars:n=>'İzle +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Diğer temalar '+n+'⭐ ile açılır',
-      langBtnLabel:'EN',
+            langBtnLabel:'EN',
       tutLink:'Nasıl Oynanır?', tutEyebrow:'Nasıl Oynanır',
       tutSkip:'Atla', tutNext:'İleri', tutDone:'Anladım',
       tutorialSteps:[
@@ -801,8 +854,7 @@
         {icon:'👁️', title:'Görülme', desc:'Avcının parlayan bakış konisine girersen fark edilirsin. Konide kaldıkça hızla yakalanırsın.'},
         {icon:'🏠', title:'Hedefe Ulaş', desc:'Karşıdaki eve/kulübeye ulaşarak bölümü tamamla.'},
         {icon:'🐑', title:'Sürünü Koru', desc:'Bazı bölümlerde arkanda seni takip eden arkadaşların olur. Onlar da avcı tarafından görülebilir!'},
-        {icon:'⭐', title:'Yem Topla', desc:'Bazı bölümlerde önce yem toplaman gerekir, hedef ancak o zaman açılır.'},
-        {icon:'🔓', title:'Yeni Temalar Aç', desc:'Bölüm tamamlayarak yıldız kazan. 100 yıldızla yeni bir tema açabilir ya da reklam izleyerek yıldız kazanabilirsin.'}
+        {icon:'⭐', title:'Yem Topla', desc:'Bazı bölümlerde önce yem toplaman gerekir, hedef ancak o zaman açılır.'}
       ]
     },
     en: {
@@ -819,11 +871,10 @@
       resumeBtn:'Resume', restartLevelBtn:'Restart Level', quitBtn:'Back to Menu',
       endEyebrow:'Spotted', hudLevelLabel:'Level', hudBestLabel:'Best',
       themeBestPrefix:'🏅 Best: ',
-      starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)', waterLabel:'Water', riverIntroTitle:'A New Predator Arrived!', riverIntroDesc:'Crocodiles are in the river now, be careful — they can spot you too!', piranhaIntroTitle:'Piranha School!', piranhaIntroDesc:'Small but fast — touching one means instant capture. The turtle is a safe spot!', mousetrapIntroTitle:'Mousetrap!', mousetrapIntroDesc:'Hidden traps on the ground — step on one and you\'re caught instantly!', cameraIntroTitle:'Security Camera!', cameraIntroDesc:'A fixed camera scans the area, stay out of its light!', netIntroTitle:'Fishing Net!', netIntroDesc:'Don\'t get caught in the swinging net — time your move!', windIntroTitle:'Windy Zone!', windIntroDesc:'The wind pushes you sideways here, control can get tricky!', birdIntroTitle:'Wolves Are Gone, Birds Arrived!', birdIntroDesc:'Fireballs are raining from the sky, dodge them! Crocodiles are still in the river.', pitIntroTitle:'Watch Out for Pits!', pitIntroDesc:'Don\'t fall into the ground pits, go around them!', pitName:'A Pit', levelMapLinkText:'🗺️ Level Map', levelMapEyebrow:'Level Map', levelMapTitle:'Choose a Level', closeLevelMapBtnText:'Close', adPrefsNotAvailable:'Ad preferences aren\'t applicable for your region right now (this setting only appears for EEA/UK/Switzerland users).',
+      starsContinuePrefix:'Continue with Stars (-', starsSuffix:'⭐)', waterLabel:'Water', riverIntroTitle:'A New Predator Arrived!', riverIntroDesc:'Crocodiles are in the river now, be careful — they can spot you too!', piranhaIntroTitle:'Piranha School!', piranhaIntroDesc:'Small but fast — touching one means instant capture. The turtle is a safe spot!', windIntroTitle:'Windy Zone!', windIntroDesc:'The wind pushes you sideways here, control can get tricky!', birdIntroTitle:'Wolves Are Gone, Birds Arrived!', birdIntroDesc:'Fireballs are raining from the sky, dodge them! Crocodiles are still in the river.', pitIntroTitle:'Watch Out for Pits!', pitIntroDesc:'Don\'t fall into the ground pits, go around them!', pitName:'A Pit', levelMapLinkText:'🗺️ Level Map', levelMapEyebrow:'Level Map', levelMapTitle:'Choose a Level', closeLevelMapBtnText:'Close', adPrefsNotAvailable:'Ad preferences aren\'t applicable for your region right now (this setting only appears for EEA/UK/Switzerland users).',
       adContinue:'Watch Ad, Gain +1 Life', adPlaying:'Playing ad...', adLoadingText:'Loading ad…', adNotAvailable:'No ad available right now, try again shortly',
-      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', endStarsCaption:'Stars', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.', storyNarrator_cat:'Mother Mouse', storyText_cat:'The cat is prowling near our burrow! Get my little ones home safely.', storyNarrator_alien:'Colony Leader', storyText_alien:'The aliens are abducting our people! Guide them safely to the ship.', storyNarrator_bear:'Old Fisherman', storyText_bear:'A hungry bear guards the river! Help the fish reach the lake safely.', storyNarrator_school:'Worried Parent', storyText_school:'Detention is looming! Sneak the students home before the teacher notices.',
-      hitTitle:'You Lost a Life!', hitSuffix:' lives left',
-      caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.', crocodileName:'The Crocodile', piranhaName:'A Piranha', mousetrapName:'A Mousetrap', cameraName:'The Security Camera', netName:'The Fishing Net', birdName:'A Bird',
+      shareBtn:'Share Score', retryBtn:'Start Over', backToMenuBtn:'Back to Menu', reachedLabel:'Reached', endStarsCaption:'Stars', riskBonusLabel:'RISK BONUS', bonusStarsLabel:'BONUS', bonusToastDesc:'Risk and bonus stars', bossLabel:'BOSS LEVEL', bossIntroTitle:'Boss Level!', bossIntroDesc:'A big, fast boss hunter is on the field. Beat it for a +5 ⭐ bonus!', storyBtn:'Story', storyContinueBtn:'Let\'s Go!', storyNarrator_wolf:'Shepherd', storyText_wolf:'Wolves have taken over the meadow! Guide my sheep home safely.',       hitTitle:'You Lost a Life!', hitSuffix:' lives left',
+      caughtBy:v=>v+' spotted you', caughtSub:lv=>'You were caught at Level '+lv+'.', crocodileName:'The Crocodile', piranhaName:'A Piranha', birdName:'A Bird',
       levelUpLabel:lv=>'Level '+lv,
       dailyQuestTitle:'📅 Daily Quests', bonusQuestTitle:'🎁 Bonus Quest', bonusQuestLockedDesc:'Watch an ad to unlock an extra quest',
       dqSummary:(d,t)=>d+'/'+t+' Completed',
@@ -831,15 +882,14 @@
       dailyQuestToastLabel:'Daily Quest',
       dailyQuestCompleteTitle:'Daily Quest Completed',
       dailyQuestRewardDesc:s=>'+'+s+' Stars earned',
-      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', limitedTimeLabel:'🎃 LIMITED TIME', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', newBestStarsText:'✨ NEW BEST!', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
+      achToastLabel:'Achievement Unlocked', streakToastLabel:'DAILY STREAK', streakToastTitle:d=>'Day '+d+'!', streakToastDesc:s=>'+'+s+' stars for coming back!', spinEyebrow:'Daily Chance', spinTitle:'Spin the Wheel!', spinBtnText:'Spin!', spinCloseBtn:'Close', spinCardTitle:'🎡 Lucky Wheel', spinReadyStatus:'Ready to spin!', spinDoneStatus:t=>'Come back tomorrow: '+t, spinResultText:n=>'You won +'+n+' stars!', spinBtnDisabled:'Already spun today', newBestStarsText:'✨ NEW BEST!', notifLifeTitle:'Your life is ready! 🐺', notifLifeBody:'Come back and sneak past danger again!',
       shareText:(t,lv)=>'I reached Level '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Score copied to clipboard!',
       skinSelected:'Selected', skinSelect:'Select',
       dqReachLevel:t=>'Reach Level '+t+' in a single run',
       dqCollectFood:t=>'Collect '+t+' food items today',
       dqNoHit:t=>'Clear '+t+' levels without losing a life',
-      foodWolf:'Grass', foodCat:'Cheese', foodAlien:'Energy', foodBear:'Kelp', foodSchool:'Pencil',
-      themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
+      foodWolf:'Grass',       themeLocked:'Locked', watchToUnlock:'Watch Ad to Unlock', unlockingTheme:'Unlocking...',
       powerUpIntroTitle:'Power-Ups Unlocked!', powerUpIntroDesc:'Use Invisibility and Speed power-ups with stars or by watching an ad.',
       wallIntroTitle:'Moving Wall!', wallIntroDesc:'Walls block your path AND the hunter\'s sight — hide behind one.', safeZoneIntroTitle:'Safe Zone!', safeZoneIntroDesc:'While inside the glowing green patch, no hunter can spot you.', foodIntroTitle:'New Rule!', foodIntroDesc:n=>'This level requires collecting '+n+' first — the goal unlocks only after.', foodRemainingPopup:(n,item)=>n+' '+item+' left', foodReadyPopup:'You can go home now!',
       nextLifeIn:t=>'Next life: '+t, watchAdInstantLife:'📺 Watch Ad, Instant Life', buyLifeWithStars:n=>'⭐ Buy Life with Stars ('+n+'⭐)',
@@ -847,8 +897,7 @@
       shopPricingIntroTitle:'Shop Info', shopPricingIntroDesc:n=>'Each look costs 20 stars. If you don\'t have enough, watch an ad to earn +'+n+' stars.',
       milestoneEyebrow:'Congratulations', milestoneTitle:lv=>'Level '+lv+' Complete!', milestoneSub:'You\'re doing great, keep it up! Share this achievement with your friends.', milestoneContinueBtn:'Continue',
       powerUpInvis:'Invisible', powerUpSpeed:'Speed', watchAdForStars:n=>'Watch +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Other themes unlock for '+n+'⭐',
-      langBtnLabel:'TR',
+            langBtnLabel:'TR',
       tutLink:'How to Play?', tutEyebrow:'How to Play',
       tutSkip:'Skip', tutNext:'Next', tutDone:'Got it',
       tutorialSteps:[
@@ -856,8 +905,7 @@
         {icon:'👁️', title:'Stay Unseen', desc:'If you enter the hunter\'s glowing vision cone, you\'ll be spotted quickly.'},
         {icon:'🏠', title:'Reach the Goal', desc:'Get to the house/hut on the other side to clear the level.'},
         {icon:'🐑', title:'Protect Your Herd', desc:'In later levels, followers trail behind you — they can be spotted too!'},
-        {icon:'⭐', title:'Collect Food', desc:'Some levels require collecting food first before the goal unlocks.'},
-        {icon:'🔓', title:'Unlock New Themes', desc:'Earn stars by completing levels. Unlock a new theme for 100 stars, or watch ads to earn stars.'}
+        {icon:'⭐', title:'Collect Food', desc:'Some levels require collecting food first before the goal unlocks.'}
       ]
     },
     fr: {
@@ -874,11 +922,10 @@
       resumeBtn:'Reprendre', restartLevelBtn:'Recommencer le Niveau', quitBtn:'Retour au Menu',
       endEyebrow:'Repéré', hudLevelLabel:'Niveau', hudBestLabel:'Meilleur',
       themeBestPrefix:'🏅 Meilleur : ',
-      starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)', waterLabel:'Eau', riverIntroTitle:'Un Nouveau Prédateur !', riverIntroDesc:'Des crocodiles sont dans la rivière, prudence — ils peuvent aussi te repérer !', piranhaIntroTitle:'Banc de Piranhas !', piranhaIntroDesc:'Petits mais rapides — les toucher signifie une capture instantanée. La tortue est un endroit sûr !', mousetrapIntroTitle:'Piège à Souris !', mousetrapIntroDesc:'Des pièges cachés au sol — marcher dessus signifie une capture instantanée !', cameraIntroTitle:'Caméra de Sécurité !', cameraIntroDesc:'Une caméra fixe balaie la zone, reste hors de sa lumière !', netIntroTitle:'Filet de Pêche !', netIntroDesc:'Ne te fais pas prendre dans le filet qui balance — calcule bien ton mouvement !', windIntroTitle:'Zone Venteuse !', windIntroDesc:'Le vent te pousse sur le côté ici, le contrôle peut devenir difficile !', birdIntroTitle:'Les Loups Sont Partis, les Oiseaux Arrivent !', birdIntroDesc:'Des boules de feu pleuvent du ciel, esquive-les ! Les crocodiles sont toujours dans la rivière.', pitIntroTitle:'Attention aux Trous !', pitIntroDesc:'Ne tombe pas dans les trous, contourne-les !', pitName:'Un Trou', levelMapLinkText:'🗺️ Carte des Niveaux', levelMapEyebrow:'Carte des Niveaux', levelMapTitle:'Choisis un Niveau', closeLevelMapBtnText:'Fermer', adPrefsNotAvailable:'Les préférences publicitaires ne sont pas applicables dans ta région pour le moment (visible uniquement pour les utilisateurs EEE/UK/Suisse).',
+      starsContinuePrefix:'Continuer avec des Étoiles (-', starsSuffix:'⭐)', waterLabel:'Eau', riverIntroTitle:'Un Nouveau Prédateur !', riverIntroDesc:'Des crocodiles sont dans la rivière, prudence — ils peuvent aussi te repérer !', piranhaIntroTitle:'Banc de Piranhas !', piranhaIntroDesc:'Petits mais rapides — les toucher signifie une capture instantanée. La tortue est un endroit sûr !', windIntroTitle:'Zone Venteuse !', windIntroDesc:'Le vent te pousse sur le côté ici, le contrôle peut devenir difficile !', birdIntroTitle:'Les Loups Sont Partis, les Oiseaux Arrivent !', birdIntroDesc:'Des boules de feu pleuvent du ciel, esquive-les ! Les crocodiles sont toujours dans la rivière.', pitIntroTitle:'Attention aux Trous !', pitIntroDesc:'Ne tombe pas dans les trous, contourne-les !', pitName:'Un Trou', levelMapLinkText:'🗺️ Carte des Niveaux', levelMapEyebrow:'Carte des Niveaux', levelMapTitle:'Choisis un Niveau', closeLevelMapBtnText:'Fermer', adPrefsNotAvailable:'Les préférences publicitaires ne sont pas applicables dans ta région pour le moment (visible uniquement pour les utilisateurs EEE/UK/Suisse).',
       adContinue:'Regarder une Pub, +1 Vie', adPlaying:'Lecture de la pub...', adLoadingText:'Chargement de la pub…', adNotAvailable:'Aucune pub disponible pour le moment, réessayez bientôt',
-      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', endStarsCaption:'Étoiles', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.', storyNarrator_cat:'Maman Souris', storyText_cat:'Le chat rôde près de notre terrier ! Ramène mes petits en sécurité.', storyNarrator_alien:'Chef de Colonie', storyText_alien:'Les extraterrestres enlèvent notre peuple ! Guide-les en sécurité vers le vaisseau.', storyNarrator_bear:'Vieux Pêcheur', storyText_bear:'Un ours affamé garde la rivière ! Aide les poissons à rejoindre le lac.', storyNarrator_school:'Parent Inquiet', storyText_school:'La retenue menace ! Aide les élèves à rentrer sans se faire voir.',
-      hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
-      caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.', crocodileName:'Le Crocodile', piranhaName:'Un Piranha', mousetrapName:'Un Piège à Souris', cameraName:'La Caméra de Sécurité', netName:'Le Filet de Pêche', birdName:'Un Oiseau',
+      shareBtn:'Partager le Score', retryBtn:'Recommencer', backToMenuBtn:'Retour au Menu', reachedLabel:'Atteint', endStarsCaption:'Étoiles', riskBonusLabel:'BONUS DE RISQUE', bonusStarsLabel:'BONUS', bonusToastDesc:'Étoiles de risque et bonus', bossLabel:'NIVEAU BOSS', bossIntroTitle:'Niveau Boss !', bossIntroDesc:'Un gros chasseur boss rapide est sur le terrain. Bats-le pour un bonus de +5 ⭐ !', storyBtn:'Histoire', storyContinueBtn:'Allons-y !', storyNarrator_wolf:'Berger', storyText_wolf:'Les loups ont envahi la prairie ! Ramène mes moutons à la maison en sécurité.',       hitTitle:'Vie Perdue !', hitSuffix:' vies restantes',
+      caughtBy:v=>v+' t\'a repéré', caughtSub:lv=>'Tu as été repéré au Niveau '+lv+'.', crocodileName:'Le Crocodile', piranhaName:'Un Piranha', birdName:'Un Oiseau',
       levelUpLabel:lv=>'Niveau '+lv,
       dailyQuestTitle:'📅 Missions Quotidiennes', bonusQuestTitle:'🎁 Mission Bonus', bonusQuestLockedDesc:'Regarde une pub pour débloquer une mission supplémentaire',
       dqSummary:(d,t)=>d+'/'+t+' Terminées',
@@ -886,15 +933,14 @@
       dailyQuestToastLabel:'Mission Quotidienne',
       dailyQuestCompleteTitle:'Mission Quotidienne Terminée',
       dailyQuestRewardDesc:s=>'+'+s+' étoiles gagnées',
-      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', limitedTimeLabel:'🎃 TEMPS LIMITÉ', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', newBestStarsText:'✨ NOUVEAU RECORD !', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
+      achToastLabel:'Succès Débloqué', streakToastLabel:'SÉRIE QUOTIDIENNE', streakToastTitle:d=>'Jour '+d+' !', streakToastDesc:s=>'+'+s+' étoiles pour être revenu !', spinEyebrow:'Chance Quotidienne', spinTitle:'Tournez la Roue !', spinBtnText:'Tourner !', spinCloseBtn:'Fermer', spinCardTitle:'🎡 Roue de la Chance', spinReadyStatus:'Prêt à tourner !', spinDoneStatus:t=>'Reviens demain : '+t, spinResultText:n=>'Tu as gagné +'+n+' étoiles !', spinBtnDisabled:'Déjà tourné aujourd\'hui', newBestStarsText:'✨ NOUVEAU RECORD !', notifLifeTitle:'Votre vie est prête ! 🐺', notifLifeBody:'Revenez et échappez au danger à nouveau !',
       shareText:(t,lv)=>'J\'ai atteint le Niveau '+lv+' dans Stay Unseen: Sneak Escape ('+t+') ! 🎮',
       shareCopied:'Score copié dans le presse-papiers !',
       skinSelected:'Sélectionné', skinSelect:'Choisir',
       dqReachLevel:t=>'Atteins le Niveau '+t+' en une seule partie',
       dqCollectFood:t=>'Récolte '+t+' aliments aujourd\'hui',
       dqNoHit:t=>'Termine '+t+' niveaux sans perdre de vie',
-      foodWolf:'Herbe', foodCat:'Fromage', foodAlien:'Énergie', foodBear:'Algues', foodSchool:'Crayon',
-      themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
+      foodWolf:'Herbe',       themeLocked:'Verrouillé', watchToUnlock:'Regarder une Pub pour Débloquer', unlockingTheme:'Déblocage...',
       powerUpIntroTitle:'Bonus Débloqués !', powerUpIntroDesc:'Utilise les bonus Invisible et Vitesse avec des étoiles ou en regardant une pub.',
       wallIntroTitle:'Mur Mobile !', wallIntroDesc:'Les murs bloquent votre chemin ET la vue du chasseur — cachez-vous derrière.', safeZoneIntroTitle:'Zone Sûre !', safeZoneIntroDesc:'À l\'intérieur de la zone verte lumineuse, aucun chasseur ne peut vous repérer.', foodIntroTitle:'Nouvelle Règle !', foodIntroDesc:n=>'Ce niveau demande de récolter '+n+' d\'abord — l\'objectif ne s\'ouvre qu\'ensuite.', foodRemainingPopup:(n,item)=>n+' '+item+' restant(s)', foodReadyPopup:'Tu peux rentrer maintenant !',
       nextLifeIn:t=>'Prochaine vie : '+t, watchAdInstantLife:'📺 Regarder une Pub, Vie Immédiate', buyLifeWithStars:n=>'⭐ Acheter une Vie ('+n+'⭐)',
@@ -902,8 +948,7 @@
       shopPricingIntroTitle:'Info Boutique', shopPricingIntroDesc:n=>'Chaque apparence coûte 20 étoiles. Si tu n\'en as pas assez, regarde une pub pour gagner +'+n+' étoiles.',
       milestoneEyebrow:'Félicitations', milestoneTitle:lv=>'Niveau '+lv+' Terminé !', milestoneSub:'Tu te débrouilles très bien, continue comme ça ! Partage cette réussite avec tes amis.', milestoneContinueBtn:'Continuer',
       powerUpInvis:'Invisible', powerUpSpeed:'Vitesse', watchAdForStars:n=>'Voir +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Les autres thèmes se débloquent pour '+n+'⭐',
-      langBtnLabel:'EN',
+            langBtnLabel:'EN',
       tutLink:'Comment Jouer ?', tutEyebrow:'Comment Jouer',
       tutSkip:'Passer', tutNext:'Suivant', tutDone:'Compris',
       tutorialSteps:[
@@ -911,8 +956,7 @@
         {icon:'👁️', title:'Reste Invisible', desc:'Si tu entres dans le cône de vision lumineux du chasseur, tu seras vite repéré.'},
         {icon:'🏠', title:'Atteins l\'Objectif', desc:'Rejoins la maison/cabane de l\'autre côté pour terminer le niveau.'},
         {icon:'🐑', title:'Protège ton Troupeau', desc:'Dans les niveaux suivants, des suiveurs te suivent — eux aussi peuvent être repérés !'},
-        {icon:'⭐', title:'Récolte de la Nourriture', desc:'Certains niveaux demandent de récolter de la nourriture avant que l\'objectif ne s\'ouvre.'},
-        {icon:'🔓', title:'Débloque de Nouveaux Thèmes', desc:'Gagne des étoiles en terminant des niveaux. Débloque un thème pour 100 étoiles, ou regarde des pubs pour en gagner.'}
+        {icon:'⭐', title:'Récolte de la Nourriture', desc:'Certains niveaux demandent de récolter de la nourriture avant que l\'objectif ne s\'ouvre.'}
       ]
     },
     es: {
@@ -929,11 +973,10 @@
       resumeBtn:'Reanudar', restartLevelBtn:'Reiniciar Nivel', quitBtn:'Volver al Menú',
       endEyebrow:'Detectado', hudLevelLabel:'Nivel', hudBestLabel:'Mejor',
       themeBestPrefix:'🏅 Mejor: ',
-      starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)', waterLabel:'Agua', riverIntroTitle:'¡Llegó un Nuevo Depredador!', riverIntroDesc:'Hay cocodrilos en el río, ten cuidado — ¡ellos también pueden verte!', piranhaIntroTitle:'¡Banco de Pirañas!', piranhaIntroDesc:'Pequeñas pero rápidas — tocarlas significa captura instantánea. ¡La tortuga es un lugar seguro!', mousetrapIntroTitle:'¡Ratonera!', mousetrapIntroDesc:'Trampas ocultas en el suelo — ¡pisar una significa captura instantánea!', cameraIntroTitle:'¡Cámara de Seguridad!', cameraIntroDesc:'Una cámara fija escanea el área, ¡mantente fuera de su luz!', netIntroTitle:'¡Red de Pesca!', netIntroDesc:'No te dejes atrapar por la red oscilante — ¡calcula bien tu movimiento!', windIntroTitle:'¡Zona con Viento!', windIntroDesc:'El viento te empuja hacia un lado aquí, ¡el control puede ser difícil!', birdIntroTitle:'¡Los Lobos se Fueron, Llegaron los Pájaros!', birdIntroDesc:'¡Bolas de fuego caen del cielo, esquívalas! Los cocodrilos siguen en el río.', pitIntroTitle:'¡Cuidado con los Hoyos!', pitIntroDesc:'¡No caigas en los hoyos del suelo, rodéalos!', pitName:'Un Hoyo', levelMapLinkText:'🗺️ Mapa de Niveles', levelMapEyebrow:'Mapa de Niveles', levelMapTitle:'Elige un Nivel', closeLevelMapBtnText:'Cerrar', adPrefsNotAvailable:'Las preferencias de anuncios no aplican en tu región por ahora (solo visible para usuarios del EEE/Reino Unido/Suiza).',
+      starsContinuePrefix:'Continuar con Estrellas (-', starsSuffix:'⭐)', waterLabel:'Agua', riverIntroTitle:'¡Llegó un Nuevo Depredador!', riverIntroDesc:'Hay cocodrilos en el río, ten cuidado — ¡ellos también pueden verte!', piranhaIntroTitle:'¡Banco de Pirañas!', piranhaIntroDesc:'Pequeñas pero rápidas — tocarlas significa captura instantánea. ¡La tortuga es un lugar seguro!', windIntroTitle:'¡Zona con Viento!', windIntroDesc:'El viento te empuja hacia un lado aquí, ¡el control puede ser difícil!', birdIntroTitle:'¡Los Lobos se Fueron, Llegaron los Pájaros!', birdIntroDesc:'¡Bolas de fuego caen del cielo, esquívalas! Los cocodrilos siguen en el río.', pitIntroTitle:'¡Cuidado con los Hoyos!', pitIntroDesc:'¡No caigas en los hoyos del suelo, rodéalos!', pitName:'Un Hoyo', levelMapLinkText:'🗺️ Mapa de Niveles', levelMapEyebrow:'Mapa de Niveles', levelMapTitle:'Elige un Nivel', closeLevelMapBtnText:'Cerrar', adPrefsNotAvailable:'Las preferencias de anuncios no aplican en tu región por ahora (solo visible para usuarios del EEE/Reino Unido/Suiza).',
       adContinue:'Ver Anuncio, +1 Vida', adPlaying:'Reproduciendo anuncio...', adLoadingText:'Cargando anuncio…', adNotAvailable:'No hay anuncios disponibles ahora, inténtalo en breve',
-      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', endStarsCaption:'Estrellas', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.', storyNarrator_cat:'Mamá Ratona', storyText_cat:'¡El gato ronda cerca de nuestra madriguera! Lleva a mis crías a casa a salvo.', storyNarrator_alien:'Líder de la Colonia', storyText_alien:'¡Los extraterrestres secuestran a nuestra gente! Guíalos a salvo hasta la nave.', storyNarrator_bear:'Viejo Pescador', storyText_bear:'¡Un oso hambriento vigila el río! Ayuda a los peces a llegar al lago.', storyNarrator_school:'Padre Preocupado', storyText_school:'¡Se acerca el castigo! Ayuda a los estudiantes a llegar a casa sin ser vistos.',
-      hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
-      caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.', crocodileName:'El Cocodrilo', piranhaName:'Una Piraña', mousetrapName:'Una Ratonera', cameraName:'La Cámara de Seguridad', netName:'La Red de Pesca', birdName:'Un Pájaro',
+      shareBtn:'Compartir Puntuación', retryBtn:'Empezar de Nuevo', backToMenuBtn:'Volver al Menú', reachedLabel:'Alcanzado', endStarsCaption:'Estrellas', riskBonusLabel:'BONO DE RIESGO', bonusStarsLabel:'BONO', bonusToastDesc:'Estrellas de riesgo y bono', bossLabel:'NIVEL JEFE', bossIntroTitle:'¡Nivel Jefe!', bossIntroDesc:'Hay un cazador jefe grande y rápido en el campo. ¡Véncelo y gana +5 ⭐ de bono!', storyBtn:'Historia', storyContinueBtn:'¡Vamos!', storyNarrator_wolf:'Pastor', storyText_wolf:'¡Los lobos han invadido el prado! Lleva a mis ovejas a casa a salvo.',       hitTitle:'¡Perdiste una Vida!', hitSuffix:' vidas restantes',
+      caughtBy:v=>v+' te detectó', caughtSub:lv=>'Te atraparon en el Nivel '+lv+'.', crocodileName:'El Cocodrilo', piranhaName:'Una Piraña', birdName:'Un Pájaro',
       levelUpLabel:lv=>'Nivel '+lv,
       dailyQuestTitle:'📅 Misiones Diarias', bonusQuestTitle:'🎁 Misión Extra', bonusQuestLockedDesc:'Mira un anuncio para desbloquear una misión extra',
       dqSummary:(d,t)=>d+'/'+t+' Completadas',
@@ -941,15 +984,14 @@
       dailyQuestToastLabel:'Misión Diaria',
       dailyQuestCompleteTitle:'Misión Diaria Completada',
       dailyQuestRewardDesc:s=>'+'+s+' estrellas ganadas',
-      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', limitedTimeLabel:'🎃 TIEMPO LIMITADO', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', newBestStarsText:'✨ ¡NUEVO RÉCORD!', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
+      achToastLabel:'Logro Desbloqueado', streakToastLabel:'RACHA DIARIA', streakToastTitle:d=>'¡Día '+d+'!', streakToastDesc:s=>'¡+'+s+' estrellas por volver!', spinEyebrow:'Oportunidad Diaria', spinTitle:'¡Gira la Rueda!', spinBtnText:'¡Girar!', spinCloseBtn:'Cerrar', spinCardTitle:'🎡 Rueda de la Suerte', spinReadyStatus:'¡Listo para girar!', spinDoneStatus:t=>'Vuelve mañana: '+t, spinResultText:n=>'¡Ganaste +'+n+' estrellas!', spinBtnDisabled:'Ya giraste hoy', newBestStarsText:'✨ ¡NUEVO RÉCORD!', notifLifeTitle:'¡Tu vida está lista! 🐺', notifLifeBody:'¡Vuelve y esquiva el peligro de nuevo!',
       shareText:(t,lv)=>'¡Alcancé el Nivel '+lv+' en Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'¡Puntuación copiada al portapapeles!',
       skinSelected:'Seleccionado', skinSelect:'Elegir',
       dqReachLevel:t=>'Alcanza el Nivel '+t+' en una sola partida',
       dqCollectFood:t=>'Recolecta '+t+' alimentos hoy',
       dqNoHit:t=>'Supera '+t+' niveles sin perder una vida',
-      foodWolf:'Hierba', foodCat:'Queso', foodAlien:'Energía', foodBear:'Algas', foodSchool:'Lápiz',
-      themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
+      foodWolf:'Hierba',       themeLocked:'Bloqueado', watchToUnlock:'Ver Anuncio para Desbloquear', unlockingTheme:'Desbloqueando...',
       powerUpIntroTitle:'¡Potenciadores Desbloqueados!', powerUpIntroDesc:'Usa los potenciadores Invisible y Velocidad con estrellas o viendo un anuncio.',
       wallIntroTitle:'¡Muro Móvil!', wallIntroDesc:'Los muros bloquean tu camino Y la vista del cazador — escóndete detrás.', safeZoneIntroTitle:'¡Zona Segura!', safeZoneIntroDesc:'Dentro del área verde brillante, ningún cazador puede verte.', foodIntroTitle:'¡Nueva Regla!', foodIntroDesc:n=>'Este nivel requiere recolectar '+n+' primero — la meta se abre solo después.', foodRemainingPopup:(n,item)=>n+' '+item+' restante(s)', foodReadyPopup:'¡Ya puedes ir a casa!',
       nextLifeIn:t=>'Próxima vida: '+t, watchAdInstantLife:'📺 Ver Anuncio, Vida Instantánea', buyLifeWithStars:n=>'⭐ Comprar Vida ('+n+'⭐)',
@@ -957,8 +999,7 @@
       shopPricingIntroTitle:'Info de la Tienda', shopPricingIntroDesc:n=>'Cada apariencia cuesta 20 estrellas. Si no tienes suficientes, mira un anuncio para ganar +'+n+' estrellas.',
       milestoneEyebrow:'Felicidades', milestoneTitle:lv=>'¡Nivel '+lv+' Completado!', milestoneSub:'¡Lo estás haciendo genial, sigue así! Comparte este logro con tus amigos.', milestoneContinueBtn:'Continuar',
       powerUpInvis:'Invisible', powerUpSpeed:'Velocidad', watchAdForStars:n=>'Ver +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Los demás temas se desbloquean por '+n+'⭐',
-      langBtnLabel:'EN',
+            langBtnLabel:'EN',
       tutLink:'¿Cómo Jugar?', tutEyebrow:'Cómo Jugar',
       tutSkip:'Omitir', tutNext:'Siguiente', tutDone:'Entendido',
       tutorialSteps:[
@@ -966,8 +1007,7 @@
         {icon:'👁️', title:'Permanece Oculto', desc:'Si entras en el cono de visión del cazador, serás detectado rápidamente.'},
         {icon:'🏠', title:'Llega a la Meta', desc:'Llega a la casa/cabaña del otro lado para superar el nivel.'},
         {icon:'🐑', title:'Protege tu Rebaño', desc:'En niveles posteriores tendrás seguidores detrás de ti — ¡ellos también pueden ser vistos!'},
-        {icon:'⭐', title:'Recolecta Comida', desc:'Algunos niveles requieren recolectar comida antes de que se abra la meta.'},
-        {icon:'🔓', title:'Desbloquea Nuevos Temas', desc:'Gana estrellas completando niveles. Desbloquea un tema por 100 estrellas, o mira anuncios para ganarlas.'}
+        {icon:'⭐', title:'Recolecta Comida', desc:'Algunos niveles requieren recolectar comida antes de que se abra la meta.'}
       ]
     },
     it: {
@@ -984,11 +1024,10 @@
       resumeBtn:'Riprendi', restartLevelBtn:'Ricomincia Livello', quitBtn:'Torna al Menu',
       endEyebrow:'Avvistato', hudLevelLabel:'Livello', hudBestLabel:'Record',
       themeBestPrefix:'🏅 Record: ',
-      starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)', waterLabel:'Acqua', riverIntroTitle:'È Arrivato un Nuovo Predatore!', riverIntroDesc:'Ci sono coccodrilli nel fiume, attento — possono vederti anche loro!', piranhaIntroTitle:'Banco di Piranha!', piranhaIntroDesc:'Piccoli ma veloci — toccarli significa cattura istantanea. La tartaruga è un posto sicuro!', mousetrapIntroTitle:'Trappola per Topi!', mousetrapIntroDesc:'Trappole nascoste a terra — calpestarne una significa cattura istantanea!', cameraIntroTitle:'Telecamera di Sicurezza!', cameraIntroDesc:'Una telecamera fissa scansiona l\'area, stai lontano dalla sua luce!', netIntroTitle:'Rete da Pesca!', netIntroDesc:'Non farti prendere dalla rete oscillante — calcola bene la tua mossa!', windIntroTitle:'Zona Ventosa!', windIntroDesc:'Il vento ti spinge di lato qui, il controllo può diventare difficile!', birdIntroTitle:'I Lupi Se Ne Sono Andati, Sono Arrivati gli Uccelli!', birdIntroDesc:'Palle di fuoco cadono dal cielo, schivale! I coccodrilli sono ancora nel fiume.', pitIntroTitle:'Attento alle Buche!', pitIntroDesc:'Non cadere nelle buche a terra, giraci intorno!', pitName:'Una Buca', levelMapLinkText:'🗺️ Mappa dei Livelli', levelMapEyebrow:'Mappa dei Livelli', levelMapTitle:'Scegli un Livello', closeLevelMapBtnText:'Chiudi', adPrefsNotAvailable:'Le preferenze pubblicitarie non sono disponibili nella tua regione al momento (visibile solo per utenti SEE/UK/Svizzera).',
+      starsContinuePrefix:'Continua con Stelle (-', starsSuffix:'⭐)', waterLabel:'Acqua', riverIntroTitle:'È Arrivato un Nuovo Predatore!', riverIntroDesc:'Ci sono coccodrilli nel fiume, attento — possono vederti anche loro!', piranhaIntroTitle:'Banco di Piranha!', piranhaIntroDesc:'Piccoli ma veloci — toccarli significa cattura istantanea. La tartaruga è un posto sicuro!', windIntroTitle:'Zona Ventosa!', windIntroDesc:'Il vento ti spinge di lato qui, il controllo può diventare difficile!', birdIntroTitle:'I Lupi Se Ne Sono Andati, Sono Arrivati gli Uccelli!', birdIntroDesc:'Palle di fuoco cadono dal cielo, schivale! I coccodrilli sono ancora nel fiume.', pitIntroTitle:'Attento alle Buche!', pitIntroDesc:'Non cadere nelle buche a terra, giraci intorno!', pitName:'Una Buca', levelMapLinkText:'🗺️ Mappa dei Livelli', levelMapEyebrow:'Mappa dei Livelli', levelMapTitle:'Scegli un Livello', closeLevelMapBtnText:'Chiudi', adPrefsNotAvailable:'Le preferenze pubblicitarie non sono disponibili nella tua regione al momento (visibile solo per utenti SEE/UK/Svizzera).',
       adContinue:'Guarda Pubblicità, +1 Vita', adPlaying:'Riproduzione pubblicità...', adLoadingText:'Caricamento annuncio…', adNotAvailable:'Nessun annuncio disponibile ora, riprova a breve',
-      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', endStarsCaption:'Stelle', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.', storyNarrator_cat:'Mamma Topo', storyText_cat:'Il gatto si aggira vicino alla nostra tana! Porta i miei piccoli a casa sani e salvi.', storyNarrator_alien:'Capo Colonia', storyText_alien:'Gli alieni rapiscono la nostra gente! Guidali sani e salvi fino alla nave.', storyNarrator_bear:'Vecchio Pescatore', storyText_bear:'Un orso affamato sorveglia il fiume! Aiuta i pesci a raggiungere il lago.', storyNarrator_school:'Genitore Preoccupato', storyText_school:'La punizione incombe! Porta gli studenti a casa senza farsi notare.',
-      hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
-      caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.', crocodileName:'Il Coccodrillo', piranhaName:'Un Piranha', mousetrapName:'Una Trappola per Topi', cameraName:'La Telecamera di Sicurezza', netName:'La Rete da Pesca', birdName:'Un Uccello',
+      shareBtn:'Condividi Punteggio', retryBtn:'Ricomincia', backToMenuBtn:'Torna al Menu', reachedLabel:'Raggiunto', endStarsCaption:'Stelle', riskBonusLabel:'BONUS RISCHIO', bonusStarsLabel:'BONUS', bonusToastDesc:'Stelle rischio e bonus', bossLabel:'LIVELLO BOSS', bossIntroTitle:'Livello Boss!', bossIntroDesc:'Un grosso cacciatore boss veloce è in campo. Battilo per un bonus di +5 ⭐!', storyBtn:'Storia', storyContinueBtn:'Andiamo!', storyNarrator_wolf:'Pastore', storyText_wolf:'I lupi hanno invaso il prato! Riporta le mie pecore a casa sane e salve.',       hitTitle:'Vita Persa!', hitSuffix:' vite rimaste',
+      caughtBy:v=>v+' ti ha avvistato', caughtSub:lv=>'Sei stato scoperto al Livello '+lv+'.', crocodileName:'Il Coccodrillo', piranhaName:'Un Piranha', birdName:'Un Uccello',
       levelUpLabel:lv=>'Livello '+lv,
       dailyQuestTitle:'📅 Missioni Giornaliere', bonusQuestTitle:'🎁 Missione Bonus', bonusQuestLockedDesc:'Guarda una pubblicità per sbloccare una missione extra',
       dqSummary:(d,t)=>d+'/'+t+' Completate',
@@ -996,15 +1035,14 @@
       dailyQuestToastLabel:'Missione Giornaliera',
       dailyQuestCompleteTitle:'Missione Giornaliera Completata',
       dailyQuestRewardDesc:s=>'+'+s+' stelle guadagnate',
-      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', limitedTimeLabel:'🎃 TEMPO LIMITATO', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', newBestStarsText:'✨ NUOVO RECORD!', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
+      achToastLabel:'Obiettivo Sbloccato', streakToastLabel:'SERIE GIORNALIERA', streakToastTitle:d=>'Giorno '+d+'!', streakToastDesc:s=>'+'+s+' stelle per essere tornato!', spinEyebrow:'Occasione Giornaliera', spinTitle:'Gira la Ruota!', spinBtnText:'Gira!', spinCloseBtn:'Chiudi', spinCardTitle:'🎡 Ruota della Fortuna', spinReadyStatus:'Pronto per girare!', spinDoneStatus:t=>'Torna domani: '+t, spinResultText:n=>'Hai vinto +'+n+' stelle!', spinBtnDisabled:'Già girato oggi', newBestStarsText:'✨ NUOVO RECORD!', notifLifeTitle:'La tua vita è pronta! 🐺', notifLifeBody:'Torna e sfuggi di nuovo al pericolo!',
       shareText:(t,lv)=>'Ho raggiunto il Livello '+lv+' in Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Punteggio copiato negli appunti!',
       skinSelected:'Selezionato', skinSelect:'Scegli',
       dqReachLevel:t=>'Raggiungi il Livello '+t+' in una sola partita',
       dqCollectFood:t=>'Raccogli '+t+' cibi oggi',
       dqNoHit:t=>'Supera '+t+' livelli senza perdere una vita',
-      foodWolf:'Erba', foodCat:'Formaggio', foodAlien:'Energia', foodBear:'Alghe', foodSchool:'Matita',
-      themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
+      foodWolf:'Erba',       themeLocked:'Bloccato', watchToUnlock:'Guarda Pubblicità per Sbloccare', unlockingTheme:'Sblocco...',
       powerUpIntroTitle:'Potenziamenti Sbloccati!', powerUpIntroDesc:'Usa i potenziamenti Invisibile e Velocità con le stelle o guardando una pubblicità.',
       wallIntroTitle:'Muro Mobile!', wallIntroDesc:'I muri bloccano il tuo cammino E la vista del cacciatore — nasconditi dietro.', safeZoneIntroTitle:'Zona Sicura!', safeZoneIntroDesc:'Dentro l\'area verde luminosa, nessun cacciatore può vederti.', foodIntroTitle:'Nuova Regola!', foodIntroDesc:n=>'Questo livello richiede di raccogliere '+n+' prima — l\'obiettivo si sblocca solo dopo.', foodRemainingPopup:(n,item)=>n+' '+item+' rimasti', foodReadyPopup:'Ora puoi tornare a casa!',
       nextLifeIn:t=>'Prossima vita: '+t, watchAdInstantLife:'📺 Guarda Pubblicità, Vita Istantanea', buyLifeWithStars:n=>'⭐ Compra Vita ('+n+'⭐)',
@@ -1012,8 +1050,7 @@
       shopPricingIntroTitle:'Info Negozio', shopPricingIntroDesc:n=>'Ogni aspetto costa 20 stelle. Se non ne hai abbastanza, guarda una pubblicità per guadagnare +'+n+' stelle.',
       milestoneEyebrow:'Complimenti', milestoneTitle:lv=>'Livello '+lv+' Completato!', milestoneSub:'Stai andando alla grande, continua così! Condividi questo traguardo con i tuoi amici.', milestoneContinueBtn:'Continua',
       powerUpInvis:'Invisibile', powerUpSpeed:'Velocità', watchAdForStars:n=>'Guarda +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Gli altri temi si sbloccano per '+n+'⭐',
-      langBtnLabel:'EN',
+            langBtnLabel:'EN',
       tutLink:'Come Giocare?', tutEyebrow:'Come Giocare',
       tutSkip:'Salta', tutNext:'Avanti', tutDone:'Capito',
       tutorialSteps:[
@@ -1021,8 +1058,7 @@
         {icon:'👁️', title:'Resta Invisibile', desc:'Se entri nel cono di visione luminoso del cacciatore, verrai avvistato rapidamente.'},
         {icon:'🏠', title:'Raggiungi l\'Obiettivo', desc:'Raggiungi la casa/capanna dall\'altra parte per completare il livello.'},
         {icon:'🐑', title:'Proteggi il tuo Gregge', desc:'Nei livelli successivi avrai dei seguaci al seguito — anche loro possono essere avvistati!'},
-        {icon:'⭐', title:'Raccogli Cibo', desc:'Alcuni livelli richiedono di raccogliere cibo prima che l\'obiettivo si sblocchi.'},
-        {icon:'🔓', title:'Sblocca Nuovi Temi', desc:'Guadagna stelle completando i livelli. Sblocca un tema per 100 stelle, oppure guarda pubblicità per guadagnarle.'}
+        {icon:'⭐', title:'Raccogli Cibo', desc:'Alcuni livelli richiedono di raccogliere cibo prima che l\'obiettivo si sblocchi.'}
       ]
     },
     ru: {
@@ -1039,11 +1075,10 @@
       resumeBtn:'Продолжить', restartLevelBtn:'Начать Уровень Заново', quitBtn:'В Главное Меню',
       endEyebrow:'Обнаружен', hudLevelLabel:'Уровень', hudBestLabel:'Рекорд',
       themeBestPrefix:'🏅 Рекорд: ',
-      starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)', waterLabel:'Вода', riverIntroTitle:'Появился Новый Хищник!', riverIntroDesc:'В реке теперь крокодилы, будь осторожен — они тоже могут тебя заметить!', piranhaIntroTitle:'Стая Пираний!', piranhaIntroDesc:'Маленькие, но быстрые — прикосновение означает мгновенную поимку. Черепаха — безопасное место!', mousetrapIntroTitle:'Мышеловка!', mousetrapIntroDesc:'Скрытые ловушки на земле — наступишь и тебя мгновенно поймают!', cameraIntroTitle:'Камера Наблюдения!', cameraIntroDesc:'Неподвижная камера сканирует местность, держись подальше от её света!', netIntroTitle:'Рыболовная Сеть!', netIntroDesc:'Не попадись в качающуюся сеть — рассчитай момент!', windIntroTitle:'Ветреная Зона!', windIntroDesc:'Здесь ветер толкает тебя вбок, управлять сложнее!', birdIntroTitle:'Волки Ушли, Прилетели Птицы!', birdIntroDesc:'С неба падают огненные шары, уклоняйся! Крокодилы всё ещё в реке.', pitIntroTitle:'Осторожно, Ямы!', pitIntroDesc:'Не падай в ямы на земле, обходи их!', pitName:'Яма', levelMapLinkText:'🗺️ Карта Уровней', levelMapEyebrow:'Карта Уровней', levelMapTitle:'Выбери Уровень', closeLevelMapBtnText:'Закрыть', adPrefsNotAvailable:'Настройки рекламы сейчас недоступны для твоего региона (видны только пользователям ЕЭЗ/Великобритании/Швейцарии).',
+      starsContinuePrefix:'Продолжить за Звёзды (-', starsSuffix:'⭐)', waterLabel:'Вода', riverIntroTitle:'Появился Новый Хищник!', riverIntroDesc:'В реке теперь крокодилы, будь осторожен — они тоже могут тебя заметить!', piranhaIntroTitle:'Стая Пираний!', piranhaIntroDesc:'Маленькие, но быстрые — прикосновение означает мгновенную поимку. Черепаха — безопасное место!', windIntroTitle:'Ветреная Зона!', windIntroDesc:'Здесь ветер толкает тебя вбок, управлять сложнее!', birdIntroTitle:'Волки Ушли, Прилетели Птицы!', birdIntroDesc:'С неба падают огненные шары, уклоняйся! Крокодилы всё ещё в реке.', pitIntroTitle:'Осторожно, Ямы!', pitIntroDesc:'Не падай в ямы на земле, обходи их!', pitName:'Яма', levelMapLinkText:'🗺️ Карта Уровней', levelMapEyebrow:'Карта Уровней', levelMapTitle:'Выбери Уровень', closeLevelMapBtnText:'Закрыть', adPrefsNotAvailable:'Настройки рекламы сейчас недоступны для твоего региона (видны только пользователям ЕЭЗ/Великобритании/Швейцарии).',
       adContinue:'Смотреть Рекламу, +1 Жизнь', adPlaying:'Идёт реклама...', adLoadingText:'Загрузка рекламы…', adNotAvailable:'Реклама сейчас недоступна, попробуйте позже',
-      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', endStarsCaption:'Звёзды', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.', storyNarrator_cat:'Мама-мышь', storyText_cat:'Кот бродит у нашей норки! Приведи моих малышей домой целыми.', storyNarrator_alien:'Глава Колонии', storyText_alien:'Пришельцы похищают наш народ! Проведи их безопасно к кораблю.', storyNarrator_bear:'Старый Рыбак', storyText_bear:'Голодный медведь стережёт реку! Помоги рыбам добраться до озера.', storyNarrator_school:'Встревоженный Родитель', storyText_school:'Наказание уже близко! Проведи учеников домой незаметно от учителя.',
-      hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
-      caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.', crocodileName:'Крокодил', piranhaName:'Пиранья', mousetrapName:'Мышеловка', cameraName:'Камера Наблюдения', netName:'Рыболовная Сеть', birdName:'Птица',
+      shareBtn:'Поделиться Результатом', retryBtn:'Начать Заново', backToMenuBtn:'Вернуться в Меню', reachedLabel:'Достигнуто', endStarsCaption:'Звёзды', riskBonusLabel:'БОНУС ЗА РИСК', bonusStarsLabel:'БОНУС', bonusToastDesc:'Звёзды риска и бонуса', bossLabel:'УРОВЕНЬ БОССА', bossIntroTitle:'Уровень Босса!', bossIntroDesc:'На поле большой и быстрый охотник-босс. Пройди его и получи бонус +5 ⭐!', storyBtn:'История', storyContinueBtn:'Вперёд!', storyNarrator_wolf:'Пастух', storyText_wolf:'Волки напали на луг! Отведи моих овец домой невредимыми.',       hitTitle:'Потеряна Жизнь!', hitSuffix:' жизней осталось',
+      caughtBy:v=>v+' заметил тебя', caughtSub:lv=>'Тебя поймали на Уровне '+lv+'.', crocodileName:'Крокодил', piranhaName:'Пиранья', birdName:'Птица',
       levelUpLabel:lv=>'Уровень '+lv,
       dailyQuestTitle:'📅 Ежедневные Задания', bonusQuestTitle:'🎁 Бонусное Задание', bonusQuestLockedDesc:'Посмотри рекламу, чтобы открыть дополнительное задание',
       dqSummary:(d,t)=>d+'/'+t+' Выполнено',
@@ -1051,15 +1086,14 @@
       dailyQuestToastLabel:'Ежедневное Задание',
       dailyQuestCompleteTitle:'Ежедневное Задание Выполнено',
       dailyQuestRewardDesc:s=>'+'+s+' звёзд получено',
-      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', limitedTimeLabel:'🎃 ОГРАНИЧЕНО ПО ВРЕМЕНИ', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', newBestStarsText:'✨ НОВЫЙ РЕКОРД!', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
+      achToastLabel:'Достижение Получено', streakToastLabel:'ЕЖЕДНЕВНАЯ СЕРИЯ', streakToastTitle:d=>'День '+d+'!', streakToastDesc:s=>'+'+s+' звёзд за возвращение!', spinEyebrow:'Ежедневный Шанс', spinTitle:'Крути Колесо!', spinBtnText:'Крутить!', spinCloseBtn:'Закрыть', spinCardTitle:'🎡 Колесо Удачи', spinReadyStatus:'Готово к вращению!', spinDoneStatus:t=>'Возвращайся завтра: '+t, spinResultText:n=>'Ты выиграл +'+n+' звёзд!', spinBtnDisabled:'Уже крутил сегодня', newBestStarsText:'✨ НОВЫЙ РЕКОРД!', notifLifeTitle:'Жизнь готова! 🐺', notifLifeBody:'Возвращайся и снова избегай опасности!',
       shareText:(t,lv)=>'Я достиг Уровня '+lv+' в Stay Unseen: Sneak Escape ('+t+')! 🎮',
       shareCopied:'Результат скопирован в буфер обмена!',
       skinSelected:'Выбрано', skinSelect:'Выбрать',
       dqReachLevel:t=>'Достигни Уровня '+t+' за одну игру',
       dqCollectFood:t=>'Собери '+t+' еды сегодня',
       dqNoHit:t=>'Пройди '+t+' уровней без потери жизни',
-      foodWolf:'Трава', foodCat:'Сыр', foodAlien:'Энергия', foodBear:'Водоросли', foodSchool:'Карандаш',
-      themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
+      foodWolf:'Трава',       themeLocked:'Заблокировано', watchToUnlock:'Смотреть Рекламу для Разблокировки', unlockingTheme:'Разблокировка...',
       powerUpIntroTitle:'Усиления Открыты!', powerUpIntroDesc:'Используй усиления Невидимка и Скорость за звёзды или посмотрев рекламу.',
       wallIntroTitle:'Подвижная Стена!', wallIntroDesc:'Стены блокируют путь И обзор охотника — спрячься за ней.', safeZoneIntroTitle:'Безопасная Зона!', safeZoneIntroDesc:'Внутри светящегося зелёного пятна охотники тебя не видят.', foodIntroTitle:'Новое Правило!', foodIntroDesc:n=>'На этом уровне сначала нужно собрать '+n+' — цель откроется только потом.', foodRemainingPopup:(n,item)=>'Осталось '+n+' '+item, foodReadyPopup:'Теперь можно домой!',
       nextLifeIn:t=>'Следующая жизнь: '+t, watchAdInstantLife:'📺 Смотреть Рекламу, Жизнь Сразу', buyLifeWithStars:n=>'⭐ Купить Жизнь ('+n+'⭐)',
@@ -1067,8 +1101,7 @@
       shopPricingIntroTitle:'Информация о Магазине', shopPricingIntroDesc:n=>'Каждый образ стоит 20 звёзд. Если звёзд не хватает, посмотри рекламу и получи +'+n+' звёзд.',
       milestoneEyebrow:'Поздравляем', milestoneTitle:lv=>'Уровень '+lv+' Пройден!', milestoneSub:'Ты отлично справляешься, продолжай в том же духе! Поделись этим достижением с друзьями.', milestoneContinueBtn:'Продолжить',
       powerUpInvis:'Невидимка', powerUpSpeed:'Скорость', watchAdForStars:n=>'Смотреть +'+n+'⭐',
-      unlockThemeCost:n=>'🔒 '+n+'⭐', lockHint:n=>'🔒 Другие темы открываются за '+n+'⭐',
-      langBtnLabel:'EN',
+            langBtnLabel:'EN',
       tutLink:'Как Играть?', tutEyebrow:'Как Играть',
       tutSkip:'Пропустить', tutNext:'Далее', tutDone:'Понятно',
       tutorialSteps:[
@@ -1076,8 +1109,7 @@
         {icon:'👁️', title:'Оставайся Незамеченным', desc:'Если попадёшь в светящийся конус зрения охотника, тебя быстро заметят.'},
         {icon:'🏠', title:'Доберись до Цели', desc:'Дойди до дома/хижины на другой стороне, чтобы пройти уровень.'},
         {icon:'🐑', title:'Защити Свою Стаю', desc:'На поздних уровнях за тобой следуют другие — их тоже могут заметить!'},
-        {icon:'⭐', title:'Собирай Еду', desc:'На некоторых уровнях сначала нужно собрать еду, чтобы открыть цель.'},
-        {icon:'🔓', title:'Открывай Новые Темы', desc:'Зарабатывай звёзды, проходя уровни. Открой новую тему за 100 звёзд или смотри рекламу, чтобы получить звёзды.'}
+        {icon:'⭐', title:'Собирай Еду', desc:'На некоторых уровнях сначала нужно собрать еду, чтобы открыть цель.'}
       ]
     }
   };
@@ -1106,14 +1138,14 @@
   // ---------- Persistent progress (stars, achievements, cosmetics) ----------
   function defaultProgress(){
     return {
-      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0},
-      lastLevelByTheme:{wolf:0, cat:0, alien:0, bear:0, school:0, halloween:0}, totalFoodsEver:0, adWatches:0,
+      stars:0, bestLevelEver:0, bestLevelByTheme:{wolf:0},
+      lastLevelByTheme:{wolf:0}, totalFoodsEver:0, adWatches:0,
       noHitStreakBest:0, themesPlayed:[], achievements:{}, tutorialSeen:false, themesUnlocked:['wolf'],
       seenPowerupIntro:false, seenFoodIntro:false, seenShopPricingIntro:false, seenLevel1Hints:false, reviewPromptLevels:[], dailyQuestSet:null, seenThemeStory:{},
-      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, seenRiverIntro:false, seenPiranhaIntro:false, seenMousetrapIntro:false, seenCameraIntro:false, seenNetIntro:false, seenWindIntro:false, seenBirdIntro:false, seenPitIntro:false, spinLastDate:null, levelStars:{},
+      streakCount:0, streakLastDate:null, seenWallIntro:false, seenSafeZoneIntro:false, seenRiverIntro:false, seenPiranhaIntro:false, seenMousetrapIntro:false, seenCameraIntro:false, seenNetIntro:false, seenWindIntro:false, seenBirdIntro:false, seenPitIntro:false, seenBossIntro:false, spinLastDate:null, levelStars:{},
       lives:MAX_LIVES, nextLifeAt:null,
-      skins:{wolf:'default', cat:'default', alien:'default', bear:'default', school:'default', halloween:'default'},
-      ownedSkins:{wolf:['default'], cat:['default'], alien:['default'], bear:['default'], school:['default'], halloween:['default']}
+      skins:{wolf:'default'},
+      ownedSkins:{wolf:['default']}
     };
   }
   const SAVE_KEY = 'gorulme_progress';
@@ -1148,7 +1180,7 @@
     p.totalFoodsEver = clampInt(p.totalFoodsEver, 0, 999999);
     p.adWatches = clampInt(p.adWatches, 0, 999999);
     p.noHitStreakBest = clampInt(p.noHitStreakBest, 0, 100000);
-    ['wolf','cat','alien','bear','school'].forEach(id=>{
+    ['wolf'].forEach(id=>{
       if(p.bestLevelByTheme) p.bestLevelByTheme[id] = clampInt(p.bestLevelByTheme[id], 0, 100000);
       if(p.lastLevelByTheme) p.lastLevelByTheme[id] = clampInt(p.lastLevelByTheme[id], 0, 100000);
     });
@@ -1159,7 +1191,7 @@
     if(typeof p.streakLastDate!=='string') p.streakLastDate = null;
     if(typeof p.spinLastDate!=='string') p.spinLastDate = null;
     if(typeof p.levelStars!=='object' || p.levelStars===null) p.levelStars = {};
-    p.themesUnlocked = p.themesUnlocked.filter(id=>['wolf','cat','alien','bear','school'].includes(id));
+    p.themesUnlocked = ['wolf'];
     if(!p.themesUnlocked.includes('wolf')) p.themesUnlocked.push('wolf');
     return p;
   }
@@ -1188,8 +1220,6 @@
   const POWERUPS = { invis:{cost:50, duration:5000}, speed:{cost:30, duration:5000} };
   const POWERUP_AD_REWARD = 5;
   const SKIN_AD_REWARD = 5;
-  const THEME_UNLOCK_COST = 100;
-  const THEME_UNLOCK_AD_REWARD = 20;
 
   // Hand-drawn "gotcha, delighted" faces for the caught screen — one per
   // theme's hunter, matching the game's cute flat-shape art style.
@@ -1207,52 +1237,6 @@
       <path d="M 38 72 Q 50 86 62 72 Q 50 80 38 72 Z" fill="#5a2a28"/>
       <path d="M 44 74 Q 50 79 56 74" stroke="#e85a5a" stroke-width="3" fill="none" stroke-linecap="round"/>
     </svg>`,
-    cat: `<svg viewBox="0 0 100 100">
-      <polygon points="20,32 14,6 42,26" fill="#e8994d"/>
-      <polygon points="80,32 86,6 58,26" fill="#e8994d"/>
-      <polygon points="24,30 21,15 37,26" fill="#f6c88a"/>
-      <polygon points="76,30 79,15 63,26" fill="#f6c88a"/>
-      <ellipse cx="50" cy="56" rx="33" ry="29" fill="#f0a860"/>
-      <ellipse cx="50" cy="68" rx="16" ry="12" fill="#fbe4c2"/>
-      <polygon points="50,58 45,65 55,65" fill="#e8708a"/>
-      <path d="M 27 46 Q 33 39 39 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M 61 46 Q 67 39 73 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M 50 65 Q 44 74 36 70" stroke="#3a2418" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <path d="M 50 65 Q 56 74 64 70" stroke="#3a2418" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-      <line x1="8" y1="60" x2="28" y2="62" stroke="#3a2418" stroke-width="1.5"/>
-      <line x1="8" y1="68" x2="28" y2="67" stroke="#3a2418" stroke-width="1.5"/>
-      <line x1="92" y1="60" x2="72" y2="62" stroke="#3a2418" stroke-width="1.5"/>
-      <line x1="92" y1="68" x2="72" y2="67" stroke="#3a2418" stroke-width="1.5"/>
-    </svg>`,
-    alien: `<svg viewBox="0 0 100 100">
-      <ellipse cx="50" cy="58" rx="30" ry="36" fill="#8fd9a8"/>
-      <circle cx="50" cy="20" r="4" fill="#8fd9a8"/>
-      <line x1="50" y1="24" x2="50" y2="34" stroke="#8fd9a8" stroke-width="3"/>
-      <path d="M 26 48 Q 33 40 40 48 Q 33 46 26 48 Z" fill="#1a2e22"/>
-      <path d="M 74 48 Q 67 40 60 48 Q 67 46 74 48 Z" fill="#1a2e22"/>
-      <path d="M 38 76 Q 50 88 62 76 Q 50 82 38 76 Z" fill="#1a2e22"/>
-    </svg>`,
-    bear: `<svg viewBox="0 0 100 100">
-      <circle cx="20" cy="22" r="14" fill="#a97a52"/>
-      <circle cx="80" cy="22" r="14" fill="#a97a52"/>
-      <circle cx="20" cy="22" r="7" fill="#d3a87a"/>
-      <circle cx="80" cy="22" r="7" fill="#d3a87a"/>
-      <ellipse cx="50" cy="58" rx="34" ry="30" fill="#a97a52"/>
-      <ellipse cx="50" cy="70" rx="19" ry="15" fill="#e8ceac"/>
-      <ellipse cx="50" cy="62" rx="6" ry="4.5" fill="#2a1a10"/>
-      <path d="M 27 48 Q 33 40 39 48" stroke="#2a1a10" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M 61 48 Q 67 40 73 48" stroke="#2a1a10" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M 38 74 Q 50 88 62 74 Q 50 82 38 74 Z" fill="#5a2a28"/>
-    </svg>`,
-    school: `<svg viewBox="0 0 100 100">
-      <path d="M 16 45 Q 12 8 50 8 Q 88 8 84 45 L 78 40 Q 76 18 50 18 Q 24 18 22 40 Z" fill="#5a4030"/>
-      <ellipse cx="50" cy="55" rx="30" ry="32" fill="#f0c9a0"/>
-      <path d="M 29 46 Q 35 39 41 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <path d="M 59 46 Q 65 39 71 46" stroke="#3a2418" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-      <ellipse cx="50" cy="60" rx="3" ry="4" fill="#d9a878"/>
-      <path d="M 36 70 Q 50 84 64 70 Q 50 78 36 70 Z" fill="#8a3a30"/>
-      <path d="M 42 72 Q 50 77 58 72" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-    </svg>`
   };
   let activePowerUp = null;
   let powerUpEndTime = 0;
@@ -1263,81 +1247,53 @@
       {id:'black', name:'Kara Kuzu', nameEn:'Black Lamb', nameFr:'Agneau Noir', nameEs:'Cordero Negro', nameIt:'Agnello Nero', nameRu:'Чёрный Ягнёнок', cost:20, body:'#3a3a3f', dark:'#242428'},
       {id:'gold', name:'Altın Kuzu', nameEn:'Golden Lamb', nameFr:'Agneau Doré', nameEs:'Cordero Dorado', nameIt:'Agnello Dorato', nameRu:'Золотой Ягнёнок', cost:20, body:'#e8c14a', dark:'#c9a53a'},
       {id:'party', name:'Partili Kuzu', nameEn:'Party Lamb', nameFr:'Agneau de Fête', nameEs:'Cordero de Fiesta', nameIt:'Agnello Festivo', nameRu:'Праздничный Ягнёнок', cost:50, body:'#c9403a', dark:'#8f2c28', accessory:'partyhat'}
-    ],
-    cat: [
-      {id:'default', name:'Klasik Fare', nameEn:'Classic Mouse', nameFr:'Souris Classique', nameEs:'Ratón Clásico', nameIt:'Topo Classico', nameRu:'Обычная Мышь', cost:0, body:'#a79c8f', dark:'#847a70'},
-      {id:'white', name:'Beyaz Fare', nameEn:'White Mouse', nameFr:'Souris Blanche', nameEs:'Ratón Blanco', nameIt:'Topo Bianco', nameRu:'Белая Мышь', cost:20, body:'#f0ece4', dark:'#cfc8bd'},
-      {id:'brown', name:'Kahve Fare', nameEn:'Brown Mouse', nameFr:'Souris Brune', nameEs:'Ratón Marrón', nameIt:'Topo Marrone', nameRu:'Коричневая Мышь', cost:20, body:'#8a6a4a', dark:'#5f4530'},
-      {id:'bowtie', name:'Fiyonklu Fare', nameEn:'Bow Mouse', nameFr:'Souris à Nœud', nameEs:'Ratón con Moño', nameIt:'Topo con Fiocco', nameRu:'Мышь с Бантиком', cost:50, body:'#e89830', dark:'#a86a1a', accessory:'bow'}
-    ],
-    alien: [
-      {id:'default', name:'Klasik İnsan', nameEn:'Classic Human', nameFr:'Humain Classique', nameEs:'Humano Clásico', nameIt:'Umano Classico', nameRu:'Обычный Человек', cost:0, body:'#e0b98f', dark:'#b8906a'},
-      {id:'tan', name:'Bronz Ten', nameEn:'Tan Skin', nameFr:'Peau Bronzée', nameEs:'Piel Bronceada', nameIt:'Pelle Abbronzata', nameRu:'Смуглая Кожа', cost:20, body:'#c68a5a', dark:'#9a6640'},
-      {id:'pale', name:'Solgun Ten', nameEn:'Pale Skin', nameFr:'Peau Pâle', nameEs:'Piel Pálida', nameIt:'Pelle Pallida', nameRu:'Бледная Кожа', cost:20, body:'#f0d8c0', dark:'#d0b89a'},
-      {id:'explorer', name:'Kaşif', nameEn:'Explorer', nameFr:'Explorateur', nameEs:'Explorador', nameIt:'Esploratore', nameRu:'Исследователь', cost:50, body:'#3a9e5c', dark:'#256b3d', accessory:'helmet'}
-    ],
-    bear: [
-      {id:'default', name:'Klasik Balık', nameEn:'Classic Fish', nameFr:'Poisson Classique', nameEs:'Pez Clásico', nameIt:'Pesce Classico', nameRu:'Обычная Рыба', cost:0, body:'#e8955a', dark:'#c9723a'},
-      {id:'silver', name:'Gümüş Balık', nameEn:'Silver Fish', nameFr:'Poisson Argenté', nameEs:'Pez Plateado', nameIt:'Pesce Argentato', nameRu:'Серебряная Рыба', cost:20, body:'#c8d4dc', dark:'#9aabb5'},
-      {id:'gold', name:'Altın Balık', nameEn:'Golden Fish', nameFr:'Poisson Doré', nameEs:'Pez Dorado', nameIt:'Pesce Dorato', nameRu:'Золотая Рыба', cost:20, body:'#f0c94a', dark:'#d1a52f'},
-      {id:'royal', name:'Kraliyet Balığı', nameEn:'Royal Fish', nameFr:'Poisson Royal', nameEs:'Pez Real', nameIt:'Pesce Reale', nameRu:'Королевская Рыба', cost:50, body:'#2a4a9e', dark:'#1a3070', accessory:'crown'}
-    ],
-    school: [
-      {id:'default', name:'Klasik Öğrenci', nameEn:'Classic Student', nameFr:'Élève Classique', nameEs:'Estudiante Clásico', nameIt:'Studente Classico', nameRu:'Обычный Ученик', cost:0, body:'#e8e4d8', dark:'#c4bfa8'},
-      {id:'navy', name:'Lacivert Forma', nameEn:'Navy Uniform', nameFr:'Uniforme Marine', nameEs:'Uniforme Azul Marino', nameIt:'Uniforme Blu Navy', nameRu:'Тёмно-синяя Форма', cost:20, body:'#4a5a80', dark:'#2f3a54'},
-      {id:'red', name:'Kırmızı Forma', nameEn:'Red Uniform', nameFr:'Uniforme Rouge', nameEs:'Uniforme Rojo', nameIt:'Uniforme Rossa', nameRu:'Красная Форма', cost:20, body:'#c9584f', dark:'#8f3a33'},
-      {id:'graduate', name:'Mezun', nameEn:'Graduate', nameFr:'Diplômé', nameEs:'Graduado', nameIt:'Laureato', nameRu:'Выпускник', cost:50, body:'#2ea8a0', dark:'#1c7570', accessory:'gradcap'}
-    ],
-    halloween: [
-      {id:'default', name:'Klasik Kostüm', nameEn:'Classic Costume', nameFr:'Costume Classique', nameEs:'Disfraz Clásico', nameIt:'Costume Classico', nameRu:'Обычный Костюм', cost:0, body:'#e8833d', dark:'#b8602a'},
-      {id:'ghostly', name:'Hayalet Kostüm', nameEn:'Ghostly Costume', nameFr:'Costume Fantomatique', nameEs:'Disfraz Fantasmal', nameIt:'Costume Fantasma', nameRu:'Костюм Призрака', cost:20, body:'#d8e8e0', dark:'#a8c0b5'},
-      {id:'witchy', name:'Cadı Kostümü', nameEn:'Witchy Costume', nameFr:'Costume de Sorcière', nameEs:'Disfraz de Bruja', nameIt:'Costume da Strega', nameRu:'Костюм Ведьмы', cost:20, body:'#6a4a8a', dark:'#453060'}
     ]
   };
-  function drawAccessory(type, r){
+  function drawAccessory(type, r, c){
+    const g = c || ctx;
     if(!type) return;
-    ctx.save();
+    g.save();
     if(type==='partyhat'){
-      ctx.fillStyle = '#3a6fc9';
-      ctx.beginPath();
-      ctx.moveTo(r*0.15, -r*0.55); ctx.lineTo(r*0.65, -r*0.55); ctx.lineTo(r*0.4, -r*1.15);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#f0c94a';
-      ctx.beginPath(); ctx.arc(r*0.4, -r*1.15, r*0.1, 0, 7); ctx.fill();
+      g.fillStyle = '#3a6fc9';
+      g.beginPath();
+      g.moveTo(r*0.15, -r*0.55); g.lineTo(r*0.65, -r*0.55); g.lineTo(r*0.4, -r*1.15);
+      g.closePath(); g.fill();
+      g.fillStyle = '#f0c94a';
+      g.beginPath(); g.arc(r*0.4, -r*1.15, r*0.1, 0, 7); g.fill();
     } else if(type==='bow'){
-      ctx.fillStyle = '#7a3ac9';
-      ctx.beginPath();
-      ctx.moveTo(-r*0.05,-r*0.7); ctx.lineTo(-r*0.4,-r*0.95); ctx.lineTo(-r*0.4,-r*0.45); ctx.closePath(); ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(r*0.05,-r*0.7); ctx.lineTo(r*0.4,-r*0.95); ctx.lineTo(r*0.4,-r*0.45); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#4f2088';
-      ctx.beginPath(); ctx.arc(0,-r*0.7,r*0.13,0,7); ctx.fill();
+      g.fillStyle = '#7a3ac9';
+      g.beginPath();
+      g.moveTo(-r*0.05,-r*0.7); g.lineTo(-r*0.4,-r*0.95); g.lineTo(-r*0.4,-r*0.45); g.closePath(); g.fill();
+      g.beginPath();
+      g.moveTo(r*0.05,-r*0.7); g.lineTo(r*0.4,-r*0.95); g.lineTo(r*0.4,-r*0.45); g.closePath(); g.fill();
+      g.fillStyle = '#4f2088';
+      g.beginPath(); g.arc(0,-r*0.7,r*0.13,0,7); g.fill();
     } else if(type==='helmet'){
-      ctx.fillStyle = 'rgba(230,170,90,0.6)';
-      ctx.beginPath(); ctx.arc(0,0,r*0.95,Math.PI,0); ctx.closePath(); ctx.fill();
-      ctx.strokeStyle = '#a05a1a'; ctx.lineWidth = r*0.08;
-      ctx.beginPath(); ctx.arc(0,0,r*0.95,Math.PI,0); ctx.stroke();
+      g.fillStyle = 'rgba(230,170,90,0.6)';
+      g.beginPath(); g.arc(0,0,r*0.95,Math.PI,0); g.closePath(); g.fill();
+      g.strokeStyle = '#a05a1a'; g.lineWidth = r*0.08;
+      g.beginPath(); g.arc(0,0,r*0.95,Math.PI,0); g.stroke();
     } else if(type==='crown'){
-      ctx.fillStyle = '#f0c94a';
-      ctx.beginPath();
-      ctx.moveTo(-r*0.5,-r*0.5); ctx.lineTo(-r*0.5,-r*0.95); ctx.lineTo(-r*0.25,-r*0.65);
-      ctx.lineTo(0,-r*1.05); ctx.lineTo(r*0.25,-r*0.65); ctx.lineTo(r*0.5,-r*0.95);
-      ctx.lineTo(r*0.5,-r*0.5); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#c9366a';
-      ctx.beginPath(); ctx.arc(0,-r*0.7,r*0.09,0,7); ctx.fill();
+      g.fillStyle = '#f0c94a';
+      g.beginPath();
+      g.moveTo(-r*0.5,-r*0.5); g.lineTo(-r*0.5,-r*0.95); g.lineTo(-r*0.25,-r*0.65);
+      g.lineTo(0,-r*1.05); g.lineTo(r*0.25,-r*0.65); g.lineTo(r*0.5,-r*0.95);
+      g.lineTo(r*0.5,-r*0.5); g.closePath(); g.fill();
+      g.fillStyle = '#c9366a';
+      g.beginPath(); g.arc(0,-r*0.7,r*0.09,0,7); g.fill();
     } else if(type==='gradcap'){
-      ctx.fillStyle = '#2a2a30';
-      ctx.beginPath(); ctx.arc(0,-r*0.55,r*0.4,0,7); ctx.fill();
-      ctx.save();
-      ctx.translate(0,-r*0.55); ctx.rotate(Math.PI/4);
-      ctx.fillRect(-r*0.55,-r*0.55,r*1.1,r*1.1);
-      ctx.restore();
-      ctx.strokeStyle = '#f0c94a'; ctx.lineWidth = r*0.06;
-      ctx.beginPath(); ctx.moveTo(r*0.35,-r*0.55); ctx.lineTo(r*0.5,-r*0.15); ctx.stroke();
-      ctx.fillStyle = '#f0c94a';
-      ctx.beginPath(); ctx.arc(r*0.5,-r*0.1,r*0.09,0,7); ctx.fill();
+      g.fillStyle = '#2a2a30';
+      g.beginPath(); g.arc(0,-r*0.55,r*0.4,0,7); g.fill();
+      g.save();
+      g.translate(0,-r*0.55); g.rotate(Math.PI/4);
+      g.fillRect(-r*0.55,-r*0.55,r*1.1,r*1.1);
+      g.restore();
+      g.strokeStyle = '#f0c94a'; g.lineWidth = r*0.06;
+      g.beginPath(); g.moveTo(r*0.35,-r*0.55); g.lineTo(r*0.5,-r*0.15); g.stroke();
+      g.fillStyle = '#f0c94a';
+      g.beginPath(); g.arc(r*0.5,-r*0.1,r*0.09,0,7); g.fill();
     }
-    ctx.restore();
+    g.restore();
   }
 
   function getCurrentSkin(){
@@ -1348,7 +1304,7 @@
 
   function overallBest(){
     const b = progress.bestLevelByTheme || {};
-    return Math.max(b.wolf||0, b.cat||0, b.alien||0);
+    return b.wolf||0;
   }
 
   const ACHIEVEMENTS = [
@@ -1368,8 +1324,6 @@
       desc:"Can kaybetmeden 5 bölüm geç", descEn:'Clear 5 levels without losing a life', descFr:'Termine 5 niveaux sans perdre de vie', descEs:'Supera 5 niveles sin perder una vida', descIt:'Supera 5 livelli senza perdere una vita', descRu:'Пройди 5 уровней без потери жизни', check:()=>progress.noHitStreakBest>=5},
     {id:'ad_watch', title:'İkinci Şans', titleEn:'Second Chance', titleFr:'Seconde Chance', titleEs:'Segunda Oportunidad', titleIt:'Seconda Occasione', titleRu:'Второй Шанс',
       desc:"Reklam izleyerek devam et", descEn:'Continue by watching an ad', descFr:'Continue en regardant une pub', descEs:'Continúa viendo un anuncio', descIt:'Continua guardando una pubblicità', descRu:'Продолжи, посмотрев рекламу', check:()=>progress.adWatches>=1},
-    {id:'all_themes', title:'Tema Gezgini', titleEn:'Theme Explorer', titleFr:'Explorateur de Thèmes', titleEs:'Explorador de Temas', titleIt:'Esploratore di Temi', titleRu:'Исследователь Тем',
-      desc:"Üç temanın hepsinde oyna", descEn:'Play all three themes', descFr:'Joue aux trois thèmes', descEs:'Juega los tres temas', descIt:'Gioca tutti e tre i temi', descRu:'Сыграй во все три темы', check:()=>progress.themesPlayed.length>=3}
   ];
   function checkAchievements(){
     const newly = [];
@@ -1387,8 +1341,10 @@
   function showAchievementToast(a, icon, label){
     const el = document.getElementById('achToast');
     document.getElementById('achToastIcon').textContent = icon || '🏆';
-    document.getElementById('achToastLabel').textContent = label || S().achToastLabel;
-    document.getElementById('achToastTitle').textContent = tField(a,'title');
+    const labelText = label || S().achToastLabel, titleText = tField(a,'title');
+    document.getElementById('achToastLabel').textContent = labelText;
+    document.getElementById('achToastLabel').style.display = (labelText === titleText) ? 'none' : ''; // never show the same text twice
+    document.getElementById('achToastTitle').textContent = titleText;
     document.getElementById('achToastDesc').textContent = tField(a,'desc');
     el.classList.add('show');
     setTimeout(()=> el.classList.remove('show'), 2600);
@@ -1397,6 +1353,7 @@
     const el = document.getElementById('achToast');
     document.getElementById('achToastIcon').textContent = '🔥';
     document.getElementById('achToastLabel').textContent = S().streakToastLabel;
+    document.getElementById('achToastLabel').style.display = '';
     document.getElementById('achToastTitle').textContent = S().streakToastTitle(day);
     document.getElementById('achToastDesc').textContent = S().streakToastDesc(stars);
     el.classList.add('show');
@@ -1410,7 +1367,9 @@
     return STREAK_REWARD_TIERS[idx];
   }
   function dateStrOffset(daysAgo){
-    const d = new Date(Date.now() - daysAgo*86400000);
+    // calendar arithmetic (not "minus 24h"), so daylight-saving days of 23/25 hours can't skew the date
+    const d = new Date(Date.now());
+    d.setDate(d.getDate() - daysAgo);
     return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
   }
   function checkDailyStreak(){
@@ -1641,7 +1600,7 @@
   }
   function renderDailyQuestsList(){
     ensureDailyQuestSet();
-    document.getElementById('dqEyebrowText').textContent = S().dailyQuestTitle;
+    document.getElementById('dqEyebrowText').style.display = 'none'; // eyebrow would just repeat the title
     document.getElementById('dqTitleText').textContent = S().dailyQuestTitle;
     document.getElementById('closeDqBtn').textContent = S().closeLink;
     const list = document.getElementById('dqList');
@@ -1662,7 +1621,7 @@
           : (q.progress+'/'+q.target);
         bodyHtml = `<div class="t1">${dailyQuestLabel(q)}</div><div class="t2">${statusText}</div>`;
       }
-      row.innerHTML = `<div class="ico">${icon}</div><div style="flex:1;">${bodyHtml}</div>`;
+      row.innerHTML = `<div class="ico">${icon}</div><div style="flex:1; min-width:0;">${bodyHtml}</div>`;
       if(!q.unlocked){
         const btn = document.createElement('button');
         btn.className = 'skin-btn';
@@ -1704,11 +1663,16 @@
   let crocodiles = [];
   let piranhas = [];
   let turtle = null;
-  let mousetraps = [];
-  let cameras = [];
-  let nets = [];
   let windZones = [];
   let pits = [];
+  // --- excitement systems: near-miss bonus, risky bonus stars, boss levels ---
+  let shakeT = 0;            // remaining screen-shake time
+  let riskPoints = 0;        // near-misses this level (capped when paid out)
+  let bonusStarsGot = 0;     // optional bonus stars collected this level
+  let lastNearMissT = -100000;
+  let bossLevel = false;
+  let floaters = [];         // short floating texts ("+1 RISK BONUS")
+  let bonusStars = [];       // optional gold stars placed near danger
   let birds = [];
   let fireballs = [];
   let drankWater = false;
@@ -1769,6 +1733,10 @@
   function sfxDetectBlip(){ tone(440,0.08,{type:'square',vol:0.1}); }
   function sfxCollect(){ tone(700,0.1,{vol:0.2}); tone(1000,0.12,{delay:0.09,vol:0.16}); }
   function sfxLevelUp(){ tone(523,0.12,{vol:0.2}); tone(659,0.12,{delay:0.1,vol:0.2}); tone(784,0.2,{delay:0.2,vol:0.22}); }
+  function sfxHeartbeat(){
+    tone(120,0.14,{vol:0.32,slideTo:70});
+    tone(100,0.16,{delay:0.17,vol:0.28,slideTo:60});
+  }
   function sfxHit(){ tone(200,0.28,{type:'sawtooth',vol:0.24,slideTo:70}); }
   function sfxGameOver(){ tone(320,0.45,{type:'sawtooth',vol:0.2,slideTo:60}); }
   function sfxTap(){ tone(500,0.05,{type:'square',vol:0.08}); }
@@ -1798,24 +1766,8 @@
 
   function spawnDecor(){
     decor = [];
-    if(theme.deco==='stars'){
-      for(let i=0;i<70;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(0.5,1.8), a:rand(0.3,1)});
-    } else if(theme.deco==='trees'){
-      for(let i=0;i<10;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(18,34), rot:rand(0,6)});
-    } else if(theme.deco==='meadow'){
-      for(let i=0;i<4;i++) decor.push({type:'tree', x:rand(0,W), y:rand(0,H), r:rand(20,32)});
-      for(let i=0;i<26;i++) decor.push({type:'grass', x:rand(0,W), y:rand(0,H), r:rand(10,18), rot:rand(-0.3,0.3)});
-    } else if(theme.deco==='riverbank'){
-      for(let i=0;i<5;i++) decor.push({type:'tree', x:rand(0,W), y:rand(0,H), r:rand(20,32)});
-      for(let i=0;i<22;i++) decor.push({type:'glint', x:rand(0,W), y:rand(0,H), r:rand(3,6), a:rand(0.3,0.8)});
-    } else if(theme.deco==='classroom'){
-      for(let i=0;i<9;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(20,30), rot:rand(-0.15,0.15)});
-    } else if(theme.deco==='halloween'){
-      for(let i=0;i<5;i++) decor.push({type:'pumpkin', x:rand(0,W), y:rand(0,H), r:rand(18,28)});
-      for(let i=0;i<20;i++) decor.push({type:'grass', x:rand(0,W), y:rand(0,H), r:rand(10,18), rot:rand(-0.3,0.3)});
-    } else {
-      for(let i=0;i<8;i++) decor.push({x:rand(0,W), y:rand(0,H), r:rand(16,26), rot:rand(0,6)});
-    }
+    for(let i=0;i<4;i++) decor.push({type:'tree', x:rand(0,W), y:rand(0,H), r:rand(20,32)});
+    for(let i=0;i<26;i++) decor.push({type:'grass', x:rand(0,W), y:rand(0,H), r:rand(10,18), rot:rand(-0.3,0.3)});
   }
 
   function cornerPoint(idx, pad){
@@ -1826,6 +1778,7 @@
     return pts[idx%4];
   }
   let lastGoalCorner = -1, lastSpawnCorner = -1;
+  let layoutW = 0, layoutH = 0; // screen size the current level layout was built for
 
   function wallRect(wl){
     const off = Math.sin(performance.now()/1000*wl.speed + wl.phase) * wl.range;
@@ -1845,7 +1798,25 @@
     return false;
   }
 
+  // Picks a spot for a level object: the first random candidate that satisfies every rule
+  // (each rule returns a margin; >= 0 means satisfied). If none does after many tries
+  // (tight small screens), returns the candidate with the LARGEST worst-case margin
+  // instead of an arbitrary one, so required items never end up on a hazard.
+  function placeBest(gen, rules, tries){
+    tries = tries || 300;
+    let best = null, bestScore = -Infinity;
+    for(let t=0; t<tries; t++){
+      const c = gen();
+      let worst = Infinity;
+      for(const r of rules){ const m = r(c); if(m < worst) worst = m; }
+      if(worst >= 0) return c;
+      if(worst > bestScore){ bestScore = worst; best = c; }
+    }
+    return best;
+  }
+
   function setupLevel(lv){
+    layoutW = W; layoutH = H;
     levelJustStartedAt = performance.now();
     levelStartTime = performance.now();
     levelWasHit = false;
@@ -1862,27 +1833,40 @@
     // difficulty ramp: steps up every 5 levels — cone reaches much further
     // and stays wide for longer, so distance no longer feels "safe" as early
     const tier = Math.floor((lv-1)/5);
+    // playfield that is never covered by the HUD (top) or the power-up buttons (bottom)
+    const UI_TOP = 160, UI_BOTTOM = lv>=21 ? 130 : 70;
 
-    // At level 60+ in the Wolf & Lamb theme, randomly pick 2 of these 3 hazard
-    // categories instead of stacking all three at once (crocodiles+piranhas,
-    // birds, and pits) — keeps any single level's difficulty reasonable.
+    // reset per-level excitement state
+    const isBoss = lv>=10 && lv%10===0;
+    bossLevel = isBoss;
+    shakeT = 0; riskPoints = 0; bonusStarsGot = 0; lastNearMissT = -100000;
+    floaters = []; bonusStars = [];
+
+    // At level 60+ in the Wolf & Lamb theme, randomly pick EXACTLY 2 of these 4
+    // separate hazards (crocodile, piranha, birds, pits) instead of stacking them
+    // all — keeps any single level's difficulty reasonable.
+    // (river = true whenever a crocodile or piranha is picked, since both live there.)
     // Wolves themselves are tied to "birds": when birds are picked, wolves
     // stay away exactly like before; when birds are NOT picked, the wolves
     // come back instead.
-    let lv60Cats = {river:false, birds:false, pits:false};
+    let lv60Cats = {croc:false, piranha:false, river:false, birds:false, pits:false};
     if(lv>=60 && theme.id==='wolf'){
-      const pool = ['river','birds','pits'];
+      const pool = ['croc','piranha','birds','pits'];
       for(let i=pool.length-1;i>0;i--){
         const j = Math.floor(Math.random()*(i+1));
         const tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
       }
+      // on boss levels the boss itself counts as one of the (max 2) hazards
       lv60Cats[pool[0]] = true;
-      lv60Cats[pool[1]] = true;
+      if(!isBoss) lv60Cats[pool[1]] = true;
+      lv60Cats.river = lv60Cats.croc || lv60Cats.piranha;
     }
 
-    const nHunters = (theme.id==='wolf' && lv>=60)
+    let nHunters = (theme.id==='wolf' && lv>=60)
       ? (lv60Cats.birds ? 0 : (lv<40 ? 4 : 3))
       : (lv<5 ? 1 : (lv<10 ? 2 : (lv<20 ? 3 : (lv<40 ? 4 : 3))));
+    // boss levels: the boss replaces one of the regular hunters
+    if(isBoss && nHunters>0) nHunters = Math.max(1, nHunters-1);
     const coneHalf = clamp(0.55 - tier*0.012, 0.30, 0.55);
     const coneRange = clamp(220 + tier*35, 220, 550);
     const rotSpeed = clamp(0.5 + tier*0.10, 0.5, 2.0);
@@ -1890,12 +1874,10 @@
 
     hunters = [];
     for(let i=0;i<nHunters;i++){
-      let hx,hy, tries=0;
-      do{
-        hx = rand(W*0.25, W*0.75);
-        hy = rand(H*0.25, H*0.75);
-        tries++;
-      } while((dist(hx,hy,sp.x,sp.y)<160 || dist(hx,hy,gp.x,gp.y)<140) && tries<30);
+      const hpos = placeBest(
+        ()=>({x:rand(W*0.25, W*0.75), y:rand(Math.max(H*0.25, UI_TOP-30), Math.min(H*0.75, H-UI_BOTTOM))}),
+        [c=>dist(c.x,c.y,sp.x,sp.y)-160, c=>dist(c.x,c.y,gp.x,gp.y)-140, ...hunters.map(o=>(c=>dist(c.x,c.y,o.x,o.y)-85))]);
+      const hx = hpos.x, hy = hpos.y;
       const swing = rand(0.9,2.2);
       const speed = rotSpeed * rand(0.85,1.15) * (i%2===0?1:-1);
       const phase = rand(0,10);
@@ -1934,21 +1916,50 @@
       });
     }
 
+    // ---- BOSS: a big, fast hunter that also patrols sideways (every 10th level) ----
+    if(isBoss){
+      const bPx1 = W*0.2, bPx2 = W*0.8;
+      // the boss patrols sideways along its row, so what matters is how far that ROW is from spawn/goal
+      const rowGap = Math.min(230, H*0.3);
+      const bpos = placeBest(
+        ()=>({x:rand(bPx1, bPx2), y:rand(Math.max(H*0.25, UI_TOP-20), Math.min(H*0.75, H-UI_BOTTOM))}),
+        [c=>Math.abs(c.y-sp.y)-rowGap, c=>Math.abs(c.y-gp.y)-120, ...hunters.map(h2=>(c=>dist(c.x,c.y,h2.x,h2.y)-110))]);
+      const bx = bpos.x, by = bpos.y;
+      const bSwing = rand(1.1,1.8);
+      const bSpeed = clamp(rotSpeed*1.15, 0.6, 2.2);
+      const bPhase = rand(0,10);
+      const bConeHalf = clamp(coneHalf*1.15, 0.30, 0.75);
+      const bConeRange = clamp(coneRange*1.3, 260, 700);
+      const bInitialOffset = Math.sin(bPhase*bSpeed*0.6)*bSwing;
+      const bAngleToSpawn = Math.atan2(sp.y-by, sp.x-bx);
+      let bBase = rand(0,Math.PI*2);
+      if(angDiff(bBase + bInitialOffset, bAngleToSpawn) < bConeHalf/2 + 0.5){
+        bBase = bAngleToSpawn + Math.PI - bInitialOffset;
+      }
+      hunters.push({
+        x:bx, y:by, baseAngle:bBase, swing:bSwing, speed:bSpeed, phase:bPhase,
+        coneHalf:bConeHalf, coneRange:bConeRange,
+        r:26, angle:0,
+        boss:true, px1:bPx1, px2:bPx2, pdir:(Math.random()<0.5?1:-1), pspeed:38
+      });
+      if(!progress.seenBossIntro){
+        progress.seenBossIntro = true;
+        saveProgress();
+        setTimeout(()=> showElementHints([{x:W/2, y:H*0.27, text:'👑 '+S().bossIntroTitle+' '+S().bossIntroDesc}], 5500), 600);
+      }
+    }
+
     // food tier: every 10 levels adds one more food stop that must be
     // collected before the goal unlocks (max 3)
     const foodsNeeded = lv<10 ? 0 : Math.min(3, Math.floor(lv/10));
     foods = [];
     for(let i=0;i<foodsNeeded;i++){
-      let fx,fy,tries=0, ok=false;
-      do{
-        fx = rand(W*0.18, W*0.82);
-        fy = rand(H*0.18, H*0.82);
-        tries++;
-        ok = dist(fx,fy,sp.x,sp.y)>150 && dist(fx,fy,gp.x,gp.y)>110 &&
-             hunters.every(h=>dist(fx,fy,h.x,h.y)>110) &&
-             foods.every(f=>dist(fx,fy,f.x,f.y)>90);
-      } while(!ok && tries<40);
-      foods.push({x:fx, y:fy, r:13, collected:false});
+      const fpos = placeBest(
+        ()=>({x:rand(44, W-44), y:rand(UI_TOP+10, H-UI_BOTTOM-10)}),
+        [c=>dist(c.x,c.y,sp.x,sp.y)-150, c=>dist(c.x,c.y,gp.x,gp.y)-110,
+         ...hunters.map(h=>(h.boss ? (c=>Math.abs(c.y-h.y)-75) : (c=>dist(c.x,c.y,h.x,h.y)-110))),
+         ...foods.map(f=>(c=>dist(c.x,c.y,f.x,f.y)-90))]);
+      foods.push({x:fpos.x, y:fpos.y, r:13, collected:false});
     }
     goalUnlocked = foodsNeeded===0 && lv<40;
     if(foodsNeeded>0 && !progress.seenFoodIntro){
@@ -2017,7 +2028,7 @@
       do{ riverY = rand(H*0.32, H*0.68); }
       while(Math.abs(riverY-sp.y)<140 || Math.abs(riverY-gp.y)<140);
       river = {y:riverY-bandH/2, h:bandH};
-      const nCrocs = lv<70 ? 1 : 2;
+      const nCrocs = (lv>=60 && !lv60Cats.croc) ? 0 : (lv<70 ? 1 : 2);
       for(let i=0;i<nCrocs;i++){
         const x1 = rand(W*0.15, W*0.35);
         const x2 = rand(W*0.65, W*0.85);
@@ -2038,7 +2049,7 @@
         });
       }
       // piranhas: small, fast, erratic — appear at higher levels for extra river danger
-      if(lv>=55){
+      if(lv>=55 && (lv<60 || lv60Cats.piranha)){
         const nPiranhas = lv<85 ? 2 : 3;
         for(let i=0;i<nPiranhas;i++){
           const px = rand(W*0.2, W*0.8);
@@ -2091,8 +2102,8 @@
         birds.push({
           x:bx, y:by, baseX:bx,
           driftPhase: rand(0,10),
-          fireCooldown: rand(1.2, 2.2),
-          fireInterval: lv<90 ? rand(2.0,2.8) : rand(1.5,2.2),
+          fireCooldown: rand(2.0, 3.2),
+          fireInterval: lv<90 ? rand(3.0,4.0) : rand(2.4,3.2),
           r:16
         });
       }
@@ -2108,119 +2119,19 @@
     if(lv>=60 && theme.id==='wolf' && lv60Cats.pits){
       const nPits = lv<90 ? 3 : 4;
       for(let i=0;i<nPits;i++){
-        let px,py,tries=0,ok=false;
-        do{
-          px = rand(W*0.15, W*0.85);
-          py = rand(H*0.25, H*0.82);
-          tries++;
-          ok = dist(px,py,sp.x,sp.y)>150 && dist(px,py,gp.x,gp.y)>150 &&
-               hunters.every(hh=>dist(px,py,hh.x,hh.y)>90) &&
-               pits.every(p2=>dist(px,py,p2.x,p2.y)>95);
-        } while(!ok && tries<40);
-        pits.push({x:px, y:py, r:24});
+        // pits must never swallow a required food: keep a clear margin around every food too
+        const ppos = placeBest(
+          ()=>({x:rand(W*0.15, W*0.85), y:rand(UI_TOP+10, H-UI_BOTTOM-10)}),
+          [c=>dist(c.x,c.y,sp.x,sp.y)-150, c=>dist(c.x,c.y,gp.x,gp.y)-150,
+           ...hunters.map(hh=>(c=>dist(c.x,c.y,hh.x,hh.y)-90)),
+           ...pits.map(p2=>(c=>dist(c.x,c.y,p2.x,p2.y)-95)),
+           ...foods.map(f=>(c=>dist(c.x,c.y,f.x,f.y)-75))]);
+        pits.push({x:ppos.x, y:ppos.y, r:24});
       }
       if(!progress.seenPitIntro){
         progress.seenPitIntro = true;
         saveProgress();
         setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🕳️ '+S().pitIntroTitle+' '+S().pitIntroDesc}], 5500), 500);
-      }
-    }
-
-    // mousetraps: Cat & Mouse theme only, static instant-catch hazards
-    mousetraps = [];
-    if(lv>=40 && theme.id==='cat'){
-      const nTraps = lv<70 ? 2 : 3;
-      for(let i=0;i<nTraps;i++){
-        let tx,ty,tries=0,ok=false;
-        do{
-          tx = rand(W*0.15, W*0.85);
-          ty = rand(H*0.25, H*0.8);
-          tries++;
-          ok = dist(tx,ty,sp.x,sp.y)>150 && dist(tx,ty,gp.x,gp.y)>150 &&
-               hunters.every(hh=>dist(tx,ty,hh.x,hh.y)>90) &&
-               mousetraps.every(mt=>dist(tx,ty,mt.x,mt.y)>90);
-        } while(!ok && tries<40);
-        mousetraps.push({x:tx, y:ty, r:16});
-      }
-      if(!progress.seenMousetrapIntro){
-        progress.seenMousetrapIntro = true;
-        saveProgress();
-        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🪤 '+S().mousetrapIntroTitle+' '+S().mousetrapIntroDesc}], 5500), 500);
-      }
-    }
-
-    // security cameras: Alien & Human theme only, stationary sweeping cone hazards
-    cameras = [];
-    if(lv>=40 && theme.id==='alien'){
-      const nCams = lv<70 ? 1 : 2;
-      for(let i=0;i<nCams;i++){
-        let cx,cy,tries=0,ok=false;
-        do{
-          cx = rand(W*0.2, W*0.8);
-          cy = rand(H*0.25, H*0.8);
-          tries++;
-          ok = dist(cx,cy,sp.x,sp.y)>170 && dist(cx,cy,gp.x,gp.y)>170 &&
-               hunters.every(hh=>dist(cx,cy,hh.x,hh.y)>120) &&
-               cameras.every(c2=>dist(cx,cy,c2.x,c2.y)>150);
-        } while(!ok && tries<40);
-        const camSwing = rand(0.6, 1.0);
-        const camSpeed = rand(0.5, 0.8);
-        const camPhase = rand(0, 10);
-        const camConeHalf = clamp(coneHalf*0.85, 0.22, 0.5);
-        // Never let a camera start already scanning the lamb's spawn point —
-        // same protection hunters get.
-        const camInitialOffset = Math.sin(camPhase*camSpeed*0.6)*camSwing;
-        const camAngleToSpawn = Math.atan2(sp.y-cy, sp.x-cx);
-        let camBaseAngle = rand(0,Math.PI*2);
-        if(angDiff(camBaseAngle + camInitialOffset, camAngleToSpawn) < camConeHalf/2 + 0.5){
-          camBaseAngle = camAngleToSpawn + Math.PI - camInitialOffset;
-        }
-        cameras.push({
-          x:cx, y:cy,
-          baseAngle: camBaseAngle,
-          swing: camSwing,
-          speed: camSpeed,
-          phase: camPhase,
-          angle: 0,
-          coneHalf: camConeHalf,
-          coneRange: clamp(coneRange*0.9, 180, 500),
-          r:15
-        });
-      }
-      if(!progress.seenCameraIntro){
-        progress.seenCameraIntro = true;
-        saveProgress();
-        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'📷 '+S().cameraIntroTitle+' '+S().cameraIntroDesc}], 5500), 500);
-      }
-    }
-
-    // fishing nets: Bear & Fish theme only, swinging-arc hazards
-    nets = [];
-    if(lv>=40 && theme.id==='bear'){
-      const nNets = lv<70 ? 1 : 2;
-      for(let i=0;i<nNets;i++){
-        let px,py,tries=0,ok=false;
-        do{
-          px = rand(W*0.25, W*0.75);
-          py = rand(H*0.3, H*0.75);
-          tries++;
-          ok = dist(px,py,sp.x,sp.y)>170 && dist(px,py,gp.x,gp.y)>170 &&
-               hunters.every(hh=>dist(px,py,hh.x,hh.y)>120) &&
-               nets.every(n2=>dist(px,py,n2.x,n2.y)>160);
-        } while(!ok && tries<40);
-        nets.push({
-          px, py, armLen: rand(70,95),
-          baseAngle: rand(0, Math.PI*2),
-          swing: rand(0.9, 1.3),
-          speed: rand(0.7, 1.0),
-          phase: rand(0, 10),
-          x:px, y:py, r:19
-        });
-      }
-      if(!progress.seenNetIntro){
-        progress.seenNetIntro = true;
-        saveProgress();
-        setTimeout(()=> showElementHints([{x:W/2, y:H*0.4, text:'🕸️ '+S().netIntroTitle+' '+S().netIntroDesc}], 5500), 500);
       }
     }
 
@@ -2249,6 +2160,42 @@
     }
 
 
+    // ---- optional RISKY BONUS STARS: placed inside danger zones, never required ----
+    bonusStars = [];
+    const nBonus = lv<8 ? 0 : (lv<30 ? 1 : 2);
+    const dangerSpots = [];
+    hunters.forEach(h2=> dangerSpots.push({kind:'hunter', h:h2}));
+    crocodiles.forEach(c2=> dangerSpots.push({kind:'pt', x:c2.x, y:c2.y}));
+    pits.forEach(p2=> dangerSpots.push({kind:'pt', x:p2.x, y:p2.y}));
+    birds.forEach(b2=> dangerSpots.push({kind:'pt', x:b2.baseX, y:b2.y+150}));
+    for(let i=0;i<nBonus;i++){
+      let sx=null, sy=null;
+      for(let tr=0; tr<50; tr++){
+        let cx2, cy2;
+        if(dangerSpots.length){
+          const d = dangerSpots[Math.floor(Math.random()*dangerSpots.length)];
+          if(d.kind==='hunter'){
+            const a = d.h.baseAngle + rand(-d.h.swing, d.h.swing);
+            const dd = rand(90, Math.min(d.h.coneRange*0.65, 260));
+            cx2 = d.h.x + Math.cos(a)*dd; cy2 = d.h.y + Math.sin(a)*dd;
+          } else {
+            const a = rand(0,Math.PI*2), dd = rand(55,95);
+            cx2 = d.x + Math.cos(a)*dd; cy2 = d.y + Math.sin(a)*dd;
+          }
+        } else {
+          cx2 = rand(W*0.2,W*0.8); cy2 = rand(H*0.25,H*0.75);
+        }
+        if(cx2<34 || cx2>W-34 || cy2<UI_TOP+10 || cy2>H-UI_BOTTOM-10) continue;
+        if(dist(cx2,cy2,sp.x,sp.y)<120 || dist(cx2,cy2,gp.x,gp.y)<100) continue;
+        if(foods.some(f2=>dist(cx2,cy2,f2.x,f2.y)<60)) continue;
+        if(pits.some(p2=>dist(cx2,cy2,p2.x,p2.y)<p2.r+22)) continue;
+        if(hunters.some(h2=>dist(cx2,cy2,h2.x,h2.y)<h2.r+30)) continue;
+        if(bonusStars.some(b3=>dist(cx2,cy2,b3.x,b3.y)<80)) continue;
+        sx=cx2; sy=cy2; break;
+      }
+      if(sx!==null) bonusStars.push({x:sx, y:sy, r:12, collected:false});
+    }
+
     // herd: how many lambs/mice/humans the player is guiding this level
     const herdSize = lv<5 ? 1 : (lv<15 ? 2 : 3);
     herd = [];
@@ -2270,10 +2217,6 @@
     lives = progress.lives;
     runStreak = 0;
     activePowerUp = null;
-    if(!progress.themesPlayed.includes(theme.id)){
-      progress.themesPlayed.push(theme.id);
-      saveProgress();
-    }
     checkAchievements();
     setupLevel(level);
     state = 'playing';
@@ -2358,14 +2301,10 @@
     }
   }
   function foodLabelFor(id){
-    if(id==='wolf') return S().foodWolf;
-    if(id==='cat') return S().foodCat;
-    if(id==='bear') return S().foodBear;
-    if(id==='school') return S().foodSchool;
-    return S().foodAlien;
+    return S().foodWolf;
   }
 
-  const STORY_NARRATOR_ICON = { wolf:'🧑‍🌾', cat:'🐭', alien:'👨‍🚀', bear:'🎣', school:'🧑' };
+  const STORY_NARRATOR_ICON = { wolf:'🧑‍🌾' };
   function showThemeStory(themeObj, onContinue){
     document.getElementById('storyIcon').textContent = STORY_NARRATOR_ICON[themeObj.id] || '🧑';
     document.getElementById('storyNarratorText').textContent = S()['storyNarrator_'+themeObj.id] || '';
@@ -2463,6 +2402,19 @@
   }
 
   // ---------- Life loss / continue flow ----------
+  function triggerNearMiss(m){
+    const now = performance.now();
+    if(now - lastNearMissT < 1500) return; // no spam
+    lastNearMissT = now;
+    let label;
+    if(riskPoints < 3){ riskPoints++; label = '+1 '+S().riskBonusLabel; }
+    else label = S().riskBonusLabel;
+    shakeT = 0.3;
+    floaters.push({x:m.x, y:m.y-26, text:label, t:0, life:1.15});
+    sfxHeartbeat();
+    vibrate([30,50,30]);
+  }
+
   function loseHerdMember(idx){
     herd.splice(idx,1);
     flashT = 0;
@@ -2502,9 +2454,6 @@
       hunter: tField(theme,'hunterName'),
       crocodile: S().crocodileName,
       piranha: S().piranhaName,
-      mousetrap: S().mousetrapName,
-      camera: S().cameraName,
-      net: S().netName,
       bird: S().birdName,
       pit: S().pitName    };
     const caughtByName = catchNameMap[lastCaughtCategory] || tField(theme,'hunterName');
@@ -2826,9 +2775,11 @@
     }
   }
 
+  let pausedAtMs = 0;
   function pauseGame(){
     if(state!=='playing') return;
     state = 'paused';
+    pausedAtMs = performance.now();
     pointer.active = false;
     document.getElementById('pauseOverlay').style.display='flex';
   }
@@ -2836,6 +2787,11 @@
     if(state!=='paused') return;
     state = 'playing';
     document.getElementById('pauseOverlay').style.display='none';
+    // Pausing must freeze the game's own clocks, otherwise hunters' sweep angles jump
+    // and a paid power-up runs out while the game is paused.
+    const pausedFor = performance.now() - pausedAtMs;
+    playStartTime += pausedFor;
+    if(activePowerUp) powerUpEndTime += pausedFor;
     lastT = performance.now();
     requestAnimationFrame(loop);
   }
@@ -2992,6 +2948,11 @@
     // hunters rotate (sentry sweep)
     hunters.forEach(h=>{
       h.angle = h.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + h.phase)*h.speed*0.6)*h.swing;
+      if(h.boss){
+        h.x += h.pdir*h.pspeed*dt;
+        if(h.x>h.px2){ h.x=h.px2; h.pdir=-1; }
+        if(h.x<h.px1){ h.x=h.px1; h.pdir=1; }
+      }
     });
 
     // crocodiles patrol back and forth inside the river, facing their swim direction
@@ -3016,27 +2977,16 @@
       p.angle = ang;
     });
 
-    // security cameras sweep in place, same style as hunters
-    cameras.forEach(c=>{
-      c.angle = c.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + c.phase)*c.speed*0.6)*c.swing;
-    });
-
-    // fishing nets swing on an arm, the hazard is the net-end position
-    nets.forEach(n=>{
-      const a = n.baseAngle + Math.sin(((performance.now()-playStartTime)/1000 + n.phase)*n.speed)*n.swing;
-      n.x = n.px + Math.cos(a) * n.armLen;
-      n.y = n.py + Math.sin(a) * n.armLen;
-    });
-
-    // birds drift gently and periodically fire a fireball aimed at the leader
+    // birds drift gently and periodically fire a fireball in a RANDOM downward
+    // direction (not aimed at the lamb — aimed shots were nearly impossible to dodge).
+    // The angle is kept inside a wide downward cone so shots actually cross the play field.
     if(herd.length>0){
-      const leaderForAim = herd[0];
       birds.forEach(b=>{
         b.x = b.baseX + Math.sin((performance.now()-playStartTime)/1000 + b.driftPhase) * 25;
         b.fireCooldown -= dt;
         if(b.fireCooldown<=0){
           b.fireCooldown = b.fireInterval;
-          const ang = Math.atan2(leaderForAim.y-b.y, leaderForAim.x-b.x);
+          const ang = rand(Math.PI*0.12, Math.PI*0.88);
           fireballs.push({x:b.x, y:b.y, vx:Math.cos(ang)*180, vy:Math.sin(ang)*180, r:9, angle:ang});
         }
       });
@@ -3088,26 +3038,6 @@
           }
         }
         if(!bumpedThis){
-          for(const mt of mousetraps){
-            if(dist(mt.x,mt.y,m.x,m.y) < (mt.r+m.r+2)){ bumpedThis = true; caughtByCategory = 'mousetrap'; break; }
-          }
-        }
-        if(!bumpedThis){
-          for(const c2 of cameras){
-            const toM = Math.atan2(m.y-c2.y, m.x-c2.x);
-            const dd = dist(c2.x,c2.y,m.x,m.y);
-            const inCone = dd < c2.coneRange && angDiff(c2.angle, toM) < c2.coneHalf/2;
-            const bump = dd < (c2.r+m.r+4);
-            if(bump){ bumpedThis = true; caughtByCategory = 'camera'; break; }
-            if(inCone){ seenThis = true; caughtByCategory = 'camera'; }
-          }
-        }
-        if(!bumpedThis){
-          for(const n of nets){
-            if(dist(n.x,n.y,m.x,m.y) < (n.r+m.r+3)){ bumpedThis = true; caughtByCategory = 'net'; break; }
-          }
-        }
-        if(!bumpedThis){
           for(const fb of fireballs){
             if(dist(fb.x,fb.y,m.x,m.y) < (fb.r+m.r+2)){ bumpedThis = true; caughtByCategory = 'bird'; break; }
           }
@@ -3130,6 +3060,12 @@
         m.dangerT -= dt/1.1;
       }
       m.dangerT = clamp(m.dangerT,0,1);
+      // NEAR-MISS: danger climbed well into the red, then you slipped out unseen
+      if(m.dangerT > (m.peakDanger||0)) m.peakDanger = m.dangerT;
+      if(m.dangerT <= 0.03){
+        if((m.peakDanger||0) >= 0.45 && !bumpedThis) triggerNearMiss(m);
+        m.peakDanger = 0;
+      }
     }
 
     if(anySeen){
@@ -3192,6 +3128,24 @@
       }
     }
 
+    // optional bonus stars
+    for(const bs of bonusStars){
+      if(bs.collected) continue;
+      for(const m of herd){
+        if(dist(m.x,m.y,bs.x,bs.y) < bs.r + m.r){
+          bs.collected = true;
+          bonusStarsGot++;
+          sfxCollect();
+          vibrate(15);
+          for(let p=0;p<10;p++){
+            particles.push({x:bs.x,y:bs.y,r:2.8,a:0.85,vx:rand(-70,70),vy:rand(-70,70),c:'255,214,90'});
+          }
+          floaters.push({x:bs.x, y:bs.y-18, text:'+1 ⭐', t:0, life:0.9});
+          break;
+        }
+      }
+    }
+
     // members reaching the goal are saved one by one
     if(goalUnlocked){
       let anySaved = false;
@@ -3214,6 +3168,11 @@
       if(anySaved && herd.length>0) syncLeaderTarget();
       if(herd.length===0){
         const completedLevel = level;
+        // bonus payout (risk + bonus stars + boss) — only on the frontier level,
+        // so replaying old levels can't be used to farm stars
+        const bonusFrontier = completedLevel >= (progress.bestLevelByTheme[theme.id]||1);
+        let bonusTotal = Math.min(3, riskPoints) + bonusStarsGot + (bossLevel ? 5 : 0);
+        if(bonusFrontier && bonusTotal>0){ progress.stars += bonusTotal; } else { bonusTotal = 0; }
         level++;
         runStreak++;
         progress.stars += 1;
@@ -3239,6 +3198,10 @@
         updateHud();
         sfxLevelUp();
         vibrate(20);
+        if(bonusTotal>0){
+          const bt = bonusTotal;
+          setTimeout(()=> showAchievementToast({title:'+'+bt+' ⭐', desc:S().bonusToastDesc}, '🔥', S().bonusStarsLabel), 650);
+        }
         if(completedLevel%10===0){
           showMilestoneOverlay(completedLevel, completedLevel%10===0);
           return;
@@ -3286,89 +3249,7 @@
     ctx.fillStyle = g;
     ctx.fillRect(0,0,W,H);
 
-    if(theme.deco==='stars'){
-      for(const s of decor){
-        ctx.globalAlpha = s.a*0.8*(1-brightness*0.75);
-        ctx.fillStyle = '#cfe8ff';
-        ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,7); ctx.fill();
-      }
-      ctx.globalAlpha=1;
-    } else if(theme.deco==='trees'){
-      for(const t of decor){
-        ctx.save();
-        ctx.translate(t.x,t.y);
-        ctx.globalAlpha=0.55;
-        ctx.fillStyle = '#0e1712';
-        ctx.beginPath();
-        ctx.moveTo(0,-t.r);
-        ctx.lineTo(t.r*0.8, t.r*0.6);
-        ctx.lineTo(-t.r*0.8, t.r*0.6);
-        ctx.closePath(); ctx.fill();
-        ctx.restore();
-      }
-      ctx.globalAlpha=1;
-    } else if(theme.deco==='riverbank'){
-      for(const d of decor){
-        ctx.save();
-        ctx.translate(d.x,d.y);
-        if(d.type==='tree'){
-          ctx.globalAlpha=0.5;
-          ctx.fillStyle = '#0e2018';
-          ctx.beginPath();
-          ctx.moveTo(0,-d.r);
-          ctx.lineTo(d.r*0.8, d.r*0.6);
-          ctx.lineTo(-d.r*0.8, d.r*0.6);
-          ctx.closePath(); ctx.fill();
-        } else {
-          const tw = 0.4 + Math.sin(performance.now()/500 + d.x)*0.3;
-          ctx.globalAlpha = d.a*tw*(0.5+brightness*0.3);
-          ctx.fillStyle = '#7fc9e8';
-          ctx.beginPath(); ctx.ellipse(0,0, d.r, d.r*0.4, 0, 0, 7); ctx.fill();
-        }
-        ctx.restore();
-      }
-      ctx.globalAlpha=1;
-    } else if(theme.deco==='classroom'){
-      for(const d of decor){
-        ctx.save();
-        ctx.translate(d.x,d.y);
-        ctx.rotate(d.rot);
-        ctx.globalAlpha=0.6;
-        // desk top
-        ctx.fillStyle = '#6b4a30';
-        ctx.fillRect(-d.r*0.9,-d.r*0.55, d.r*1.8, d.r*0.35);
-        // desk legs
-        ctx.fillStyle = '#3a2a1a';
-        ctx.fillRect(-d.r*0.75,-d.r*0.2, d.r*0.14, d.r*0.75);
-        ctx.fillRect(d.r*0.6,-d.r*0.2, d.r*0.14, d.r*0.75);
-        // notebook on top
-        ctx.fillStyle = '#e8e4d8';
-        ctx.fillRect(-d.r*0.35,-d.r*0.72, d.r*0.7, d.r*0.4);
-        ctx.restore();
-      }
-      ctx.globalAlpha=1;
-    } else if(theme.deco==='halloween'){
-      for(const d of decor){
-        ctx.save();
-        ctx.translate(d.x,d.y);
-        if(d.type==='pumpkin'){
-          ctx.globalAlpha=0.55;
-          ctx.fillStyle = '#3a1a12';
-          ctx.beginPath(); ctx.ellipse(0,0, d.r*0.85, d.r*0.65, 0, 0, 7); ctx.fill();
-          ctx.fillStyle = '#2a1208';
-          ctx.fillRect(-d.r*0.08,-d.r*0.95,d.r*0.16,d.r*0.4);
-        } else {
-          ctx.rotate(d.rot);
-          ctx.globalAlpha = 0.3 + brightness*0.15;
-          ctx.fillStyle = '#4a3020';
-          [[-0.3,0],[0.3,0],[0,-0.3]].forEach(p=>{
-            ctx.beginPath(); ctx.ellipse(p[0]*d.r, p[1]*d.r, d.r*0.26, d.r*0.16, Math.atan2(p[1],p[0]), 0, 7); ctx.fill();
-          });
-        }
-        ctx.restore();
-      }
-      ctx.globalAlpha=1;
-    } else if(theme.deco==='meadow'){
+    if(theme.deco==='meadow'){
       for(const d of decor){
         ctx.save();
         ctx.translate(d.x,d.y);
@@ -3388,24 +3269,6 @@
             ctx.beginPath(); ctx.ellipse(p[0]*d.r, p[1]*d.r, d.r*0.26, d.r*0.16, Math.atan2(p[1],p[0]), 0, 7); ctx.fill();
           });
         }
-        ctx.restore();
-      }
-      ctx.globalAlpha=1;
-    } else {
-      for(const b of decor){
-        ctx.save();
-        ctx.translate(b.x,b.y);
-        ctx.rotate((b.rot||0)*0.15);
-        ctx.globalAlpha=0.6;
-        ctx.fillStyle = '#5a4530';
-        ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*0.8);
-        ctx.fillStyle = '#3e3020';
-        ctx.fillRect(-b.r/2,-b.r/2,b.r,b.r*0.16);
-        ctx.strokeStyle = '#2e2416'; ctx.lineWidth = Math.max(1, b.r*0.04);
-        ctx.beginPath();
-        ctx.moveTo(-b.r*0.02, -b.r*0.5+b.r*0.16);
-        ctx.lineTo(-b.r*0.02, b.r*0.3);
-        ctx.stroke();
         ctx.restore();
       }
       ctx.globalAlpha=1;
@@ -3478,142 +3341,6 @@
     ctx.beginPath(); ctx.arc(r*0.7, r*0.2,r*0.13,0,7); ctx.fill();
   }
 
-  function drawCatBody(h, glowColor){
-    const r = h.r;
-    // legs (grounds the cat, small paw tufts)
-    ctx.fillStyle = theme.hunterDark;
-    [[-0.45,-0.5],[-0.45,0.5],[0.3,-0.45],[0.3,0.45]].forEach(p=>{
-      ctx.fillRect(r*p[0]-r*0.07, r*0.5, r*0.14, r*0.48);
-      ctx.beginPath(); ctx.arc(r*p[0], r*0.98, r*0.09, 0, 7); ctx.fill();
-    });
-    // tail (long, curled)
-    ctx.strokeStyle = theme.hunterDark;
-    ctx.lineWidth = r*0.26; ctx.lineCap='round';
-    ctx.beginPath();
-    ctx.moveTo(-r*1.15,0);
-    ctx.quadraticCurveTo(-r*1.9,-r*0.5,-r*1.7,-r*1.05);
-    ctx.stroke();
-    // ears (sharp triangles)
-    ctx.fillStyle = theme.hunterDark;
-    tri(-r*0.7,-r*0.55, -r*1.15,-r*1.15, -r*0.15,-r*0.8);
-    tri(-r*0.7, r*0.55, -r*1.15, r*1.15, -r*0.15, r*0.8);
-    // body
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(-r*0.15,0, r*1.15, r*0.85, 0,0,7); ctx.fill();
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(-r*0.2,0, r*1.0, r*0.68, 0,0,7); ctx.fill();
-    // small snout
-    ctx.beginPath(); ctx.arc(r*0.85,0,r*0.42,0,7); ctx.fill();
-    // whiskers
-    ctx.strokeStyle = theme.hunterDark; ctx.lineWidth = r*0.05;
-    [-0.18,0,0.18].forEach(o=>{
-      ctx.beginPath(); ctx.moveTo(r*1.0,o*r); ctx.lineTo(r*1.6,o*r*2.4); ctx.stroke();
-    });
-    ctx.fillStyle = '#2a1f14';
-    ctx.beginPath(); ctx.arc(r*1.15,0,r*0.09,0,7); ctx.fill();
-    // glowing eyes
-    ctx.fillStyle = glowColor;
-    ctx.beginPath(); ctx.arc(r*0.55,-r*0.2,r*0.12,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(r*0.55, r*0.2,r*0.12,0,7); ctx.fill();
-  }
-
-  function drawAlienBody(h, glowColor){
-    const r = h.r;
-    // thin dangling limbs (little-green-alien cue), hanging beneath the head
-    ctx.strokeStyle = theme.hunterDark; ctx.lineWidth = r*0.09; ctx.lineCap='round';
-    [[-0.35,-0.4],[-0.1,-0.55],[-0.35,0.4],[-0.1,0.55]].forEach(p=>{
-      ctx.beginPath();
-      ctx.moveTo(p[0]*r, r*0.75);
-      ctx.lineTo(p[1]*r, r*1.25);
-      ctx.stroke();
-    });
-    // small hovering body/torso
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(-r*0.1, r*0.7, r*0.55, r*0.4, 0,0,7); ctx.fill();
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(-r*0.08, r*0.62, r*0.46, r*0.32, 0,0,7); ctx.fill();
-    // antennae
-    ctx.strokeStyle = theme.hunterDark; ctx.lineWidth = r*0.14; ctx.lineCap='round';
-    [-1,1].forEach(s=>{
-      ctx.beginPath();
-      ctx.moveTo(-r*0.3, s*r*0.55);
-      ctx.quadraticCurveTo(-r*0.9, s*r*1.1, -r*1.15, s*r*1.25);
-      ctx.stroke();
-      ctx.fillStyle = glowColor;
-      ctx.beginPath(); ctx.arc(-r*1.15, s*r*1.25, r*0.14,0,7); ctx.fill();
-    });
-    // head (oval, larger toward back)
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(0,0, r*1.25, r*1.05, 0,0,7); ctx.fill();
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(0.03*r,0, r*1.08, r*0.9, 0,0,7); ctx.fill();
-    // visor scanning eye
-    ctx.fillStyle = 'rgba(10,20,15,0.85)';
-    ctx.beginPath(); ctx.ellipse(r*0.35,0, r*0.55, r*0.32, 0,0,7); ctx.fill();
-    ctx.fillStyle = glowColor;
-    ctx.beginPath(); ctx.ellipse(r*0.55,0, r*0.18, r*0.14, 0,0,7); ctx.fill();
-  }
-
-  function drawBearBody(h, glowColor){
-    const r = h.r;
-    // legs (thick and heavy, bear-like)
-    ctx.fillStyle = theme.hunterDark;
-    [[-0.5,-0.55],[-0.5,0.55],[0.3,-0.5],[0.3,0.5]].forEach(p=>{
-      ctx.fillRect(r*p[0]-r*0.13, r*0.6, r*0.26, r*0.5);
-    });
-    // small round ears
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.arc(-r*0.55,-r*0.85,r*0.32,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(-r*0.55, r*0.85,r*0.32,0,7); ctx.fill();
-    // bulky rounded body
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(-r*0.15,0, r*1.35, r*1.05, 0,0,7); ctx.fill();
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(-r*0.2,0, r*1.18, r*0.9, 0,0,7); ctx.fill();
-    // short rounded snout
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(r*0.85,0.05*r, r*0.5, r*0.4, 0,0,7); ctx.fill();
-    ctx.fillStyle = '#241a10';
-    ctx.beginPath(); ctx.arc(r*1.25,0.05*r,r*0.13,0,7); ctx.fill();
-    // glowing eyes
-    ctx.fillStyle = glowColor;
-    ctx.beginPath(); ctx.arc(r*0.55,-r*0.28,r*0.13,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(r*0.55, r*0.28,r*0.13,0,7); ctx.fill();
-  }
-
-  function drawTeacherBody(h, glowColor){
-    const r = h.r;
-    // legs
-    ctx.fillStyle = theme.hunterDark;
-    ctx.fillRect(-r*0.43, r*0.35, r*0.16, r*0.55);
-    ctx.fillRect(-r*0.13, r*0.35, r*0.16, r*0.55);
-    // arms
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(-r*0.05,-r*0.55, r*0.22, r*0.4, 0.6,0,7); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(-r*0.05, r*0.55, r*0.22, r*0.4, -0.6,0,7); ctx.fill();
-    // torso (blazer)
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.ellipse(-r*0.1,0, r*0.68, r*0.62, 0,0,7); ctx.fill();
-    ctx.fillStyle = theme.hunterBody;
-    ctx.beginPath(); ctx.ellipse(-r*0.12,0, r*0.56, r*0.5, 0,0,7); ctx.fill();
-    // head
-    ctx.fillStyle = theme.hunterDark;
-    ctx.beginPath(); ctx.arc(r*0.55,0, r*0.5,0,7); ctx.fill();
-    ctx.fillStyle = '#e0b98f';
-    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.4,0,7); ctx.fill();
-    // hair
-    ctx.fillStyle = '#4a3a2a';
-    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.4, -2.5,2.5); ctx.fill();
-    // glasses frame (a stern authority-figure cue)
-    ctx.strokeStyle = '#241a10'; ctx.lineWidth = r*0.05;
-    ctx.beginPath(); ctx.ellipse(r*0.5,-r*0.14, r*0.14, r*0.11, 0,0,7); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(r*0.5, r*0.14, r*0.14, r*0.11, 0,0,7); ctx.stroke();
-    // glowing eyes behind the glasses
-    ctx.fillStyle = glowColor;
-    ctx.beginPath(); ctx.arc(r*0.5,-r*0.14,r*0.08,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(r*0.5, r*0.14,r*0.08,0,7); ctx.fill();
-  }
-
   function drawHunter(h){
     ctx.save();
     ctx.translate(h.x,h.y);
@@ -3631,11 +3358,7 @@
     ctx.save();
     ctx.rotate(h.angle);
     const glowColor = flashT>0.02 ? '#ff8c7d' : theme.accent;
-    if((theme.shape||theme.id)==='wolf') drawWolfBody(h, glowColor);
-    else if(theme.id==='cat') drawCatBody(h, glowColor);
-    else if(theme.id==='bear') drawBearBody(h, glowColor);
-    else if(theme.id==='school') drawTeacherBody(h, glowColor);
-    else drawAlienBody(h, glowColor);
+    drawWolfBody(h, glowColor);
     ctx.restore();
 
     // fixed-direction light sheen (top-left light source) for a rounded, volumetric look
@@ -3652,141 +3375,29 @@
     ctx.restore();
   }
 
-  function drawSheepBody(r, bodyColor, darkColor){
+  function drawSheepBody(r, bodyColor, darkColor, c){
+    const g = c || ctx;
     // legs (thin and dark, classic cartoon-sheep cue)
-    ctx.fillStyle = '#2a241c';
+    g.fillStyle = '#2a241c';
     [[-0.4,-0.5],[-0.4,0.5],[0.35,-0.45],[0.35,0.45]].forEach(p=>{
-      ctx.fillRect(r*p[0]-r*0.06, r*0.55, r*0.12, r*0.5);
+      g.fillRect(r*p[0]-r*0.06, r*0.55, r*0.12, r*0.5);
     });
     // fluffy wool cloud (shadow layer)
-    ctx.fillStyle = darkColor;
+    g.fillStyle = darkColor;
     const puffs = [[0,0,1.15],[-0.55,-0.45,0.7],[-0.55,0.45,0.7],[0.5,-0.4,0.62],[0.5,0.4,0.62],[-0.15,-0.75,0.6],[-0.15,0.75,0.6]];
-    puffs.forEach(p=>{ ctx.beginPath(); ctx.arc(p[0]*r,p[1]*r,p[2]*r,0,7); ctx.fill(); });
+    puffs.forEach(p=>{ g.beginPath(); g.arc(p[0]*r,p[1]*r,p[2]*r,0,7); g.fill(); });
     // small wool tail tuft at the back
-    ctx.beginPath(); ctx.arc(-r*1.1,0,r*0.32,0,7); ctx.fill();
+    g.beginPath(); g.arc(-r*1.1,0,r*0.32,0,7); g.fill();
     // wool top layer (slightly smaller, inset)
-    ctx.fillStyle = bodyColor;
-    puffs.forEach(p=>{ ctx.beginPath(); ctx.arc(p[0]*r,p[1]*r,p[2]*r*0.82,0,7); ctx.fill(); });
-    ctx.beginPath(); ctx.arc(-r*1.1,0,r*0.24,0,7); ctx.fill();
+    g.fillStyle = bodyColor;
+    puffs.forEach(p=>{ g.beginPath(); g.arc(p[0]*r,p[1]*r,p[2]*r*0.82,0,7); g.fill(); });
+    g.beginPath(); g.arc(-r*1.1,0,r*0.24,0,7); g.fill();
     // face (front, dark)
-    ctx.fillStyle = '#3a332c';
-    ctx.beginPath(); ctx.ellipse(r*1.02,0, r*0.48, r*0.36, 0,0,7); ctx.fill();
+    g.fillStyle = '#3a332c';
+    g.beginPath(); g.ellipse(r*1.02,0, r*0.48, r*0.36, 0,0,7); g.fill();
     // ears
-    ctx.beginPath(); ctx.ellipse(r*0.65,-r*0.55, r*0.28, r*0.16, -0.5,0,7); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(r*0.65, r*0.55, r*0.28, r*0.16, 0.5,0,7); ctx.fill();
-  }
-
-  function drawMouseBody(r, bodyColor, darkColor){
-    // tiny feet
-    ctx.fillStyle = darkColor;
-    [[-0.3,-0.4],[-0.3,0.4],[0.35,-0.35],[0.35,0.35]].forEach(p=>{
-      ctx.beginPath(); ctx.ellipse(r*p[0], r*0.68, r*0.14, r*0.1, 0, 0, 7); ctx.fill();
-    });
-    // tail
-    ctx.strokeStyle = darkColor; ctx.lineWidth = r*0.12; ctx.lineCap='round';
-    ctx.beginPath();
-    ctx.moveTo(-r*1.0,0);
-    ctx.quadraticCurveTo(-r*1.7,r*0.35,-r*1.9,-r*0.15);
-    ctx.stroke();
-    // ears (big round)
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.arc(-r*0.55,-r*0.75,r*0.5,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(-r*0.55, r*0.75,r*0.5,0,7); ctx.fill();
-    ctx.fillStyle = '#d9c9c9';
-    ctx.beginPath(); ctx.arc(-r*0.55,-r*0.75,r*0.3,0,7); ctx.fill();
-    ctx.beginPath(); ctx.arc(-r*0.55, r*0.75,r*0.3,0,7); ctx.fill();
-    // body
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(0,0, r*1.05, r*0.78, 0,0,7); ctx.fill();
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath(); ctx.ellipse(0.02*r,0, r*0.9, r*0.63, 0,0,7); ctx.fill();
-    // nose
-    ctx.fillStyle = '#d98f8f';
-    ctx.beginPath(); ctx.arc(r*0.95,0,r*0.13,0,7); ctx.fill();
-    // whiskers
-    ctx.strokeStyle = 'rgba(255,255,255,0.5)'; ctx.lineWidth = r*0.04;
-    [-0.16,0,0.16].forEach(o=>{
-      ctx.beginPath(); ctx.moveTo(r*0.9,o*r); ctx.lineTo(r*1.35,o*r*2.2); ctx.stroke();
-    });
-  }
-
-  function drawHumanBody(r, bodyColor, darkColor){
-    // legs
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.35,-r*0.32, r*0.22, r*0.52, 0.15,0,7); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(-r*0.35, r*0.32, r*0.22, r*0.52, -0.15,0,7); ctx.fill();
-    // arms
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.15,-r*0.85, r*0.34, r*0.55, 0.5,0,7); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(-r*0.15, r*0.85, r*0.34, r*0.55, -0.5,0,7); ctx.fill();
-    // torso
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.2,0, r*0.85, r*0.72, 0,0,7); ctx.fill();
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.22,0, r*0.72, r*0.58, 0,0,7); ctx.fill();
-    // head (front, overlapping)
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.arc(r*0.55,0, r*0.62,0,7); ctx.fill();
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.5,0,7); ctx.fill();
-    // simple hair strip
-    ctx.fillStyle = '#4a3a2a';
-    ctx.beginPath(); ctx.arc(r*0.58,0, r*0.5, -2.3,2.3); ctx.fill();
-  }
-
-  function drawFishBody(r, bodyColor, darkColor){
-    // tail fin
-    ctx.fillStyle = darkColor;
-    ctx.beginPath();
-    ctx.moveTo(-r*0.85,0);
-    ctx.lineTo(-r*1.55,-r*0.5);
-    ctx.lineTo(-r*1.25,0);
-    ctx.lineTo(-r*1.55,r*0.5);
-    ctx.closePath(); ctx.fill();
-    // dorsal fin
-    ctx.beginPath();
-    ctx.moveTo(-r*0.1,-r*0.55);
-    ctx.lineTo(r*0.15,-r*1.05);
-    ctx.lineTo(r*0.4,-r*0.5);
-    ctx.closePath(); ctx.fill();
-    // body
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(0,0, r*1.05, r*0.62, 0,0,7); ctx.fill();
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath(); ctx.ellipse(0.05*r,0, r*0.9, r*0.5, 0,0,7); ctx.fill();
-    // small side fin
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(0,r*0.4, r*0.32, r*0.16, -0.3,0,7); ctx.fill();
-    // eye
-    ctx.fillStyle = '#241a10';
-    ctx.beginPath(); ctx.arc(r*0.72,-r*0.08,r*0.1,0,7); ctx.fill();
-  }
-
-  function drawStudentBody(r, bodyColor, darkColor){
-    // legs
-    ctx.fillStyle = darkColor;
-    ctx.fillRect(-r*0.42, r*0.32, r*0.14, r*0.48);
-    ctx.fillRect(-r*0.12, r*0.32, r*0.14, r*0.48);
-    // backpack peeking out behind
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.55,0, r*0.28, r*0.4, 0,0,7); ctx.fill();
-    // arms
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.05,-r*0.5, r*0.2, r*0.35, 0.6,0,7); ctx.fill();
-    ctx.beginPath(); ctx.ellipse(-r*0.05, r*0.5, r*0.2, r*0.35, -0.6,0,7); ctx.fill();
-    // torso (uniform)
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.1,0, r*0.62, r*0.56, 0,0,7); ctx.fill();
-    ctx.fillStyle = bodyColor;
-    ctx.beginPath(); ctx.ellipse(-r*0.12,0, r*0.5, r*0.44, 0,0,7); ctx.fill();
-    // head
-    ctx.fillStyle = darkColor;
-    ctx.beginPath(); ctx.arc(r*0.5,0, r*0.44,0,7); ctx.fill();
-    ctx.fillStyle = '#e8c9a0';
-    ctx.beginPath(); ctx.arc(r*0.53,0, r*0.35,0,7); ctx.fill();
-    // hair
-    ctx.fillStyle = '#2a2015';
-    ctx.beginPath(); ctx.arc(r*0.53,0, r*0.35, -2.4,2.4); ctx.fill();
+    g.beginPath(); g.ellipse(r*0.65,-r*0.55, r*0.28, r*0.16, -0.5,0,7); g.fill();
+    g.beginPath(); g.ellipse(r*0.65, r*0.55, r*0.28, r*0.16, 0.5,0,7); g.fill();
   }
 
   function drawHerdMember(m){
@@ -3816,11 +3427,7 @@
     ctx.rotate(m.angle||0);
     const skin = getCurrentSkin();
     const bodyColor = m.dangerT>0.5 ? '#e0554a' : skin.body;
-    if((theme.shape||theme.id)==='wolf') drawSheepBody(m.r, bodyColor, skin.dark);
-    else if(theme.id==='cat') drawMouseBody(m.r, bodyColor, skin.dark);
-    else if(theme.id==='bear') drawFishBody(m.r, bodyColor, skin.dark);
-    else if(theme.id==='school') drawStudentBody(m.r, bodyColor, skin.dark);
-    else drawHumanBody(m.r, bodyColor, skin.dark);
+    drawSheepBody(m.r, bodyColor, skin.dark);
     if(!isInvis) drawAccessory(skin.accessory, m.r*1.9);
     ctx.restore();
     ctx.globalAlpha = 1;
@@ -3865,11 +3472,7 @@
     }
 
     ctx.scale(pulse, pulse);
-    if((theme.shape||theme.id)==='wolf') drawGoalHut(goal.r, goalUnlocked);
-    else if(theme.id==='cat') drawGoalMouseHouse(goal.r, goalUnlocked);
-    else if(theme.id==='bear') drawGoalDen(goal.r, goalUnlocked);
-    else if(theme.id==='school') drawGoalCheatSheet(goal.r, goalUnlocked);
-    else drawGoalHouse(goal.r, goalUnlocked);
+    drawGoalHut(goal.r, goalUnlocked);
     ctx.restore();
   }
 
@@ -3894,100 +3497,6 @@
       ctx.fillStyle = 'rgba(255,214,140,0.55)';
       ctx.fillRect(-r*0.15, r*0.22, r*0.3, r*0.28);
     }
-  }
-
-  function drawGoalHouse(r, unlocked){
-    const wall = unlocked ? '#d8c9a8' : '#5a5f6a';
-    const wallDark = unlocked ? '#b8a888' : '#454a54';
-    const roof = unlocked ? '#9a5a42' : '#3a3e48';
-    ctx.fillStyle = wallDark;
-    ctx.fillRect(-r*0.85, -r*0.05, r*1.7, r*0.95);
-    ctx.fillStyle = wall;
-    ctx.fillRect(-r*0.78, 0, r*1.56, r*0.85);
-    ctx.fillStyle = roof;
-    ctx.beginPath();
-    ctx.moveTo(-r*1.08, -r*0.05);
-    ctx.lineTo(0, -r*0.92);
-    ctx.lineTo(r*1.08, -r*0.05);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = roof;
-    ctx.fillRect(r*0.35, -r*0.88, r*0.16, r*0.38);
-    ctx.fillStyle = unlocked ? 'rgba(255,224,150,0.6)' : 'rgba(255,255,255,0.15)';
-    ctx.fillRect(-r*0.55, r*0.12, r*0.28, r*0.28);
-    ctx.fillStyle = unlocked ? '#4a3320' : '#2a2d34';
-    ctx.fillRect(r*0.08, r*0.22, r*0.32, r*0.58);
-  }
-
-  function drawGoalMouseHouse(r, unlocked){
-    const wall = unlocked ? '#c9a06a' : '#5a5f6a';
-    const wallDark = unlocked ? '#a37e4c' : '#454a54';
-    const roof = unlocked ? '#7a5230' : '#3a3e48';
-    ctx.fillStyle = wallDark;
-    ctx.beginPath(); ctx.arc(0, r*0.12, r*0.72, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = wall;
-    ctx.beginPath(); ctx.arc(0, r*0.08, r*0.62, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = roof;
-    ctx.beginPath();
-    ctx.arc(0, r*0.05, r*0.66, Math.PI, 0);
-    ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = unlocked ? '#2a1f14' : '#2a2d34';
-    ctx.beginPath(); ctx.arc(0, r*0.35, r*0.22, 0, Math.PI*2); ctx.fill();
-  }
-
-  function drawGoalDen(r, unlocked){
-    const rock = unlocked ? '#6b7568' : '#5a5f6a';
-    const rockDark = unlocked ? '#4c5548' : '#454a54';
-    const water = unlocked ? '#4a90c9' : '#3a3e48';
-    // rocky mound
-    ctx.fillStyle = rockDark;
-    ctx.beginPath();
-    ctx.ellipse(0, r*0.15, r*1.15, r*0.95, 0, 0, Math.PI*2);
-    ctx.fill();
-    ctx.fillStyle = rock;
-    ctx.beginPath();
-    ctx.ellipse(-0.05*r, r*0.1, r*1.0, r*0.82, 0, 0, Math.PI*2);
-    ctx.fill();
-    // dark cave opening
-    ctx.fillStyle = unlocked ? '#12211c' : '#22262e';
-    ctx.beginPath(); ctx.ellipse(0, r*0.28, r*0.48, r*0.38, 0, 0, Math.PI*2); ctx.fill();
-    // water pool glint at the opening
-    ctx.fillStyle = water;
-    ctx.globalAlpha = unlocked ? 0.7 : 0.35;
-    ctx.beginPath(); ctx.ellipse(0, r*0.4, r*0.36, r*0.14, 0, 0, Math.PI*2); ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  function drawGoalCheatSheet(r, unlocked){
-    const paper = unlocked ? '#f0ece0' : '#5a5f6a';
-    const paperDark = unlocked ? '#d8d0bc' : '#454a54';
-    const ink = unlocked ? '#3a4a6b' : '#3a3e48';
-    // folded paper, tilted like a note passed under a desk
-    ctx.save();
-    ctx.rotate(-0.15);
-    ctx.fillStyle = paperDark;
-    ctx.fillRect(-r*0.75, -r*0.95, r*1.5, r*1.9);
-    ctx.fillStyle = paper;
-    ctx.fillRect(-r*0.68, -r*0.88, r*1.36, r*1.76);
-    // folded corner
-    ctx.fillStyle = paperDark;
-    ctx.beginPath();
-    ctx.moveTo(r*0.68, -r*0.88);
-    ctx.lineTo(r*0.68, -r*0.5);
-    ctx.lineTo(r*0.3, -r*0.88);
-    ctx.closePath(); ctx.fill();
-    // scribbled answer lines
-    ctx.strokeStyle = ink; ctx.lineWidth = Math.max(1, r*0.07); ctx.lineCap='round';
-    ctx.globalAlpha = unlocked ? 0.75 : 0.4;
-    [[-0.5,0.4],[-0.2,0.55],[0.1,0.3],[0.4,0.5],[0.7,0.35]].forEach(l=>{
-      ctx.beginPath();
-      ctx.moveTo(-r*0.5, l[0]*r);
-      ctx.lineTo(-r*0.5+l[1]*r, l[0]*r);
-      ctx.stroke();
-    });
-    ctx.globalAlpha = 1;
-    ctx.restore();
   }
 
   function drawGrassFoodIcon(ctx, x, y, size) {
@@ -4130,75 +3639,7 @@
     ctx.fillStyle = glow;
     ctx.beginPath(); ctx.arc(0,0,f.r*2.4*pulse,0,7); ctx.fill();
 
-    if(theme.id==='wolf'){
-      drawGrassFoodIcon(ctx, 0, 0, f.r*2.6);
-    } else if(theme.id==='cat'){
-      // cheese wedge
-      ctx.fillStyle = '#e8c14a';
-      ctx.beginPath();
-      ctx.moveTo(-f.r*0.8,f.r*0.6); ctx.lineTo(f.r*0.8,f.r*0.6); ctx.lineTo(0,-f.r*0.8);
-      ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#c9a53a';
-      [[0.15,0.15,0.12],[-0.2,0.3,0.09],[0.3,0.35,0.08]].forEach(p=>{
-        ctx.beginPath(); ctx.arc(p[0]*f.r,p[1]*f.r,p[2]*f.r,0,7); ctx.fill();
-      });
-    } else if(theme.id==='bear'){
-      // wavy kelp strands
-      ctx.strokeStyle = '#4a9d6a'; ctx.lineWidth=3.2; ctx.lineCap='round';
-      [-0.4,0,0.4].forEach(o=>{
-        ctx.beginPath(); ctx.moveTo(o*f.r*0.8,f.r*0.75);
-        ctx.bezierCurveTo(o*f.r*1.4,f.r*0.1, -o*f.r*0.8,-f.r*0.3, o*f.r*0.5,-f.r*0.9);
-        ctx.stroke();
-      });
-    } else if(theme.id==='school'){
-      // pencil, tilted
-      ctx.save();
-      ctx.rotate(-0.6);
-      ctx.fillStyle = '#e8a33d';
-      ctx.fillRect(-f.r*0.22, -f.r*0.95, f.r*0.44, f.r*1.5);
-      ctx.fillStyle = '#c4bfa8';
-      ctx.beginPath(); ctx.moveTo(-f.r*0.22, -f.r*0.95); ctx.lineTo(f.r*0.22,-f.r*0.95); ctx.lineTo(0,-f.r*1.3); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#3a2e1c';
-      ctx.beginPath(); ctx.moveTo(-f.r*0.08,-f.r*1.08); ctx.lineTo(f.r*0.08,-f.r*1.08); ctx.lineTo(0,-f.r*1.24); ctx.closePath(); ctx.fill();
-      ctx.fillStyle = '#e8917a';
-      ctx.fillRect(-f.r*0.22, f.r*0.42, f.r*0.44, f.r*0.16);
-      ctx.restore();
-    } else if(theme.id==='halloween'){
-      // candy corn
-      ctx.save();
-      ctx.beginPath();
-      ctx.moveTo(-f.r*0.55, f.r*0.7);
-      ctx.lineTo(f.r*0.55, f.r*0.7);
-      ctx.lineTo(f.r*0.28, f.r*0.1);
-      ctx.lineTo(-f.r*0.28, f.r*0.1);
-      ctx.closePath();
-      ctx.fillStyle = '#e8833d';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-f.r*0.28, f.r*0.1);
-      ctx.lineTo(f.r*0.28, f.r*0.1);
-      ctx.lineTo(f.r*0.12,-f.r*0.5);
-      ctx.lineTo(-f.r*0.12,-f.r*0.5);
-      ctx.closePath();
-      ctx.fillStyle = '#f7e6a3';
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-f.r*0.12,-f.r*0.5);
-      ctx.lineTo(f.r*0.12,-f.r*0.5);
-      ctx.lineTo(0,-f.r*0.95);
-      ctx.closePath();
-      ctx.fillStyle = '#fff8ea';
-      ctx.fill();
-      ctx.restore();
-    } else {
-      // energy cell
-      ctx.fillStyle = '#5fd6a8';
-      ctx.beginPath(); ctx.ellipse(0,0,f.r*0.55,f.r*0.85,0,0,7); ctx.fill();
-      ctx.fillStyle = 'rgba(255,255,255,0.7)';
-      ctx.beginPath(); ctx.moveTo(-f.r*0.12,-f.r*0.5); ctx.lineTo(f.r*0.18,-f.r*0.05);
-      ctx.lineTo(-f.r*0.05,-f.r*0.05); ctx.lineTo(f.r*0.15,f.r*0.5);
-      ctx.lineTo(-f.r*0.2,f.r*0.05); ctx.lineTo(f.r*0.05,f.r*0.05); ctx.closePath(); ctx.fill();
-    }
+    drawGrassFoodIcon(ctx, 0, 0, f.r*2.6);
     ctx.restore();
   }
 
@@ -4447,68 +3888,6 @@
     ctx.restore();
   }
 
-  function drawMousetrap(mt){
-    ctx.save();
-    ctx.translate(mt.x, mt.y);
-    // wooden base
-    ctx.fillStyle = '#a8763f';
-    ctx.beginPath();
-    ctx.roundRect(-mt.r, -mt.r*0.55, mt.r*2, mt.r*1.1, 3);
-    ctx.fill();
-    // metal snap bar (diagonal, looks "armed")
-    ctx.strokeStyle = '#8a8f96'; ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(-mt.r*0.8, mt.r*0.5);
-    ctx.lineTo(mt.r*0.6, -mt.r*0.65);
-    ctx.stroke();
-    ctx.fillStyle = '#c9403a';
-    ctx.beginPath(); ctx.arc(mt.r*0.15, -mt.r*0.05, mt.r*0.22, 0, 7); ctx.fill(); // cheese bait
-    ctx.restore();
-  }
-
-  function drawCamera(c){
-    ctx.save();
-    ctx.translate(c.x, c.y);
-    ctx.fillStyle = '#5a5f6b';
-    ctx.beginPath(); ctx.arc(0,0, c.r*0.7, 0, 7); ctx.fill();
-    ctx.save();
-    ctx.rotate(c.angle);
-    ctx.fillStyle = '#3a3d45';
-    ctx.beginPath();
-    ctx.roundRect(-c.r*0.3, -c.r*0.42, c.r*1.3, c.r*0.84, 4);
-    ctx.fill();
-    ctx.fillStyle = '#7fc4e0';
-    ctx.beginPath(); ctx.arc(c.r*0.9, 0, c.r*0.28, 0, 7); ctx.fill();
-    ctx.fillStyle = '#1a1a1a';
-    ctx.beginPath(); ctx.arc(c.r*0.9, 0, c.r*0.14, 0, 7); ctx.fill();
-    ctx.restore();
-    // blinking red status light
-    if(Math.sin(performance.now()/300) > 0){
-      ctx.fillStyle = '#e0554a';
-      ctx.beginPath(); ctx.arc(-c.r*0.35, -c.r*0.35, c.r*0.13, 0, 7); ctx.fill();
-    }
-    ctx.restore();
-  }
-
-  function drawNet(n){
-    ctx.save();
-    // rope from pivot to net
-    ctx.strokeStyle = 'rgba(220,210,190,0.5)'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(n.px, n.py); ctx.lineTo(n.x, n.y); ctx.stroke();
-    ctx.translate(n.x, n.y);
-    ctx.fillStyle = 'rgba(210,190,150,0.28)';
-    ctx.beginPath(); ctx.arc(0,0,n.r,0,7); ctx.fill();
-    ctx.strokeStyle = 'rgba(160,140,100,0.85)'; ctx.lineWidth = 1.3;
-    for(let i=0;i<5;i++){
-      const a = (Math.PI*2/5)*i;
-      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(a)*n.r, Math.sin(a)*n.r); ctx.stroke();
-    }
-    for(let ring=1; ring<=2; ring++){
-      ctx.beginPath(); ctx.arc(0,0, n.r*ring/2, 0, 7); ctx.stroke();
-    }
-    ctx.restore();
-  }
-
   function drawWindZone(wz){
     ctx.save();
     ctx.beginPath(); ctx.arc(wz.x,wz.y,wz.r,0,7); ctx.clip();
@@ -4609,29 +3988,109 @@
     ctx.restore();
   }
 
+  function drawBonusStar(bs){
+    if(bs.collected) return;
+    const t = performance.now()/1000;
+    const pulse = 1 + Math.sin(t*4 + bs.x)*0.12;
+    ctx.save();
+    ctx.translate(bs.x, bs.y);
+    const glow = ctx.createRadialGradient(0,0,0, 0,0,bs.r*2.4);
+    glow.addColorStop(0,'rgba(255,214,90,0.55)');
+    glow.addColorStop(1,'rgba(255,214,90,0)');
+    ctx.fillStyle = glow;
+    ctx.beginPath(); ctx.arc(0,0,bs.r*2.4,0,7); ctx.fill();
+    ctx.rotate(Math.sin(t*2+bs.y)*0.25);
+    ctx.scale(pulse,pulse);
+    ctx.beginPath();
+    for(let i=0;i<10;i++){
+      const ang = -Math.PI/2 + i*Math.PI/5;
+      const rr = (i%2===0) ? bs.r : bs.r*0.45;
+      const px = Math.cos(ang)*rr, py = Math.sin(ang)*rr;
+      if(i===0) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#ffd25a';
+    ctx.fill();
+    ctx.lineWidth = 1.6; ctx.strokeStyle = '#b8801a'; ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawBossMarker(h){
+    const t = performance.now()/1000;
+    ctx.save();
+    ctx.translate(h.x, h.y);
+    // pulsing red danger ring under the boss
+    const ring = h.r*2.1 + Math.sin(t*3)*3;
+    ctx.strokeStyle = 'rgba(224,85,74,0.75)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.arc(0,0,ring,0,7); ctx.stroke();
+    // crown above
+    const cy = -h.r*1.9;
+    ctx.fillStyle = '#ffd25a';
+    ctx.strokeStyle = '#b8801a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-13, cy+9);
+    ctx.lineTo(-13, cy-4);
+    ctx.lineTo(-6.5, cy+2);
+    ctx.lineTo(0, cy-9);
+    ctx.lineTo(6.5, cy+2);
+    ctx.lineTo(13, cy-4);
+    ctx.lineTo(13, cy+9);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawFloaters(){
+    for(const f of floaters){
+      const k = f.t/f.life;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, 1 - k*k);
+      ctx.font = '800 15px Segoe UI, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(10,10,15,0.85)';
+      const y = f.y - 34*k;
+      // keep the text fully on-screen even when the lamb is at the edge
+      const halfW = ctx.measureText(f.text).width/2 + 8;
+      const x = Math.max(halfW, Math.min(W-halfW, f.x));
+      ctx.strokeText(f.text, x, y);
+      ctx.fillStyle = '#ffd25a';
+      ctx.fillText(f.text, x, y);
+      ctx.restore();
+    }
+  }
+
+  // shrink a canvas font until the text fits the screen width (long translations on small phones)
+  function fitFont(weight, size, text, maxW){
+    ctx.font = weight+' '+size+'px Segoe UI, sans-serif';
+    const w = ctx.measureText(text).width;
+    if(w > maxW) ctx.font = weight+' '+Math.max(11, Math.floor(size*maxW/w))+'px Segoe UI, sans-serif';
+  }
+
   function draw(){
     drawBackground();
     drawRiver();
     drawTurtle(turtle);
     drawSafeZones();
     for(const wz of windZones) drawWindZone(wz);
-    for(const mt of mousetraps) drawMousetrap(mt);
     for(const p2 of pits) drawPit(p2);
-    for(const n of nets) drawNet(n);
     drawGoal();
     for(const f of foods) drawFood(f);
+    for(const bs of bonusStars) drawBonusStar(bs);
     for(const h of hunters) drawCone(h);
     for(const c of crocodiles) drawCone(c);
-    for(const c2 of cameras) drawCone(c2);
     drawWalls();
     drawParticles();
     for(const h of hunters) drawHunter(h);
+    for(const h of hunters) if(h.boss) drawBossMarker(h);
     for(const c of crocodiles) drawCrocodileBody(c);
     for(const p of piranhas) drawPiranha(p);
-    for(const c2 of cameras) drawCamera(c2);
     for(const b of birds) drawBird(b);
     drawPlayer();
     for(const fb of fireballs) drawFireball(fb);
+    drawFloaters();
 
     if(flashT>0.02){
       ctx.save();
@@ -4644,7 +4103,7 @@
       ctx.save();
       ctx.globalAlpha = 0.9;
       ctx.fillStyle = '#7fae86';
-      ctx.font = '700 22px Segoe UI, sans-serif';
+      fitFont(700, 22, S().levelUpLabel(level), W-32);
       ctx.textAlign='center';
       ctx.fillText(S().levelUpLabel(level), W/2, H/2);
       ctx.restore();
@@ -4653,10 +4112,10 @@
       ctx.save();
       ctx.globalAlpha = 0.92;
       ctx.fillStyle = '#e0554a';
-      ctx.font = '700 22px Segoe UI, sans-serif';
+      fitFont(700, 22, S().hitTitle, W-32);
       ctx.textAlign='center';
       ctx.fillText(S().hitTitle, W/2, H/2-16);
-      ctx.font = '600 15px Segoe UI, sans-serif';
+      fitFont(600, 15, lives + S().hitSuffix, W-32);
       ctx.fillStyle = '#eae6d8';
       ctx.fillText(lives + S().hitSuffix, W/2, H/2+14);
       ctx.restore();
@@ -4680,6 +4139,13 @@
       ctx.shadowColor = 'rgba(232,163,61,0.6)';
       ctx.shadowBlur = 24;
       ctx.fillText(String(Math.max(1,num)), 0, 0);
+      if(bossLevel){
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = 'rgba(224,85,74,0.8)';
+        ctx.fillStyle = '#ff6b5a';
+        fitFont(900, 30, '👑 '+S().bossLabel+' 👑', W-32);
+        ctx.fillText('👑 '+S().bossLabel+' 👑', 0, -92);
+      }
       ctx.restore();
     }
   }
@@ -4689,92 +4155,29 @@
     lastT = now;
     update(dt);
     draw();
+    // screen shake (whole canvas) + floating texts
+    if(shakeT>0){
+      shakeT = Math.max(0, shakeT-dt);
+      const a = 5*(shakeT/0.3);
+      canvas.style.transform = 'translate('+rand(-a,a).toFixed(1)+'px,'+rand(-a,a).toFixed(1)+'px) scale(1.03)';
+    } else if(canvas.style.transform){
+      canvas.style.transform = '';
+    }
+    for(let i=floaters.length-1;i>=0;i--){
+      floaters[i].t += dt;
+      if(floaters[i].t >= floaters[i].life) floaters.splice(i,1);
+    }
     if(state==='playing' || state==='levelup' || state==='hit') requestAnimationFrame(loop);
   }
 
-  // ---------- Theme selection UI ----------
-  const tabsEl = document.getElementById('themeTabs');
-  function isSeasonActive(seasonal){
-    const now = new Date();
-    const m = now.getMonth()+1, d = now.getDate();
-    const startVal = seasonal.startMonth*100+seasonal.startDay;
-    const endVal = seasonal.endMonth*100+seasonal.endDay;
-    const nowVal = m*100+d;
-    if(startVal <= endVal) return nowVal >= startVal && nowVal <= endVal;
-    return nowVal >= startVal || nowVal <= endVal;
-  }
-  function renderTabs(){
-    tabsEl.innerHTML='';
-    THEMES.forEach((t,i)=>{
-      if(t.seasonal && !isSeasonActive(t.seasonal)) return;
-      const el = document.createElement('div');
-      const isLocked = t.locked && !progress.themesUnlocked.includes(t.id);
-      el.className = 'theme-tab' + (i===themeIndex?' active':'') + (isLocked?' locked':'') + (t.seasonal?' seasonal':'');
-      el.style.setProperty('--tab-color', t.color);
-      if(isLocked){
-        const costLabel = progress.stars>=THEME_UNLOCK_COST
-          ? S().unlockThemeCost(THEME_UNLOCK_COST)
-          : ('🔒 '+S().watchAdForStars(THEME_UNLOCK_AD_REWARD));
-        if(t.seasonal){
-          el.innerHTML = `<span class="glyph">${t.glyph}</span><span style="color:var(--amber);font-weight:800;">${S().limitedTimeLabel}</span><span>${costLabel}</span>`;
-        } else {
-          el.innerHTML = `<span class="glyph">${progress.stars>=THEME_UNLOCK_COST?'🔓':'🔒'}</span><span>${costLabel}</span>`;
-        }
-        el.addEventListener('click', ()=> handleLockedThemeClick(el, i));
-      } else {
-        el.innerHTML = `<span class="glyph">${t.glyph}</span><span>vs ${tField(t,'preyName')}</span>`;
-        el.addEventListener('click', ()=>{
-          themeIndex = i;
-          theme = THEMES[themeIndex];
-          renderTabs();
-          updateStartText();
-        });
-      }
-      tabsEl.appendChild(el);
-    });
-  }
-
-  function handleLockedThemeClick(el, idx){
-    const t = THEMES[idx];
-    if(progress.stars>=THEME_UNLOCK_COST){
-      progress.stars -= THEME_UNLOCK_COST;
-      progress.themesUnlocked.push(t.id);
-      saveProgress();
-      checkAchievements();
-      sfxLevelUp();
-      vibrate(20);
-      themeIndex = idx;
-      theme = THEMES[idx];
-      renderTabs();
-      updateStartText();
-      return;
-    }
-    el.innerHTML = `<span class="glyph">🔒</span><span>${S().unlockingTheme}</span>`;
-    const grantStars = (earned)=>{
-      if(earned){
-        progress.stars += THEME_UNLOCK_AD_REWARD;
-        saveProgress();
-      }
-      renderTabs();
-      updateStartText();
-    };
-    const AdMob = getAdMob();
-    if(AdMob){
-      showRealRewardedAd().then(grantStars);
-    } else {
-      setTimeout(()=> grantStars(true), 1600); // browser testing fallback
-    }
-  }
   function applyLanguage(){
     document.getElementById('eyebrowText').textContent = S().eyebrow;
-    document.getElementById('footerHintText').textContent = S().footerHint;
     document.getElementById('playBtn').textContent = S().playBtn;
     document.getElementById('openAchLabel').textContent = S().achLink;
     document.getElementById('openShopLabel').textContent = S().shopLink;
     document.getElementById('openTutLabel').textContent = S().tutLink;
     document.getElementById('openStoryLabel').textContent = S().storyBtn;
     document.getElementById('themeBestLabel').textContent = S().themeBestPrefix;
-    document.getElementById('lockHintText').textContent = S().lockHint(THEME_UNLOCK_COST);
     document.getElementById('achEyebrowText').textContent = S().progressEyebrow;
     document.getElementById('achTitleText').textContent = S().achTitle;
     document.getElementById('closeAchBtn').textContent = S().closeLink;
@@ -4827,7 +4230,6 @@
     startLivesTicker();
   }
   applyLanguage();
-  renderTabs();
   updateStartText();
 
   // ---------- Achievements screen ----------
@@ -4854,15 +4256,7 @@
     document.getElementById('closeShopBtn').textContent = S().closeLink;
     const el = document.getElementById('shopTabs');
     el.innerHTML = '';
-    THEMES.forEach((t,i)=>{
-      if(t.seasonal && !isSeasonActive(t.seasonal)) return;
-      const b = document.createElement('div');
-      b.className = 'theme-tab' + (i===shopThemeIndex?' active':'');
-      b.style.setProperty('--tab-color', t.color);
-      b.innerHTML = `<span class="glyph">${t.glyph}</span><span>${tField(t,'preyName')}</span>`;
-      b.addEventListener('click', ()=>{ shopThemeIndex=i; renderShopTabs(); renderShopList(); });
-      el.appendChild(b);
-    });
+    el.style.display = 'none'; // only one theme left, no theme tabs needed in the shop
   }
   function renderShopList(){
     const t = THEMES[shopThemeIndex];
@@ -5050,6 +4444,9 @@
       vibrate(20);
       renderPowerupBar();
     } else {
+      // Watching an ad must never cost the player a life: freeze the game first and leave it
+      // on the pause screen afterwards, so play only resumes when the player taps Resume.
+      pauseGame();
       const grantStars = ()=>{
         progress.stars += POWERUP_AD_REWARD;
         saveProgress();
@@ -5266,28 +4663,179 @@
   }
 
   // ---------- Level map (jump to any previously-reached level) ----------
-  function renderLevelMap(){
+  // ----- Level map: winding meadow path (level 1 at the bottom, the lamb stands on the level you are at) -----
+  const MAP_STEP = 84, MAP_TOP = 120, MAP_BOTTOM = 130, MAP_FUTURE = 3;
+  function mapRng(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      let t = Math.imul(seed ^ seed>>>15, 1 | seed);
+      t = t + Math.imul(t ^ t>>>7, 61 | t) ^ t;
+      return ((t ^ t>>>14) >>> 0) / 4294967296;
+    };
+  }
+  function makeLambSprite(px, faceLeft){
+    const c = document.createElement('canvas');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    c.width = c.height = Math.round(px*dpr);
+    c.style.width = c.style.height = px+'px';
+    const g = c.getContext('2d');
+    g.scale(dpr, dpr);
+    g.translate(px/2, px*0.58);
+    if(faceLeft) g.scale(-1, 1);
+    const r = px*0.2;
+    // soft ground shadow
+    g.save(); g.scale(1, 0.38);
+    const sh = g.createRadialGradient(0, r*2.2, 0, 0, r*2.2, r*1.7);
+    sh.addColorStop(0,'rgba(0,0,0,0.35)'); sh.addColorStop(1,'rgba(0,0,0,0)');
+    g.fillStyle = sh; g.beginPath(); g.arc(0, r*2.2, r*1.7, 0, 7); g.fill();
+    g.restore();
+    const skin = getCurrentSkin();
+    drawSheepBody(r, skin.body, skin.dark, g);
+    drawAccessory(skin.accessory, r*1.9, g);
+    return c;
+  }
+  function mapDecor(Wc, H, pathX, rng){
+    const out = [];
+    const tree = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})"><rect x="-3" y="2" width="6" height="12" fill="#5b4126"/><polygon points="0,-30 -17,2 17,2" fill="#256b3d"/><polygon points="0,-20 -21,12 21,12" fill="#2f8148"/></g>`;
+    const bush = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})"><circle cx="-9" cy="0" r="10" fill="#2f7a42"/><circle cx="9" cy="1" r="9" fill="#2f7a42"/><circle cx="0" cy="-6" r="11" fill="#3b8e4f"/></g>`;
+    const tuft = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})" stroke="#7ccf6a" stroke-width="2.4" stroke-linecap="round" fill="none"><path d="M-6 6 Q-8 -4 -10 -9"/><path d="M0 6 Q0 -6 1 -13"/><path d="M6 6 Q8 -4 11 -8"/></g>`;
+    const flower = (x,y,k,col)=>`<g transform="translate(${x},${y}) scale(${k})"><path d="M0 8 L0 -2" stroke="#3a7a3c" stroke-width="2"/><circle cx="0" cy="-6" r="5" fill="${col}"/><circle cx="0" cy="-6" r="2" fill="#fff4b0"/></g>`;
+    const mush = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})"><rect x="-2" y="-1" width="4" height="7" rx="1.5" fill="#f4ead2"/><path d="M-8 0 Q0 -13 8 0 Z" fill="#d9534a"/><circle cx="-2" cy="-4" r="1.4" fill="#fff"/><circle cx="3" cy="-3" r="1.1" fill="#fff"/></g>`;
+    const rock = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})"><ellipse cx="0" cy="0" rx="10" ry="6.5" fill="#8c9a8c"/><ellipse cx="-2" cy="-2" rx="6" ry="3.2" fill="#a6b3a6"/></g>`;
+    const pond = (x,y,k)=>`<g transform="translate(${x},${y}) scale(${k})"><ellipse cx="0" cy="0" rx="38" ry="19" fill="#8fd0e8" stroke="#6bb4d0" stroke-width="3"/><ellipse cx="-8" cy="-4" rx="16" ry="5" fill="rgba(255,255,255,0.35)"/></g>`;
+    const cols = ['#f6d65a','#f291b4','#ffffff','#ef6f61','#b79af0'];
+    for(let y = 36; y < H - 24; y += 44){
+      const n = rng() < 0.55 ? 2 : 1;
+      for(let q=0; q<n; q++){
+        for(let tr=0; tr<6; tr++){
+          const x = 26 + rng()*(Wc-52), yy = y + rng()*30;
+          if(Math.abs(x - pathX(yy)) < 76) continue;
+          const roll = rng(), k = 0.85 + rng()*0.4;
+          let el;
+          if(roll < 0.17) el = tree(x,yy,k);
+          else if(roll < 0.31) el = bush(x,yy,k);
+          else if(roll < 0.56) el = tuft(x,yy,k);
+          else if(roll < 0.83) el = flower(x,yy,k, cols[Math.floor(rng()*cols.length)]);
+          else if(roll < 0.90) el = mush(x,yy,k);
+          else if(roll < 0.96) el = rock(x,yy,k);
+          else if(Math.abs(x - pathX(yy)) > 118 && x > 50 && x < Wc-50) el = pond(x,yy,1);
+          else el = tuft(x,yy,k);
+          out.push(el); break;
+        }
+      }
+    }
+    return out.join('');
+  }
+  function renderLevelMap(keepScroll){
     const grid = document.getElementById('levelMapGrid');
-    grid.innerHTML = '';
+    const prevScroll = grid.scrollTop;
     const best = Math.max(1, progress.bestLevelByTheme[theme.id]||1);
-    const checkpoint = progress.lastLevelByTheme[theme.id]||1;
-    for(let lv=1; lv<=best; lv++){
-      const btn = document.createElement('div');
-      btn.className = 'level-map-btn' + (lv===checkpoint ? ' current' : '');
-      const starKey = theme.id+'_'+lv;
-      const stars = progress.levelStars[starKey] || 0;
-      btn.innerHTML = `<span>${lv}</span>` + (stars>0 ? `<span class="stars">${'⭐'.repeat(stars)}</span>` : '');
+    const N = best + MAP_FUTURE;
+    const Wc = Math.min(grid.clientWidth || 360, 520);
+    const H = MAP_TOP + (N-1)*MAP_STEP + MAP_BOTTOM;
+    const cx = Wc/2, amp = Math.min(Wc*0.30, 130);
+    const tToY = t => H - MAP_BOTTOM - t*MAP_STEP;
+    const tToX = t => cx + amp*Math.sin(t*0.9 + 0.2);
+    const pathX = y => tToX((H - MAP_BOTTOM - y)/MAP_STEP);
+    grid.innerHTML = '';
+    const inner = document.createElement('div');
+    inner.className = 'map-inner';
+    inner.style.height = H+'px';
+
+    // path samples: from the hut (t=-0.9) up past the last visible level
+    const pts = [];
+    for(let t=-0.9; t<=N-1+0.55; t+=0.1) pts.push([tToX(t).toFixed(1), tToY(t).toFixed(1)]);
+    const idxDone = pts.findIndex(p=> parseFloat(p[1]) <= tToY(best-1));
+    const done = pts.slice(0, idxDone+1), ahead = pts.slice(idxDone);
+    const d = arr => 'M'+arr.map(p=>p.join(' ')).join(' L');
+    const hutX = tToX(-0.9), hutY = tToY(-0.9);
+    let svg = `<svg class="map-svg" width="${Wc}" height="${H}" viewBox="0 0 ${Wc} ${H}">`;
+    svg += mapDecor(Wc, H, pathX, mapRng(20260606));
+    svg += `<path d="${d(done)}" fill="none" stroke="rgba(70,50,20,0.32)" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>`;
+    svg += `<path d="${d(done)}" fill="none" stroke="#e3cf98" stroke-width="23" stroke-linecap="round" stroke-linejoin="round"/>`;
+    svg += `<path d="${d(done)}" fill="none" stroke="#f4e8bf" stroke-width="2.5" stroke-dasharray="7 9" stroke-linecap="round" stroke-linejoin="round"/>`;
+    svg += `<path d="${d(ahead)}" fill="none" stroke="rgba(230,215,160,0.55)" stroke-width="18" stroke-linecap="round" stroke-dasharray="1 17"/>`;
+    // the shepherd's hut where the road begins
+    svg += `<g transform="translate(${hutX-2},${hutY+6})"><ellipse cx="0" cy="22" rx="30" ry="8" fill="rgba(0,0,0,0.18)"/><rect x="-24" y="-8" width="48" height="30" fill="#c8995a"/><rect x="-24" y="14" width="48" height="8" fill="#a97a3f"/><polygon points="-30,-6 0,-34 30,-6" fill="#a8443c"/><rect x="-6" y="3" width="12" height="19" rx="2" fill="#5b3a1d"/><rect x="11" y="0" width="9" height="9" fill="#bfe3f2"/></g>`;
+    svg += `</svg>`;
+    inner.insertAdjacentHTML('beforeend', svg);
+
+    // level nodes
+    let nodes = '';
+    for(let lv=1; lv<=N; lv++){
+      const t = lv-1, x = tToX(t), y = tToY(t);
+      const locked = lv > best, isCurrent = lv === best, boss = lv>=10 && lv%10===0;
+      const stars = locked ? 0 : (progress.levelStars[theme.id+'_'+lv] || 0);
+      const cls = 'map-node' + (isCurrent?' current':'') + (locked?' locked':'') + (boss?' boss':'') + (lv>=100?' big3':'');
+      let inside = locked ? '🔒' : lv;
+      if(boss && !locked) inside = lv;
+      let extra = '';
+      if(boss) extra += '<span class="map-crown">👑</span>';
+      if(!locked && !isCurrent && stars>0){
+        extra += '<span class="map-stars">' + [1,2,3].map(n=> n<=stars ? '★' : '<span class="off">★</span>').join('') + '</span>';
+      }
+      nodes += `<button class="${cls}" data-lv="${lv}" aria-label="${lv}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px">${inside}${extra}</button>`;
+    }
+    inner.insertAdjacentHTML('beforeend', nodes);
+
+    // the lamb (same sprite and costume as in the game) stands on the level you are at
+    const bx = tToX(best-1), by = tToY(best-1);
+    const faceLeft = tToX(best) < bx;
+    const lamb = document.createElement('div');
+    lamb.className = 'map-lamb';
+    lamb.style.left = bx.toFixed(1)+'px';
+    lamb.style.top = (by - 8 - ((best>=10 && best%10===0) ? 16 : 0)).toFixed(1)+'px'; // stands above the boss crown
+    lamb.appendChild(makeLambSprite(64, faceLeft));
+    inner.appendChild(lamb);
+
+    inner.querySelectorAll('.map-node:not(.locked)').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         closeLevelMap();
-        startGame(lv);
+        startGame(parseInt(btn.dataset.lv, 10));
       });
-      grid.appendChild(btn);
-    }
+    });
+    grid.appendChild(inner);
+    grid.dataset.lambY = String(by);
+    if(keepScroll) grid.scrollTop = prevScroll;
+    else grid.scrollTop = Math.max(0, by - grid.clientHeight*0.58);
+  }
+  function scrollMapToLamb(smooth){
+    const grid = document.getElementById('levelMapGrid');
+    const y = parseFloat(grid.dataset.lambY || '0');
+    grid.scrollTo({top: Math.max(0, y - grid.clientHeight*0.58), behavior: smooth ? 'smooth' : 'auto'});
   }
   function openLevelMap(){
-    renderLevelMap();
     document.getElementById('levelMapOverlay').style.display = 'flex';
+    renderLevelMap(false);
   }
+  document.getElementById('mapJumpBtn').addEventListener('click', ()=> scrollMapToLamb(true));
+  window.addEventListener('resize', ()=>{
+    if(document.getElementById('levelMapOverlay').style.display === 'flex') renderLevelMap(true);
+  });
+
+  // If the screen size changes while a level is running (iPad rotation, split screen, system bars),
+  // the level layout (goal, food, hazards) was built for the OLD size and could end up off-screen,
+  // making the level unwinnable. Big changes rebuild the level for the new size (no life lost,
+  // with a fresh 3-2-1); small ones just pull everything back inside the visible area.
+  let relayoutTimer = null;
+  function adaptLevelToScreen(){
+    if(state==='start' || state==='gameover' || !layoutW) return;
+    const big = Math.abs(W-layoutW) >= 60 || Math.abs(H-layoutH) >= 60;
+    if(big){
+      setupLevel(level);
+      if(state==='playing' || state==='paused'){ countdownActive = true; countdownRemaining = 3; }
+      updateHud();
+    } else if(W!==layoutW || H!==layoutH){
+      const m = 36;
+      const fit = o=>{ o.x = Math.min(Math.max(o.x, m), W-m); o.y = Math.min(Math.max(o.y, m), H-m); };
+      fit(goal); foods.forEach(fit); pits.forEach(fit); bonusStars.forEach(fit); herd.forEach(fit);
+      layoutW = W; layoutH = H;
+    }
+  }
+  window.addEventListener('resize', ()=>{
+    clearTimeout(relayoutTimer);
+    relayoutTimer = setTimeout(adaptLevelToScreen, 250);   // wait until the resize settles
+  });
   function closeLevelMap(){
     document.getElementById('levelMapOverlay').style.display = 'none';
   }
