@@ -1,5 +1,5 @@
 {
-  "name": "capacitor-game-connect-local",
+  "name": "capacitor-game-connect",
   "version": "1.0.0",
   "description": "Minimal Game Center (iOS) leaderboard plugin for Stay Unseen",
   "main": "index.js",
