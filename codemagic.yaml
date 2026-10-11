@@ -53,6 +53,7 @@ workflows:
       app_store_connect: gorulme_asc_key
     environment:
       node: 22
+      xcode: 26.5
       groups:
         - appstore_credentials
       vars:
@@ -120,6 +121,7 @@ workflows:
       app_store_connect: gorulme_asc_key
     environment:
       node: 22
+      xcode: 26.5
       groups:
         - appstore_credentials
       vars:
