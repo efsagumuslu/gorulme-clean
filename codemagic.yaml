@@ -174,6 +174,18 @@ workflows:
           NEW_BUILD=$(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID") + 1))
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $NEW_BUILD" ios/App/App/Info.plist
           /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $MARKETING_VERSION" ios/App/App/Info.plist
+      - name: DEBUG xcodebuild (only for diagnosis)
+        ignore_failure: true
+        script: |
+          cd ios/App
+          echo "=== CapApp-SPM/Package.swift ==="
+          cat CapApp-SPM/Package.swift || true
+          echo "=== showBuildSettings (errors) ==="
+          xcodebuild -project App.xcodeproj -scheme App -showBuildSettings 2>&1 | grep -iE "error|warning: |fatal|could not|cannot|invalid|missing|no such" | head -40 || true
+          echo "=== resolvePackageDependencies ==="
+          xcodebuild -resolvePackageDependencies -project App.xcodeproj -scheme App 2>&1 | tail -40 || true
+          echo "=== pbxproj entitlement lines ==="
+          grep -n "CODE_SIGN_ENTITLEMENTS" App.xcodeproj/project.pbxproj || true
       - name: Build iOS app
         script: |
           xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
