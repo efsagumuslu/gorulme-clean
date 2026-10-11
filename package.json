@@ -1,21 +1,10 @@
 {
-  "name": "capacitor-game-connect",
+  "name": "gorulme-app",
   "version": "1.0.0",
-  "description": "Minimal Game Center (iOS) leaderboard plugin for Stay Unseen",
-  "main": "index.js",
-  "files": [
-    "ios/Sources",
-    "Package.swift",
-    "CapacitorGameConnect.podspec",
-    "index.js"
-  ],
-  "license": "MIT",
-  "capacitor": {
-    "ios": {
-      "src": "ios"
-    }
-  },
-  "peerDependencies": {
-    "@capacitor/core": ">=8.0.0"
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^8.5.0",
+    "@capacitor/cli": "^8.5.0",
+    "@capacitor/core": "^8.5.0"
   }
 }
