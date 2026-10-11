@@ -2858,10 +2858,16 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   const LEADERBOARD_IDS = { ios:'com.gorulme.app.bestlevel', android:'' };
   function getGameConnect(){
     const C = window.Capacitor;
-    if(!(C && C.isNativePlatform && C.isNativePlatform() && C.Plugins && C.Plugins.CapacitorGameConnect)) return null;
+    if(!(C && C.isNativePlatform && C.isNativePlatform())) return null;
     const plat = C.getPlatform ? C.getPlatform() : '';
     const id = LEADERBOARD_IDS[plat];
-    return id ? {plugin:C.Plugins.CapacitorGameConnect, id} : null;
+    if(!id) return null;
+    let plugin = C.Plugins && C.Plugins.CapacitorGameConnect;
+    // native plugins are not always pre-populated on Capacitor.Plugins when the page has no bundler
+    if(!plugin && C.isPluginAvailable && C.isPluginAvailable('CapacitorGameConnect') && C.registerPlugin){
+      try{ plugin = C.registerPlugin('CapacitorGameConnect'); }catch(e){ plugin = null; }
+    }
+    return plugin ? {plugin, id} : null;
   }
   let gcSignedIn = false;
   async function gcSignIn(){
