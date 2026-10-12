@@ -11,7 +11,8 @@ public class CapacitorGameConnectPlugin: CAPPlugin, CAPBridgedPlugin, GKGameCent
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "signIn", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "submitScore", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "showLeaderboard", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "showLeaderboard", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getLeaderboardEntries", returnType: CAPPluginReturnPromise)
     ]
 
     private func playerInfo(_ player: GKLocalPlayer) -> [String: Any] {
@@ -83,6 +84,55 @@ public class CapacitorGameConnectPlugin: CAPPlugin, CAPBridgedPlugin, GKGameCent
             vc.gameCenterDelegate = self
             self.bridge?.viewController?.present(vc, animated: true, completion: nil)
             call.resolve()
+        }
+    }
+
+    /// Returns the top entries (global or friends) plus the local player's own entry,
+    /// so the game can draw its own leaderboard screen.
+    @objc func getLeaderboardEntries(_ call: CAPPluginCall) {
+        guard let leaderboardID = call.getString("leaderboardID") else {
+            call.reject("leaderboardID is required")
+            return
+        }
+        guard GKLocalPlayer.local.isAuthenticated else {
+            call.reject("Not signed in to Game Center")
+            return
+        }
+        let friendsOnly = call.getBool("friendsOnly") ?? false
+        let count = max(1, min(call.getInt("count") ?? 25, 50))
+        let myId = GKLocalPlayer.local.gamePlayerID
+        func toDict(_ e: GKLeaderboard.Entry) -> [String: Any] {
+            return [
+                "rank": e.rank,
+                "score": e.score,
+                "name": e.player.displayName,
+                "isMe": e.player.gamePlayerID == myId
+            ]
+        }
+        GKLeaderboard.loadLeaderboards(IDs: [leaderboardID]) { boards, error in
+            if let error = error {
+                call.reject(error.localizedDescription)
+                return
+            }
+            guard let board = boards?.first else {
+                call.reject("Leaderboard not found")
+                return
+            }
+            let scope: GKLeaderboard.PlayerScope = friendsOnly ? .friendsOnly : .global
+            board.loadEntries(for: scope, timeScope: .allTime, range: NSRange(location: 1, length: count)) { local, entries, total, error in
+                if let error = error {
+                    call.reject(error.localizedDescription)
+                    return
+                }
+                var result: [String: Any] = [
+                    "entries": (entries ?? []).map { toDict($0) },
+                    "total": total
+                ]
+                if let me = local {
+                    result["me"] = toDict(me)
+                }
+                call.resolve(result)
+            }
         }
     }
 
