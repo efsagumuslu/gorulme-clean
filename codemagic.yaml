@@ -59,7 +59,7 @@ workflows:
       vars:
         BUNDLE_ID: "com.gorulme.app"
         APP_STORE_APPLE_ID: 6810249133
-        MARKETING_VERSION: "2.0"
+        MARKETING_VERSION: "2.1"
     scripts:
       - name: Install npm dependencies
         script: |
@@ -69,6 +69,7 @@ workflows:
           npm install @capacitor-community/in-app-review
           npm install @capacitor-community/admob
           npm install @capacitor/local-notifications
+          npm install ./plugins/capacitor-game-connect
       - name: Minify game code
         script: |
           npm install terser --no-save
@@ -84,6 +85,8 @@ workflows:
           npx capacitor-assets generate --ios
       - name: Configure iOS AdMob settings
         script: node scripts/configure-ios-admob.js
+      - name: Add Game Center entitlement
+        script: node scripts/configure-ios-gamecenter.js
       - name: Sync Capacitor with iOS
         script: npx cap sync ios
       - name: Set up keychain
@@ -127,7 +130,7 @@ workflows:
       vars:
         BUNDLE_ID: "com.gorulme.app"
         APP_STORE_APPLE_ID: 6810249133
-        MARKETING_VERSION: "2.0"
+        MARKETING_VERSION: "2.1"
     scripts:
       - name: Install npm dependencies
         script: |
