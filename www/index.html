@@ -4697,7 +4697,7 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
   }
   function dayBrightness(){
     const cyclePos = (performance.now()/1000 % DAY_CYCLE_SECONDS)/DAY_CYCLE_SECONDS;
-    return (1+Math.cos(cyclePos*Math.PI*2))/2; // 1 = warm dusk peak, 0 = deep night
+    return 1; // always full daylight (day/night cycle disabled)
   }
   // ---- fake-3D helpers: every object gets a soft cast shadow toward the lower right (light from top-left) ----
   function drawShadow(x, y, r, alpha){
@@ -5970,14 +5970,16 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       const u = g.userData;
       g.position.set(m.x, 0, m.y);
       g.rotation.y = -(m.angle||0);
-      g.scale.setScalar(m.r*1.42);   // bigger lambs read better in crowded levels (hitbox unchanged)
+      g.scale.setScalar(m.r*1.85);   // bigger lambs read better in crowded levels (hitbox unchanged)
       if(!u.lead){
         const lm = new THREE.MeshBasicMaterial({color:0xffffff, transparent:true, opacity:0.6, side:THREE.DoubleSide, depthWrite:false});
         u.lead = new THREE.Mesh(new THREE.RingGeometry(1.45,1.7,40), lm);
         u.lead.rotation.x = -Math.PI/2; u.lead.position.y = 0.06; u.lead.renderOrder = 2; g.add(u.lead);
       }
-      u.lead.visible = (herd[0] === m);
-      if(u.lead.visible){ const pr = 1 + 0.07*Math.sin(performance.now()/260); u.lead.scale.set(pr,pr,pr); }
+      u.lead.visible = true;
+      u.lead.material.opacity = (herd[0] === m) ? 0.85 : 0.4;
+      { const pr = (herd[0] === m) ? 1 + 0.07*Math.sin(performance.now()/260) : 1; u.lead.scale.set(pr,pr,pr); }
+      if(!u.hl){ u.hl = glowSprite(0xfff3b8, 4.6, 0.3); u.hl.position.y = 0.8; u.hl.renderOrder = 1; g.add(u.hl); }
       if(u.lx===null){ u.lx = m.x; u.lz = m.y; }
       const moved = Math.hypot(m.x-u.lx, m.y-u.lz);
       u.lx = m.x; u.lz = m.y;
@@ -5991,14 +5993,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       u.head.rotation.y = Math.sin(now/1300 + m.x)*0.18;
       const skin = getCurrentSkin();
       const col = m.dangerT>0.5 ? '#e0554a' : skin.body;
-      if(u.col !== col){ u.col = col; u.wool.color.set(col); u.core.color.set(m.dangerT>0.5 ? '#b83a30' : skin.dark); }
+      if(u.col !== col){ u.col = col; u.wool.color.set(col); u.wool.emissive.set(col); u.wool.emissiveIntensity = 0.32; u.core.color.set(m.dangerT>0.5 ? '#b83a30' : skin.dark); }
       const inv = activePowerUp==='invis';
       const op = inv ? 0.46 + Math.sin(now/120)*0.08 : 1;
       if(!u.gg){
         u.gg = glowSprite(0xa9c4ff, 4.8, 0); u.gg.position.y = 0.9; u.gg.material.depthTest = false; u.gg.renderOrder = 3; g.add(u.gg);
         u.sg = glowSprite(0x6fe3ff, 4.4, 0); u.sg.position.y = 0.9; u.sg.material.depthTest = false; u.sg.renderOrder = 3; g.add(u.sg);
       }
-      u.gg.visible = inv;
+      u.gg.visible = inv; if(u.hl) u.hl.visible = !inv;
       if(inv) u.gg.material.opacity = 0.42 + 0.14*Math.sin(now/170 + m.x*0.05);
       const fast = activePowerUp==='speed' && herd[0]===m;
       u.sg.visible = fast;
@@ -7000,16 +7002,14 @@ function(t,e){"object"==typeof exports&&"undefined"!=typeof module?e(exports):"f
       const br = dayBrightness();
       // environment follows the game's day/night cycle
       C_A.set(lerpColor(theme.bg1, theme.dayBg1, br));
-      if(Q.event === 'halloween') C_A.lerp(C_E1, 0.5);
       scene.background = C_A;
       if(!scene.fog) scene.fog = new THREE.Fog(0x000000, 1, 2);
       scene.fog.color.copy(C_A); scene.fog.near = Math.max(W,H)*1.6; scene.fog.far = Math.max(W,H)*4;
       groundMat.color.set(lerpColor(theme.bg1, theme.dayBg1, br)).multiplyScalar(1.25);
-      if(Q.event === 'halloween') groundMat.color.lerp(C_E2, 0.3);
-      hemi.intensity = 1.25 + br*0.4;
-      sun.intensity = 2.3 + br*0.8;
+      hemi.intensity = 1.9;
+      sun.intensity = 3.0;
       sun.color.set(br > 0.5 ? 0xfff0d0 : 0xcfdcff);
-      if(Q.event === 'halloween'){ sun.color.lerp(C_E3, 0.55); animateBats(performance.now()/1000); }
+      if(Q.event === 'halloween'){ animateBats(performance.now()/1000); }
 
       // scenery depends on the current level's decor list
       if(sceneryKey !== decor){ sceneryKey = decor; rebuildScenery(); }
